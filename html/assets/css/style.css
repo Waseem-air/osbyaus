@@ -295,4 +295,21 @@ body{
 .footer-section a:hover {
   color: #adb5bd;
 }
- 
+ .breadcrumb-line {
+  font-size: 0.95rem;
+  color: #000;
+}
+
+.breadcrumb-line i {
+  color: #000;
+  font-size: 0.9rem;
+}
+
+.breadcrumb-line span {
+  cursor: pointer;
+}
+
+.breadcrumb-line span:last-child {
+  color: #555;
+  cursor: default;
+}
