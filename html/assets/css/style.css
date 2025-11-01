@@ -295,4 +295,87 @@ body{
 .footer-section a:hover {
   color: #adb5bd;
 }
- 
+ /* dress card section */
+ .availability-title {
+  width: 105px;
+  height: 20px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 500;
+  font-style: normal;
+  font-size: 15px;
+  line-height: 19.5px;
+  letter-spacing: 0.2px;
+  text-transform: uppercase;
+  vertical-align: middle;
+  color: #000; /* Optional, tum apna color de sakti ho */
+}
+.availability-options {
+  display: flex;
+  flex-direction: column; /* vertical flow (one below another) */
+  width: 105px;
+  padding: 2px 0;
+  gap: 11px;
+}
+
+/* Each checkbox + label */
+.checkbox-item {
+  display: flex;
+  align-items: center; /* ✅ vertically align checkbox & text */
+  gap: 8px; /* spacing between checkbox and text */
+  cursor: pointer;
+}
+
+.checkbox-item input[type="checkbox"] {
+  accent-color: #000;
+  width: 16px;
+  height: 16px;
+}
+/* Parent container — Vertical flow */
+.availability-options {
+  display: flex;
+  flex-direction: column;  /* Flow: Vertical */
+  width: 105px;            /* Fill (fixed width) */
+  padding-top: 2px;
+  padding-bottom: 2px;
+  gap: 11px;               /* Space between each option */
+}
+
+/* Single option — Horizontal flow */
+.availability-options label {
+  display: flex;
+  align-items: center;
+  flex-direction: row;     /* Flow: Horizontal */
+  width: fit-content;      /* Hug width */
+  height: fit-content;     /* Hug height */
+  gap: 8px;                /* Space between checkbox and text */
+  cursor: pointer;
+}
+
+/* Checkbox size */
+.availability-options input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+}
+
+/* Text styling */
+.availability-options span {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 500;
+  font-size: 15px;
+  line-height: 19.5px;
+  letter-spacing: 0.2px;
+  text-transform: uppercase;
+  color: #000;
+}
+
+/* 📱 Responsive: Mobile fix */
+@media (max-width: 768px) {
+  .availability-options {
+    width: 100%;
+    gap: 8px;
+  }
+
+  .availability-options span {
+    font-size: 14px;
+  }
+}
