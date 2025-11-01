@@ -1,6 +1,7 @@
-
-
-
+body{
+  padding: 0px;
+  margin: 0px;
+}
 /* Overlay (optional) */
 .hero-section-left::before {
   content: "";
