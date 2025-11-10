@@ -68,164 +68,59 @@ flex-shrink: 0;
 
                                 <!-- all-category -->
                                 <div class="wg-box mt-5">
-                                    <div class="wg-table table-all-category">
-                                        <ul class="table-title flex gap20 mb-14">
-                                            <li>
-                                                <div class="body-title">Category</div>
-                                            </li>    
-                                            <li>
-                                                <div class="body-title">Quantity</div>
-                                            </li>
-                                            <li>
-                                                <div class="body-title">Sale</div>
-                                            </li>
-                                            <li>
-                                                <div class="body-title">Start date</div>
-                                            </li>
-                                            <li>
-                                                <div class="body-title">Action</div>
-                                            </li>
-                                        </ul>
-                                        <ul class="flex flex-column">
-                                            <li class="wg-product item-row gap20">
-                                                <div class="name">
-                                                    <div class="image">
-                                                        <img src="{{ asset('admin/admin-ecomus/images/products/product-1.jpg') }}" alt="">                                                    </div>
-                                                    <div class="title line-clamp-2 mb-0">
-                                                        <a href="#" class="body-text">Oversized Motif T-shirt</a>
-                                                    </div>
-                                                </div>
-                                                <div class="body-text text-main-dark mt-4">1,638</div>
-                                                <div class="body-text text-main-dark mt-4">20</div>
-                                                <div class="body-text text-main-dark mt-4">20 Nov 2023</div>
-                                                <div class="list-icon-function">
-                                                    <div class="item eye">
-                                                        <i class="icon-eye"></i>
-                                                    </div>
-                                                    <div class="item edit">
-                                                        <i class="icon-edit-3"></i>
-                                                    </div>
-                                                    <div class="item trash">
-                                                        <i class="icon-trash-2"></i>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li class="wg-product item-row gap20">
-                                                <div class="name">
-                                                    <div class="image">
-                                                        <img src="{{ asset('admin/admin-ecomus/images/products/product-1.jpg') }}" alt="">                                                     </div>
-                                                    <div class="title line-clamp-2 mb-0">
-                                                        <a href="#" class="body-text">Oversized Motif T-shirt</a>
-                                                    </div>
-                                                </div>
-                                                <div class="body-text text-main-dark mt-4">1,638</div>
-                                                <div class="body-text text-main-dark mt-4">20</div>
-                                                <div class="body-text text-main-dark mt-4">20 Nov 2023</div>
-                                                <div class="list-icon-function">
-                                                    <div class="item eye">
-                                                        <i class="icon-eye"></i>
-                                                    </div>
-                                                    <div class="item edit">
-                                                        <i class="icon-edit-3"></i>
-                                                    </div>
-                                                    <div class="item trash">
-                                                        <i class="icon-trash-2"></i>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li class="wg-product item-row gap20">
-                                                <div class="name">
-                                                    <div class="image">
-                                                        <img src="{{ asset('admin/admin-ecomus/images/products/product-1.jpg') }}" alt="">                                                     </div>
-                                                    <div class="title line-clamp-2 mb-0">
-                                                        <a href="#" class="body-text">Oversized Motif T-shirt</a>
-                                                    </div>
-                                                </div>
-                                                <div class="body-text text-main-dark mt-4">1,638</div>
-                                                <div class="body-text text-main-dark mt-4">20</div>
-                                                <div class="body-text text-main-dark mt-4">20 Nov 2023</div>
-                                                <div class="list-icon-function">
-                                                    <div class="item eye">
-                                                        <i class="icon-eye"></i>
-                                                    </div>
-                                                    <div class="item edit">
-                                                        <i class="icon-edit-3"></i>
-                                                    </div>
-                                                    <div class="item trash">
-                                                        <i class="icon-trash-2"></i>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li class="wg-product item-row gap20">
-                                                <div class="name">
-                                                    <div class="image">
-                                                        <img src="{{ asset('admin/admin-ecomus/images/products/product-1.jpg') }}" alt="">                                                     </div>
-                                                    <div class="title line-clamp-2 mb-0">
-                                                        <a href="#" class="body-text">Oversized Motif T-shirt</a>
-                                                    </div>
-                                                </div>
-                                                <div class="body-text text-main-dark mt-4">1,638</div>
-                                                <div class="body-text text-main-dark mt-4">20</div>
-                                                <div class="body-text text-main-dark mt-4">20 Nov 2023</div>
-                                                <div class="list-icon-function">
-                                                    <div class="item eye">
-                                                        <i class="icon-eye"></i>
-                                                    </div>
-                                                    <div class="item edit">
-                                                        <i class="icon-edit-3"></i>
-                                                    </div>
-                                                    <div class="item trash">
-                                                        <i class="icon-trash-2"></i>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li class="wg-product item-row gap20">
-                                                <div class="name">
-                                                    <div class="image">
-                                                        <img src="{{ asset('admin/admin-ecomus/images/products/product-1.jpg') }}" alt="">                                                     </div>
-                                                    <div class="title line-clamp-2 mb-0">
-                                                        <a href="#" class="body-text">Oversized Motif T-shirt</a>
-                                                    </div>
-                                                </div>
-                                                <div class="body-text text-main-dark mt-4">1,638</div>
-                                                <div class="body-text text-main-dark mt-4">20</div>
-                                                <div class="body-text text-main-dark mt-4">20 Nov 2023</div>
-                                                <div class="list-icon-function">
-                                                    <div class="item eye">
-                                                        <i class="icon-eye"></i>
-                                                    </div>
-                                                    <div class="item edit">
-                                                        <i class="icon-edit-3"></i>
-                                                    </div>
-                                                    <div class="item trash">
-                                                        <i class="icon-trash-2"></i>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div class="divider"></div>
-                                    <div class="flex items-center justify-between flex-wrap gap10">
-                                        <div class="text-tiny">Showing 10 entries</div>
-                                        <ul class="wg-pagination">
-                                            <li>
-                                                <a href="#"><i class="icon-chevron-left"></i></a>
-                                            </li>
-                                            <li>
-                                                <a href="#">1</a>
-                                            </li>
-                                            <li class="active">
-                                                <a href="#">2</a>
-                                            </li>
-                                            <li>
-                                                <a href="#">3</a>
-                                            </li>
-                                            <li>
-                                                <a href="#"><i class="icon-chevron-right"></i></a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
+    <div class="wg-table table-all-category">
+        <ul class="table-title flex gap20 mb-14">
+            <li><div class="body-title">Category</div></li>
+            <li><div class="body-title">Slug</div></li>
+            <li><div class="body-title">Status</div></li>
+            <li><div class="body-title">Created</div></li>
+            <li><div class="body-title">Action</div></li>
+        </ul>
+
+        <ul class="flex flex-column">
+            @foreach($categories as $category)
+            <li class="wg-product item-row gap20">
+                <div class="name">
+                    <div class="image">
+                        <img src="{{ asset('uploads/categories/' . ($category->image ?? 'default.jpg')) }}" 
+                             alt="{{ $category->name }}" width="50">
+                    </div>
+                    <div class="title line-clamp-2 mb-0">
+                        <a href="#" class="body-text">{{ $category->name }}</a>
+                    </div>
+                </div>
+
+                <div class="body-text text-main-dark mt-4">{{ $category->slug }}</div>
+                <div class="body-text text-main-dark mt-4">
+                    {{ $category->is_active ? 'Active' : 'Inactive' }}
+                </div>
+                <div class="body-text text-main-dark mt-4">{{ $category->created_at->format('d M Y') }}</div>
+
+               <div class="item-actions">
+    <!-- Edit -->
+    <a href="{{ route('edit.category', $category->id) }}" title="Edit Category">
+        <i class="icon-edit"></i>
+    </a>
+
+    <!-- Delete -->
+    <a href="{{ route('delete.category', $category->id) }}" 
+       onclick="return confirm('Delete this category?')" title="Delete Category">
+       <i class="icon-trash-2"></i>
+    </a>
+
+    <!-- Preview -->
+    <a href="{{ route('category.list') }}#category-{{ $category->id }}" title="Preview Category">
+        <i class="icon-eye"></i>
+    </a>
+</div>
+
+
+            </li>
+            @endforeach
+        </ul>
+    </div>
+</div>
+
                                 <!-- /all-category -->
                             </div>
                             <!-- /main-content-wrap -->
