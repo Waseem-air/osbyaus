@@ -23,7 +23,7 @@ flex-shrink: 0;
                             <!-- main-content-wrap -->
                             <div class="main-content-wrap">
                                 <div class="flex items-center flex-wrap justify-between gap20 mb-30">
-                                    <h3>Product List</h3>
+                                    <h3>Category List</h3>
                                 </div>
                                 
                                 <div class="search-bar-container">
@@ -63,7 +63,7 @@ flex-shrink: 0;
                                     </div>
 
                                     <!-- Add New Button -->
-                                    <a class="tf-button style-1 w208" href="new-category.html"><i class="icon-plus"></i>Add new</a>
+                                    <a class="tf-button style-1 w208" href="{{ url('/addcategory') }}"><i class="icon-plus"></i>Add new</a>
                                 </div>
 
                                 <!-- all-category -->

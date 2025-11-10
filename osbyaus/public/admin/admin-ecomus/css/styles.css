@@ -177,7 +177,15 @@ body {
 body::-webkit-scrollbar {
   width: 0px;
 }
-
+.item-actions i {
+    font-size: 20px; /* ensures icon scales if it's font-based */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+.item-actions a {
+    margin-right: 10px; /* optional spacing between icons */
+}
 article,
 aside,
 details,
@@ -228,10 +236,16 @@ img {
   max-width: 100%;
   height: auto;
 }
-
 select {
   max-width: 100%;
+  /* optional: set default border and background */
 }
+
+select:focus {
+  background-color: transparent; /* makes background transparent */
+  border-color: #94010E;         /* changes border color on focus */
+}
+
 
 /* General
 -------------------------------------------------------------- */
@@ -658,6 +672,7 @@ h6, .h6 {
 .flex-grow {
   flex-grow: 1;
 }
+
 
 .row-reverse {
   flex-direction: row-reverse;
