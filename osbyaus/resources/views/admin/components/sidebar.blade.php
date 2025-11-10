@@ -2,7 +2,7 @@
             <div class="section-menu-left">
                 <div class="box-logo">
                     <a href="index.html" id="site-logo-inner">
-                        <img class="" id="logo_header" alt="" src="../images/logo/logo.png" data-light="../images/logo/logo.svg" data-dark="../images/logo/logo-white.svg">
+                        <img class="" id="logo_header" alt="" src="{{asset('admin/admin-ecomus/logo/logo.png')}}" data-light="../images/logo/logo.svg" data-dark="../images/logo/logo-white.svg">
                     </a>
                     <div class="button-show-hide">
                         <i class="icon-chevron-left"></i>
@@ -13,7 +13,7 @@
                         <div class="center-item">
                             <ul class="">
                                 <li class="menu-item">
-                                    <a href="index.html" class="">
+                                    <a href="{{ url('/transaction') }}" class="">
                                         <div class="icon">
                                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
                                             xmlns="http://www.w3.org/2000/svg">
@@ -59,6 +59,12 @@
                                             </a>
                                         </li>
                                     </ul>
+                                     <li class="menu-item">
+                                    <a href="report.html" class="">
+                                        <div class="icon"><i class="icon-pie-chart"></i></div>
+                                        <div class="text">Store Menu</div>
+                                    </a>
+                                </li>
                                 </li>
                                 <li class="menu-item has-children">
                                     <a href="javascript:void(0);" class="menu-item-button">
@@ -158,12 +164,6 @@
                                             </a>
                                         </li>
                                     </ul>
-                                </li>
-                                <li class="menu-item">
-                                    <a href="report.html" class="">
-                                        <div class="icon"><i class="icon-pie-chart"></i></div>
-                                        <div class="text">Report</div>
-                                    </a>
                                 </li>
                                 <li class="menu-item">
                                     <a href="setting.html" class="">

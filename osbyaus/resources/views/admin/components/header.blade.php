@@ -3,7 +3,7 @@
                     <div class="wrap">
                         <div class="header-left">
                             <a href="index.html">
-                                <img class="" id="logo_header_mobile" alt="" src="../images/logo/logo.png" data-light="../images/logo/logo.svg" data-dark="../images/logo/logo-white.svg">
+                                <img class="" id="logo_header_mobile" alt="" src="{{asset('admin/admin-ecomus/logo/logo.png')}}" data-light="../images/logo/logo.svg" data-dark="../images/logo/logo-white.svg">
                             </a>
                             <div class="button-show-hide">
                                 <i class="icon-chevron-left"></i>

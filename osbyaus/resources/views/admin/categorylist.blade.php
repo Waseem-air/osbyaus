@@ -1,5 +1,7 @@
 @extends("admin.layout.main")
-<!-- <style>
+@section('styles')
+
+<style>
 .wg-table.table-all-category .wg-product > *:nth-child(1), .wg-table.table-all-category ul.table-title > *:nth-child(1) {
 width: 281px;
 flex-shrink: 0;
@@ -11,7 +13,8 @@ flex-shrink: 0;
     width: 100% !important;
   }
 }
-</style> -->
+</style>
+@endsection
 @section('content')
     <!-- main-content -->
                     <div class="main-content">

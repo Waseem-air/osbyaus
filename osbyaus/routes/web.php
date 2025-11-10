@@ -10,6 +10,11 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/transaction', [AdminController::class, 'transaction'])->name('transaction');
+Route::get('/store-menu', [AdminController::class, 'store_menu'])->name('store.menu');
+
+
 Route::get('/addproduct', [ProductController::class, 'add_product'])->name('add.product');
  Route::get('/product-list', [ProductController::class, 'product_list'])->name('product_list');
 
