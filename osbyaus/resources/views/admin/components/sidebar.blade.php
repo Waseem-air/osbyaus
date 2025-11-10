@@ -24,20 +24,20 @@
                                         <div class="text">Transaction</div>
                                     </a>
                                 </li>
-                               <li class="menu-item has-children active">
+                               <li class="menu-item has-children">
                                         <a href="javascript:void(0);" class="menu-item-button">
                                             <div class="icon"><i class="icon-file-plus"></i></div>
                                             <div class="text">Product</div>
                                         </a>
                                         <ul class="sub-menu" style="display: block;">
-                                            <li class="sub-menu-item active">
-                                                <a href="product-list.html" class="">
+                                            <li class="sub-menu-item ">
+                                                <a href="{{ url('/product-list') }}" class="">
                                                     <div class="text">All Products</div>
                                                 </a>
                                             </li>
                                             <li class="sub-menu-item">
-                                                <a href="add-product.html" class="">
-                                                    <div class="text">Add Product</div>
+                                               <a href="{{ url('/addproduct') }}" class="">
+                                                 <div class="text">Add Product</div>
                                                 </a>
                                             </li>
                                         </ul>
@@ -49,12 +49,12 @@
                                     </a>
                                     <ul class="sub-menu">
                                         <li class="sub-menu-item">
-                                            <a href="category-list.html" class="">
+                                            <a href="{{ url('/category-list') }}" class="">
                                                 <div class="text">Category list</div>
                                             </a>
                                         </li>
                                         <li class="sub-menu-item">
-                                            <a href="new-category.html" class="">
+                                            <a href="{{ url('/addcategory') }}" class="">
                                                 <div class="text">New category</div>
                                             </a>
                                         </li>

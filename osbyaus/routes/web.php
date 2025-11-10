@@ -2,12 +2,22 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ProductController;
+
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
 });
- Route::get('/product', [AdminController::class, 'admin'])->name('admin');
+Route::get('/addproduct', [ProductController::class, 'add_product'])->name('add.product');
+ Route::get('/product-list', [ProductController::class, 'product_list'])->name('product_list');
+
+
+ Route::get('/addcategory', [CategoryController::class, 'add_category'])->name('add.category');
+ Route::get('/category-list', [CategoryController::class, 'category_list'])->name('category.list');
+
+
 
 
 // Route::get('/dashboard', function () {

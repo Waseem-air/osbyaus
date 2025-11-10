@@ -208,8 +208,7 @@
                                     <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton3" data-bs-toggle="dropdown" aria-expanded="false">
                                         <span class="header-user wg-user">
                                             <span class="image">
-                                                <img src="images/avatar/user-1.png" alt="">
-                                            </span>
+                                                <img src="{{ asset('admin/admin-ecomus/images/avatar/user-1.png') }}" alt="">                                            </span>
                                         </span>
                                     </button>
                                     <ul class="dropdown-menu dropdown-menu-end has-content" aria-labelledby="dropdownMenuButton3">
