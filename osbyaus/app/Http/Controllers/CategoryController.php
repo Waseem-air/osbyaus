@@ -5,99 +5,155 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Category;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Validator;
 
 class CategoryController extends Controller
 {
-    // ✅ Show Add Category Form
-    public function add_category()
+    // ✅ Show Category List
+    public function category_list()
     {
-        return view('admin.addcategory');
+        $categories = Category::latest()->get();
+        return view('admin.categories.categorylist', compact('categories'));
     }
 
-    // ✅ Store Category
+    // ✅ Store Category (AJAX)
     public function store_category(Request $request)
     {
-        $request->validate([
+        $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255|unique:categories,name',
             'description' => 'nullable|string',
             'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
-        $category = new Category();
-        $category->name = $request->name;
-        $category->slug = Str::slug($request->name);
-        $category->description = $request->description;
-
-        // ✅ Handle Image Upload
-        if ($request->hasFile('image')) {
-            $image = $request->file('image');
-            $imageName = time() . '_' . $image->getClientOriginalName();
-            $image->move(public_path('uploads/categories'), $imageName);
-            $category->image = 'uploads/categories/' . $imageName;
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Validation failed',
+                'errors' => $validator->errors()
+            ], 422);
         }
-        // dd($category);
-        $category->is_active = true;
-        $category->save();
 
-        return redirect()->route('category.list')->with('success', 'Category added successfully!');
+        try {
+            $category = new Category();
+            $category->name = $request->name;
+            $category->slug = Str::slug($request->name);
+            $category->description = $request->description;
+
+            // ✅ Handle Image Upload
+            if ($request->hasFile('image')) {
+                $image = $request->file('image');
+                $imageName = time() . '_' . $image->getClientOriginalName();
+                $image->move(public_path('uploads/categories'), $imageName);
+                $category->image = 'uploads/categories/' . $imageName;
+            }
+
+            $category->is_active = true;
+            $category->save();
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Category added successfully!',
+                'category' => $category
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Failed to add category: ' . $e->getMessage()
+            ], 500);
+        }
     }
 
-    // ✅ Show Category List
-    public function category_list()
+    // ✅ Get Category Data for Edit (AJAX)
+    public function get_category($id)
     {
-        $categories = Category::latest()->get();
-        return view('admin.categorylist', compact('categories'));
+        try {
+            $category = Category::findOrFail($id);
+            return response()->json([
+                'status' => 'success',
+                'category' => $category
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Category not found'
+            ], 404);
+        }
     }
 
-    // ✅ Edit Category
-    public function edit_category($id)
-    {
-        $category = Category::findOrFail($id);
-        return view('admin.categoryedit', compact('category'));
-    }
-
-    // ✅ Update Category
+    // ✅ Update Category (AJAX)
     public function update_category(Request $request, $id)
     {
-        $request->validate([
+        $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255|unique:categories,name,' . $id,
             'description' => 'nullable|string',
             'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
-        $category = Category::findOrFail($id);
-        $category->name = $request->name;
-        $category->slug = Str::slug($request->name);
-        $category->description = $request->description;
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Validation failed',
+                'errors' => $validator->errors()
+            ], 422);
+        }
 
-        if ($request->hasFile('image')) {
-            // Delete old image
+        try {
+            $category = Category::findOrFail($id);
+            $category->name = $request->name;
+            $category->slug = Str::slug($request->name);
+            $category->description = $request->description;
+            
+            if ($request->hasFile('image')) {
+                // Delete old image
+                if ($category->image && file_exists(public_path($category->image))) {
+                    unlink(public_path($category->image));
+                }
+
+                $image = $request->file('image');
+                $imageName = time() . '_' . $image->getClientOriginalName();
+                $image->move(public_path('uploads/categories'), $imageName);
+                $category->image = 'uploads/categories/' . $imageName;
+            }
+
+            $category->save();
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Category updated successfully!',
+                'category' => $category
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Failed to update category: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    // ✅ Delete Category (AJAX)
+    public function delete_category($id)
+    {
+        try {
+            $category = Category::findOrFail($id);
+
             if ($category->image && file_exists(public_path($category->image))) {
                 unlink(public_path($category->image));
             }
 
-            $image = $request->file('image');
-            $imageName = time() . '_' . $image->getClientOriginalName();
-            $image->move(public_path('uploads/categories'), $imageName);
-            $category->image = 'uploads/categories/' . $imageName;
+            $category->delete();
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Category deleted successfully!'
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Failed to delete category: ' . $e->getMessage()
+            ], 500);
         }
-
-        $category->save();
-
-        return redirect()->route('category.list')->with('success', 'Category updated successfully!');
-    }
-
-    // ✅ Delete Category
-    public function delete_category($id)
-    {
-        $category = Category::findOrFail($id);
-
-        if ($category->image && file_exists(public_path($category->image))) {
-            unlink(public_path($category->image));
-        }
-
-        $category->delete();
-
-        return redirect()->route('category.list')->with('success', 'Category deleted successfully!');
     }
 }

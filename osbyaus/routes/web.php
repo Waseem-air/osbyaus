@@ -19,15 +19,12 @@ Route::get('/addproduct', [ProductController::class, 'add_product'])->name('add.
  Route::get('/product-list', [ProductController::class, 'product_list'])->name('product_list');
 
 
-Route::get('/addcategory', [CategoryController::class, 'add_category'])->name('add.category');
-Route::post('/store-category', [CategoryController::class, 'store_category'])->name('store.category');
-
-Route::get('/category-list', [CategoryController::class, 'category_list'])->name('category.list');
-
-Route::get('/edit-category/{id}', [CategoryController::class, 'edit_category'])->name('edit.category');
-Route::post('/update-category/{id}', [CategoryController::class, 'update_category'])->name('update.category');
-
-Route::get('/delete-category/{id}', [CategoryController::class, 'delete_category'])->name('delete.category');
+// Category Routes
+Route::get('/admin/categories', [CategoryController::class, 'category_list'])->name('category.list');
+Route::post('/admin/categories/store', [CategoryController::class, 'store_category'])->name('store.category');
+Route::get('/admin/categories/{id}/get', [CategoryController::class, 'get_category']);
+Route::post('/admin/categories/{id}/update', [CategoryController::class, 'update_category']);
+Route::delete('/admin/categories/{id}/delete', [CategoryController::class, 'delete_category']);
 
 
 
