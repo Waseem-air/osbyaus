@@ -684,5 +684,373 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
+
+
+
+
+class ProductCRUD {
+    constructor() {
+        this.init();
+    }
+
+    init() {
+        this.handleImageUpload();
+        this.handleTagSelection();
+        this.handleFormSubmit();
+        this.handleEditProduct();
+        this.handleDeleteProduct();
+        this.handleDeleteImage();
+    }
+
+    // Image Upload Preview
+    handleImageUpload() {
+        const fileInput = document.getElementById('myFiles');
+        const previewContainer = document.getElementById('previewContainer');
+
+        fileInput.addEventListener('change', function(e) {
+            const files = e.target.files;
+            previewContainer.innerHTML = '';
+
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                const reader = new FileReader();
+
+                reader.onload = function(e) {
+                    const preview = document.createElement('div');
+                    preview.className = 'image-preview';
+                    preview.innerHTML = `
+                        <img src="${e.target.result}" alt="Preview">
+                        <button type="button" class="remove-image" data-index="${i}">×</button>
+                    `;
+                    previewContainer.appendChild(preview);
+                }
+
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Remove image preview
+        previewContainer.addEventListener('click', function(e) {
+            if (e.target.classList.contains('remove-image')) {
+                e.target.parentElement.remove();
+                // You might want to update the file input here
+            }
+        });
+    }
+
+    // Tag Selection for Categories, Sizes, Colors
+    handleTagSelection() {
+        this.setupTagBox('categorySelect', 'selectedTags', 'placeholderText');
+        this.setupTagBox('sizeSelect', 'selectedSizes', 'sizePlaceholderText');
+        this.setupTagBox('colorSelect', 'selectedColors', 'colorPlaceholderText', true);
+    }
+
+    setupTagBox(selectId, tagsContainerId, placeholderId, isColor = false) {
+        const select = document.getElementById(selectId);
+        const tagsContainer = document.getElementById(tagsContainerId);
+        const placeholder = document.getElementById(placeholderId);
+
+        select.addEventListener('change', function(e) {
+            const selectedOption = this.options[this.selectedIndex];
+            if (selectedOption.value) {
+                placeholder.style.display = 'none';
+                
+                const tag = document.createElement('div');
+                tag.className = 'tag';
+                tag.dataset.value = selectedOption.value;
+                
+                if (isColor) {
+                    const color = selectedOption.getAttribute('data-color');
+                    const textColor = selectedOption.getAttribute('data-text-color');
+                    tag.style.backgroundColor = color;
+                    tag.style.color = textColor;
+                }
+                
+                tag.innerHTML = `
+                    ${selectedOption.text}
+                    <span class="remove-tag">×</span>
+                `;
+                
+                tagsContainer.appendChild(tag);
+                
+                // Reset select
+                this.selectedIndex = 0;
+            }
+        });
+
+        // Remove tag
+        tagsContainer.addEventListener('click', function(e) {
+            if (e.target.classList.contains('remove-tag')) {
+                e.target.parentElement.remove();
+                if (tagsContainer.children.length === 0) {
+                    placeholder.style.display = 'inline';
+                }
+            }
+        });
+    }
+
+    // Form Submission
+    handleFormSubmit() {
+        const form = document.querySelector('.form-add-product');
+        const submitBtn = form.querySelector('button[type="submit"]');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            if (!this.validateForm()) {
+                return;
+            }
+
+            const formData = new FormData();
+            const formElements = form.elements;
+
+            // Add form data
+            for (let element of formElements) {
+                if (element.name && element.type !== 'file') {
+                    if (element.type === 'checkbox') {
+                        formData.append(element.name, element.checked ? 'active' : 'inactive');
+                    } else {
+                        formData.append(element.name, element.value);
+                    }
+                }
+            }
+
+            // Add tags data
+            formData.append('sizes', this.getSelectedValues('selectedSizes'));
+            formData.append('colors', this.getSelectedValues('selectedColors'));
+            formData.append('category_id', this.getSelectedValues('selectedTags')[0]);
+
+            // Add images
+            const fileInput = document.getElementById('myFiles');
+            for (let i = 0; i < fileInput.files.length; i++) {
+                formData.append('images[]', fileInput.files[i]);
+            }
+
+            try {
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Adding Product...';
+
+                const response = await fetch('/admin/products/store', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    },
+                    body: formData
+                });
+
+                const result = await response.json();
+
+                if (result.status === 'success') {
+                    this.showNotification('Product added successfully!', 'success');
+                    setTimeout(() => {
+                        window.location.href = '/admin/products';
+                    }, 1500);
+                } else {
+                    this.showNotification(result.message, 'error');
+                    if (result.errors) {
+                        this.displayValidationErrors(result.errors);
+                    }
+                }
+            } catch (error) {
+                this.showNotification('An error occurred. Please try again.', 'error');
+                console.error('Error:', error);
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Add Product';
+            }
+        });
+    }
+
+    // Edit Product
+    handleEditProduct() {
+        document.addEventListener('click', async (e) => {
+            if (e.target.classList.contains('edit-product')) {
+                e.preventDefault();
+                const productId = e.target.dataset.id;
+                
+                try {
+                    const response = await fetch(`/admin/products/${productId}/get`);
+                    const result = await response.json();
+                    
+                    if (result.status === 'success') {
+                        this.populateEditForm(result.product);
+                    } else {
+                        this.showNotification(result.message, 'error');
+                    }
+                } catch (error) {
+                    this.showNotification('Error loading product data', 'error');
+                    console.error('Error:', error);
+                }
+            }
+        });
+    }
+
+    // Delete Product
+    handleDeleteProduct() {
+        document.addEventListener('click', async (e) => {
+            if (e.target.classList.contains('delete-product')) {
+                e.preventDefault();
+                
+                if (!confirm('Are you sure you want to delete this product?')) {
+                    return;
+                }
+
+                const productId = e.target.dataset.id;
+                
+                try {
+                    const response = await fetch(`/admin/products/${productId}/delete`, {
+                        method: 'DELETE',
+                        headers: {
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                            'Content-Type': 'application/json'
+                        }
+                    });
+
+                    const result = await response.json();
+
+                    if (result.status === 'success') {
+                        this.showNotification('Product deleted successfully!', 'success');
+                        // Remove product row from table
+                        e.target.closest('tr').remove();
+                    } else {
+                        this.showNotification(result.message, 'error');
+                    }
+                } catch (error) {
+                    this.showNotification('Error deleting product', 'error');
+                    console.error('Error:', error);
+                }
+            }
+        });
+    }
+
+    // Delete Image
+    handleDeleteImage() {
+        document.addEventListener('click', async (e) => {
+            if (e.target.classList.contains('delete-image')) {
+                e.preventDefault();
+                
+                if (!confirm('Are you sure you want to delete this image?')) {
+                    return;
+                }
+
+                const imageId = e.target.dataset.id;
+                
+                try {
+                    const response = await fetch(`/admin/products/image/${imageId}/delete`, {
+                        method: 'DELETE',
+                        headers: {
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                            'Content-Type': 'application/json'
+                        }
+                    });
+
+                    const result = await response.json();
+
+                    if (result.status === 'success') {
+                        this.showNotification('Image deleted successfully!', 'success');
+                        e.target.closest('.image-preview').remove();
+                    } else {
+                        this.showNotification(result.message, 'error');
+                    }
+                } catch (error) {
+                    this.showNotification('Error deleting image', 'error');
+                    console.error('Error:', error);
+                }
+            }
+        });
+    }
+
+    // Helper Methods
+    validateForm() {
+        let isValid = true;
+
+        // Clear previous errors
+        document.querySelectorAll('.error-message').forEach(el => {
+            el.style.display = 'none';
+        });
+
+        // Check category
+        if (document.getElementById('selectedTags').children.length === 0) {
+            document.getElementById('categoryError').style.display = 'block';
+            isValid = false;
+        }
+
+        // Check sizes
+        if (document.getElementById('selectedSizes').children.length === 0) {
+            document.getElementById('sizeError').style.display = 'block';
+            isValid = false;
+        }
+
+        // Check colors
+        if (document.getElementById('selectedColors').children.length === 0) {
+            document.getElementById('colorError').style.display = 'block';
+            isValid = false;
+        }
+
+        return isValid;
+    }
+
+    getSelectedValues(containerId) {
+        const container = document.getElementById(containerId);
+        const tags = container.querySelectorAll('.tag');
+        return Array.from(tags).map(tag => tag.dataset.value);
+    }
+
+    populateEditForm(product) {
+        // Populate form fields with product data
+        // This would depend on your edit form structure
+        console.log('Populating form with:', product);
+        // Implementation for populating edit form
+    }
+
+    displayValidationErrors(errors) {
+        for (const [field, messages] of Object.entries(errors)) {
+            const input = document.querySelector(`[name="${field}"]`);
+            if (input) {
+                const errorDiv = document.createElement('div');
+                errorDiv.className = 'error-message';
+                errorDiv.textContent = messages[0];
+                input.parentNode.appendChild(errorDiv);
+            }
+        }
+    }
+
+    showNotification(message, type) {
+        // Create notification element
+        const notification = document.createElement('div');
+        notification.className = `notification ${type}`;
+        notification.textContent = message;
+        
+        // Add styles
+        notification.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: 5px;
+            color: white;
+            z-index: 1000;
+            font-weight: bold;
+        `;
+        
+        if (type === 'success') {
+            notification.style.backgroundColor = '#28a745';
+        } else {
+            notification.style.backgroundColor = '#dc3545';
+        }
+        
+        document.body.appendChild(notification);
+        
+        // Remove after 3 seconds
+        setTimeout(() => {
+            notification.remove();
+        }, 3000);
+    }
+}
+
+// Initialize when document is ready
+document.addEventListener('DOMContentLoaded', function() {
+    new ProductCRUD();
+});
 </script>
 @endpush

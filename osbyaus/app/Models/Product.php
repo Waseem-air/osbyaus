@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -21,20 +20,15 @@ class Product extends Model
         'stock_quantity',
         'status',
         'sku',
-        'brand',
-        'thumbnail',
-        'is_featured',
-        'is_new_arrival',
         'fabric',
-        'fit',
-        'style',
-        'tags',
+        'embellishment',
+        'cut',
     ];
 
     protected $casts = [
-        'is_featured' => 'boolean',
-        'is_new_arrival' => 'boolean',
-        'tags' => 'array',
+        'status' => 'boolean',
+        'price' => 'decimal:2',
+        'discount_price' => 'decimal:2',
     ];
 
     protected static function boot()
@@ -71,9 +65,22 @@ class Product extends Model
         return $this->hasMany(ProductVariant::class);
     }
 
-    /** Accessor for discounted price */
+    /** Accessors */
+    public function getMainImageAttribute()
+    {
+        return $this->images->where('is_main', true)->first() ?? $this->images->first();
+    }
+
     public function getFinalPriceAttribute()
     {
         return $this->discount_price ?? $this->price;
+    }
+
+    public function getDiscountPercentageAttribute()
+    {
+        if ($this->discount_price && $this->price > 0) {
+            return round((($this->price - $this->discount_price) / $this->price) * 100);
+        }
+        return 0;
     }
 }
