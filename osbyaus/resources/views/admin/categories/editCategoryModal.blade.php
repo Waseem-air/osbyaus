@@ -52,12 +52,13 @@
 
                 <!-- Modal Footer -->
                 <div class="modal-footer">
-                    <button type="button" class="tf-button style-2 w150" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="tf-button style-1 w150 d-flex align-items-center" id="editCategoryBtn">
+                    <button type="button" class="tf-button style-1 w208" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="tf-button style-1 w208 d-flex align-items-center" id="editCategoryBtn">
                         <span class="spinner-border spinner-border-sm me-2 d-none"></span>
                         Update Category
                     </button>
                 </div>
+
 
             </form>
         </div>
