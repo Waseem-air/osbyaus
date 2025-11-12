@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\admin;
 
-use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use App\Models\Category;
-use Illuminate\Support\Str;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 class CategoryController extends Controller
 {
@@ -13,7 +14,7 @@ class CategoryController extends Controller
     public function category_list()
     {
         $categories = Category::latest()->get();
-        return view('admin.categories.categorylist', compact('categories'));
+        return view('admin.categories.index', compact('categories'));
     }
 
     // ✅ Store Category (AJAX)
@@ -103,7 +104,7 @@ class CategoryController extends Controller
             $category->name = $request->name;
             $category->slug = Str::slug($request->name);
             $category->description = $request->description;
-            
+
             if ($request->hasFile('image')) {
                 // Delete old image
                 if ($category->image && file_exists(public_path($category->image))) {

@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\admin;
 
-use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class ProductController extends Controller
 {
@@ -18,5 +18,5 @@ class ProductController extends Controller
         // dd(123);
         return view('admin.productlist');
     }
-    
+
 }
