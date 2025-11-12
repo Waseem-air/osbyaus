@@ -190,7 +190,7 @@
                 </div>
 
                 <!-- Categories List -->
-                <div class="wg-box mt-2">
+                <div class="wg-box mt-5">
                     <div class="wg-table table-all-category">
                         <ul class="table-title flex gap20 mb-14">
                             <li><div class="body-title">Category</div></li>

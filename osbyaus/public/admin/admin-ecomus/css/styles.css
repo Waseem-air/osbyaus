@@ -2753,16 +2753,16 @@ a:hover {
 }
 .tf-button.style-2 {
   color: #FFF;
-  background-color: transparent;
+  /* background-color: transparent; */
   border: 1px solid rgba(255, 255, 255, 0.3019607843);
   font-weight: 400;
   font-size: 16px;
   line-height: 19px;
 }
 .tf-button.style-2:hover {
-  color: #FFF;
-  background-color: var(--Secondary);
-  border-color: var(--Secondary);
+  color: black;
+  background-color: transparent;
+  border-color: #94010E;
 }
 .tf-button.style-3 {
   color: var(--Secondary);

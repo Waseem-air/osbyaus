@@ -32,7 +32,7 @@
                 </div>
 
                 <!-- Category Details -->
-                <div class="wg-box mb-4">
+                <div class="wg-box mb-4 mt-5">
                     <div class="wg-table">
                         <ul class="table-title flex gap20 mb-14">
                             <li><div class="body-title">Image</div></li>

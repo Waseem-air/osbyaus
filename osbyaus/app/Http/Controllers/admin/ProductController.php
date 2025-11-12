@@ -10,13 +10,13 @@ class ProductController extends Controller
     {
         // Return a view from resources/views/admin/dashboard.blade.php
         // dd(123);
-        return view('admin.addproduct');
+        return view('admin.products.addproduct');
     }
      public function product_list()
     {
         // Return a view from resources/views/admin/dashboard.blade.php
         // dd(123);
-        return view('admin.productlist');
+        return view('admin.products.productlist');
     }
 
 }
