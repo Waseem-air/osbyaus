@@ -22,7 +22,7 @@ class CategoryController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255|unique:categories,name',
-            'description' => 'nullable|string',
+            'description' => 'nullable|string|max:500',
             'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
@@ -43,7 +43,7 @@ class CategoryController extends Controller
             // ✅ Handle Image Upload
             if ($request->hasFile('image')) {
                 $image = $request->file('image');
-                $imageName = time() . '_' . $image->getClientOriginalName();
+                $imageName = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
                 $image->move(public_path('uploads/categories'), $imageName);
                 $category->image = 'uploads/categories/' . $imageName;
             }
@@ -58,9 +58,10 @@ class CategoryController extends Controller
             ]);
 
         } catch (\Exception $e) {
+            \Log::error('Category Store Error: ' . $e->getMessage());
             return response()->json([
                 'status' => 'error',
-                'message' => 'Failed to add category: ' . $e->getMessage()
+                'message' => 'Failed to add category. Please try again.'
             ], 500);
         }
     }
@@ -75,6 +76,7 @@ class CategoryController extends Controller
                 'category' => $category
             ]);
         } catch (\Exception $e) {
+            \Log::error('Category Fetch Error: ' . $e->getMessage());
             return response()->json([
                 'status' => 'error',
                 'message' => 'Category not found'
@@ -87,7 +89,7 @@ class CategoryController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255|unique:categories,name,' . $id,
-            'description' => 'nullable|string',
+            'description' => 'nullable|string|max:500',
             'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
@@ -112,7 +114,7 @@ class CategoryController extends Controller
                 }
 
                 $image = $request->file('image');
-                $imageName = time() . '_' . $image->getClientOriginalName();
+                $imageName = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
                 $image->move(public_path('uploads/categories'), $imageName);
                 $category->image = 'uploads/categories/' . $imageName;
             }
@@ -126,11 +128,19 @@ class CategoryController extends Controller
             ]);
 
         } catch (\Exception $e) {
+            \Log::error('Category Update Error: ' . $e->getMessage());
             return response()->json([
                 'status' => 'error',
-                'message' => 'Failed to update category: ' . $e->getMessage()
+                'message' => 'Failed to update category. Please try again.'
             ], 500);
         }
+    }
+
+
+    public function show_category($id)
+    {
+        $category = Category::with('products')->findOrFail($id);
+        return view('admin.categories.show', compact('category'));
     }
 
     // ✅ Delete Category (AJAX)
@@ -139,6 +149,7 @@ class CategoryController extends Controller
         try {
             $category = Category::findOrFail($id);
 
+            // Delete image if exists
             if ($category->image && file_exists(public_path($category->image))) {
                 unlink(public_path($category->image));
             }
@@ -151,9 +162,10 @@ class CategoryController extends Controller
             ]);
 
         } catch (\Exception $e) {
+            \Log::error('Category Delete Error: ' . $e->getMessage());
             return response()->json([
                 'status' => 'error',
-                'message' => 'Failed to delete category: ' . $e->getMessage()
+                'message' => 'Failed to delete category. Please try again.'
             ], 500);
         }
     }

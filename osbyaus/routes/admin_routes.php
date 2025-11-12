@@ -16,10 +16,12 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/product-list', [ProductController::class, 'product_list'])->name('product.list');
 
     // 🏷️ Category Routes
-    Route::get('/categories', [CategoryController::class, 'category_list'])->name('category.list');
-    Route::post('/categories/store', [CategoryController::class, 'store_category'])->name('category.store');
-    Route::get('/categories/{id}/get', [CategoryController::class, 'get_category'])->name('category.get');
-    Route::post('/categories/{id}/update', [CategoryController::class, 'update_category'])->name('category.update');
-    Route::delete('/categories/{id}/delete', [CategoryController::class, 'delete_category'])->name('category.delete');
-
+    Route::prefix('categories')->name('category.')->group(function () {
+        Route::get('/', [CategoryController::class, 'category_list'])->name('index');
+        Route::get('/{id}/show', [CategoryController::class, 'show_category'])->name('show');
+        Route::post('/store', [CategoryController::class, 'store_category'])->name('store');
+        Route::get('/{id}/get', [CategoryController::class, 'get_category'])->name('get');
+        Route::post('/{id}/update', [CategoryController::class, 'update_category'])->name('update');
+        Route::delete('/{id}/delete', [CategoryController::class, 'delete_category'])->name('delete');
+    });
 });
