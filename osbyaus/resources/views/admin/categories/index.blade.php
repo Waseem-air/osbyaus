@@ -142,10 +142,10 @@ flex-shrink: 0;
                     <form id="addCategoryForm" class="form-style-1" enctype="multipart/form-data">
                         <div class="modal-body">
                             <div id="addCategoryErrors" class="alert alert-danger d-none mb-20"></div>
-                            
+
                             <fieldset class="mb-20">
                                 <div class="body-title">Category Name <span class="tf-color-1">*</span></div>
-                                <input class="form-control" type="text" placeholder="Category name" 
+                                <input class="form-control" type="text" placeholder="Category name"
                                        name="name" required>
                             </fieldset>
 
@@ -196,10 +196,10 @@ flex-shrink: 0;
                         <div class="modal-body">
                             <div id="editCategoryErrors" class="alert alert-danger d-none mb-20"></div>
                             <input type="hidden" id="editCategoryId" name="id">
-                            
+
                             <fieldset class="mb-20">
                                 <div class="body-title">Category Name <span class="tf-color-1">*</span></div>
-                                <input class="form-control" type="text" placeholder="Category name" 
+                                <input class="form-control" type="text" placeholder="Category name"
                                        id="editCategoryName" name="name" required>
                             </fieldset>
 
@@ -245,7 +245,7 @@ flex-shrink: 0;
                 <div class="flex items-center flex-wrap justify-between gap20 mb-30">
                     <h3>Category List</h3>
                 </div>
-                
+
                 <div class="search-bar-container">
                     <!-- Search Form -->
                     <form class="form-search">
@@ -304,7 +304,7 @@ flex-shrink: 0;
                             <li class="wg-product item-row gap20" id="category-{{ $category->id }}">
                                 <div class="name">
                                     <div class="image">
-                                        <img src="{{ asset(($category->image ?? 'default.jpg')) }}" 
+                                        <img src="{{ asset(($category->image ?? 'default.jpg')) }}"
                                              alt="{{ $category->name }}" width="50">
                                     </div>
                                     <div class="title line-clamp-2 mb-0">
@@ -322,18 +322,18 @@ flex-shrink: 0;
 
                                 <div class="item-actions">
                                     <!-- Edit -->
-                                    <a href="javascript:void(0)" class="edit-category" 
-                                       data-id="{{ $category->id }}" 
-                                       data-bs-toggle="modal" 
+                                    <a href="javascript:void(0)" class="edit-category"
+                                       data-id="{{ $category->id }}"
+                                       data-bs-toggle="modal"
                                        data-bs-target="#editCategoryModal"
                                        title="Edit Category">
                                         <i class="icon-edit"></i>
                                     </a>
 
                                     <!-- Delete -->
-                                    <a href="javascript:void(0)" class="delete-category" 
-                                       data-id="{{ $category->id }}" 
-                                       data-name="{{ $category->name }}" 
+                                    <a href="javascript:void(0)" class="delete-category"
+                                       data-id="{{ $category->id }}"
+                                       data-name="{{ $category->name }}"
                                        title="Delete Category">
                                         <i class="icon-trash-2"></i>
                                     </a>
@@ -353,12 +353,8 @@ flex-shrink: 0;
             <!-- /main-content-wrap -->
         </div>
         <!-- /main-content-wrap -->
-        
-        <!-- bottom-page -->
-        <div class="bottom-page">
-            <div class="body-text">Copyright © 2024 <a href="../index.html">Ecomus</a>. Design by Themesflat All rights reserved</div>
-        </div>
-        <!-- /bottom-page -->
+
+        @include('admin.components.footer')
     </div>
     <!-- /main-content -->
 @endsection
@@ -387,9 +383,9 @@ $(document).ready(function() {
                 </button>
             </div>
         `;
-        
+
         $('#alertContainer').append(alertHtml);
-        
+
         // Auto remove after 5 seconds
         setTimeout(() => {
             $('#' + alertId).remove();
@@ -411,7 +407,7 @@ $(document).ready(function() {
     }
 
     console.log('DOM loaded - initializing category management');
-    
+
     // Setup image previews
     setupImagePreview('addCategoryImage', 'addCategoryImagePreview');
     setupImagePreview('editCategoryImage', 'editCategoryImagePreview');
@@ -432,16 +428,16 @@ $(document).ready(function() {
     $('#addCategoryForm').on('submit', function(e) {
         e.preventDefault();
         console.log('Add category form submitted');
-        
+
         const formData = new FormData(this);
         const btn = $('#addCategoryBtn');
         const spinner = btn.find('.spinner');
         const errorDiv = $('#addCategoryErrors');
-        
+
         btn.addClass('btn-loading').prop('disabled', true);
         spinner.removeClass('d-none');
         errorDiv.html('').addClass('d-none');
-        
+
         $.ajax({
             url: '{{ route("store.category") }}',
             method: 'POST',
@@ -457,9 +453,9 @@ $(document).ready(function() {
                     // Close modal using Bootstrap
                     const modal = bootstrap.Modal.getInstance($('#addCategoryModal')[0]);
                     modal.hide();
-                    
+
                     showAlert(data.message, 'success');
-                    
+
                     // Reload page to show new category
                     setTimeout(() => {
                         location.reload();
@@ -495,7 +491,7 @@ $(document).ready(function() {
         if (editBtn.hasClass('edit-category')) {
             const categoryId = editBtn.data('id');
             console.log('Edit category clicked:', categoryId);
-            
+
             $.ajax({
                 url: `/admin/categories/${categoryId}/get`,
                 headers: {
@@ -509,14 +505,14 @@ $(document).ready(function() {
                         $('#editCategoryId').val(category.id);
                         $('#editCategoryName').val(category.name);
                         $('#editCategoryDescription').val(category.description || '');
-                        
+
                         const imagePreview = $('#editCategoryImagePreview');
                         if (category.image) {
                             imagePreview.attr('src', '{{ asset("") }}' + category.image).removeClass('d-none');
                         } else {
                             imagePreview.attr('src', '').addClass('d-none');
                         }
-                        
+
                         const errorDiv = $('#editCategoryErrors');
                         errorDiv.html('').addClass('d-none');
                     }
@@ -533,17 +529,17 @@ $(document).ready(function() {
     $('#editCategoryForm').on('submit', function(e) {
         e.preventDefault();
         console.log('Edit category form submitted');
-        
+
         const categoryId = $('#editCategoryId').val();
         const formData = new FormData(this);
         const btn = $('#editCategoryBtn');
         const spinner = btn.find('.spinner');
         const errorDiv = $('#editCategoryErrors');
-        
+
         btn.addClass('btn-loading').prop('disabled', true);
         spinner.removeClass('d-none');
         errorDiv.html('').addClass('d-none');
-        
+
         $.ajax({
             url: `/admin/categories/${categoryId}/update`,
             method: 'POST',
@@ -559,9 +555,9 @@ $(document).ready(function() {
                     // Close modal using Bootstrap
                     const modal = bootstrap.Modal.getInstance($('#editCategoryModal')[0]);
                     modal.hide();
-                    
+
                     showAlert(data.message, 'success');
-                    
+
                     // Reload page to show updated category
                     setTimeout(() => {
                         location.reload();
@@ -597,7 +593,7 @@ $(document).ready(function() {
         const categoryId = deleteBtn.data('id');
         const categoryName = deleteBtn.data('name');
         console.log('Delete category clicked:', categoryId, categoryName);
-        
+
         Swal.fire({
             title: 'Are you sure?',
             text: `You are about to delete "${categoryName}". This action cannot be undone!`,

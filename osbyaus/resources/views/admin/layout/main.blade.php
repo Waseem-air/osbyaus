@@ -1,6 +1,6 @@
-   @include("admin.components.head")
- @include("admin.components.header")
-  <!-- #wrapper -->
+@include("admin.components.head")
+@include("admin.components.header")
+<!-- #wrapper -->
 <div id="wrapper">
     <!-- #page -->
     <div id="page" class="">
@@ -13,12 +13,12 @@
                 </div>
             </div>
             <!-- /preload -->
- @include("admin.components.sidebar")
-  <!-- section-content-right -->
+            @include("admin.components.sidebar")
+            <!-- section-content-right -->
             <div class="section-content-right">
- @include("admin.components.header")
-@yield('content')
- </div>
+                @include("admin.components.header")
+                @yield('content')
+            </div>
             <!-- /section-content-right -->
         </div>
         <!-- /layout-wrap -->
@@ -26,4 +26,4 @@
     <!-- /#page -->
 </div>
 <!-- /#wrapper -->
- @include("admin.components.footer")
+@include("admin.components.scripts")

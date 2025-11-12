@@ -3,6 +3,12 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
+
+// ---------------------------------------------------------
+// 🧭 All Cache Clear
+// ---------------------------------------------------------
+require __DIR__ . '/all-clear.php';
+
 Route::get('/', function () {
     return view('welcome');
 });
@@ -20,13 +26,14 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+
+// ---------------------------------------------------------
+// 🧭 Auth Routes
+// ---------------------------------------------------------
 require __DIR__.'/auth.php';
 
 
 // ---------------------------------------------------------
 // 🧭 Admin Panel Routes
-// ---------------------------------------------------------
-// These routes handle all admin-related features such as
-// dashboard, product management, categories, and transactions.
 // ---------------------------------------------------------
 require __DIR__ . '/admin_routes.php';
