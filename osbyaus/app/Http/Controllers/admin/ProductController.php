@@ -179,9 +179,10 @@ class ProductController extends Controller
         $product = Product::with([
             'categories',
             'images',
-            'colors.color',
-            'sizes.size',
-            'variants'
+            'colors',
+            'sizes',
+            'variants.color',
+            'variants.size'
         ])->findOrFail($id);
 
         $categories = Category::where('is_active', true)->get();
@@ -214,7 +215,6 @@ class ProductController extends Controller
             ], 404);
         }
     }
-
     // ✅ Update Product
     public function update_product(Request $request, $id)
     {
@@ -234,6 +234,8 @@ class ProductController extends Controller
             'sizes.*' => 'exists:sizes,id',
             'colors' => 'required|array|min:1',
             'colors.*' => 'exists:colors,id',
+            'images' => 'sometimes|array',
+            'images.*' => 'image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
         if ($validator->fails()) {
@@ -282,6 +284,23 @@ class ProductController extends Controller
                 ]);
             }
 
+            // Handle new images
+            if ($request->hasFile('images')) {
+                foreach ($request->file('images') as $image) {
+                    $imageName = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
+                    $image->move(public_path('uploads/products'), $imageName);
+
+                    $productImage = new ProductImage();
+                    $productImage->product_id = $product->id;
+                    $productImage->image_path = 'uploads/products/' . $imageName;
+                    $productImage->is_main = false; // New images are not main by default
+                    $productImage->save();
+                }
+            }
+
+            // Update variants if needed (optional - you can add this if you want to update variant prices/stock)
+            $this->updateProductVariants($product, $request);
+
             DB::commit();
 
             return response()->json([
@@ -300,6 +319,15 @@ class ProductController extends Controller
         }
     }
 
+// ✅ Optional: Update Product Variants
+    private function updateProductVariants(Product $product, Request $request)
+    {
+        // If you want to update variant prices and stock when product details change
+        $product->variants()->update([
+            'price' => $request->regular_price,
+            'stock_quantity' => $request->stock_quantity,
+        ]);
+    }
     // ✅ Delete Product
     public function delete_product($id)
     {

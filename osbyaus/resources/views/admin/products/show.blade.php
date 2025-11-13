@@ -4,7 +4,7 @@
     <style>
         .main-product-image {
             width: 400px;
-            height: 350px;
+            height: 300px;
             object-fit: cover;
             border-radius: 8px;
         }
@@ -309,6 +309,9 @@
                 </div>
             </div>
         </div>
+
+        @include('admin.components.footer')
+
     </div>
 @endsection
 
