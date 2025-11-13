@@ -20,17 +20,100 @@ use Illuminate\Support\Str;
 class ProductController extends Controller
 {
     // ✅ Show Product List - Updated for HTML display
-    public function product_list()
+//    public function product_list()
+//    {
+//        $products = Product::with([
+//            'categories',
+//            'images',
+//            'colors',
+//            'sizes',
+//            'variants'
+//        ])->latest()->get();
+//        return view('admin.products.index', compact('products'));
+//    }
+
+
+    // ✅ Show Product List with AJAX support
+    public function product_list(Request $request)
     {
-        $products = Product::with([
+        $query = Product::with([
             'categories',
             'images',
             'colors',
             'sizes',
-            'variants'
-        ])->latest()->get();
+            'variants',
+        ]);
+
+        // Search filter
+        if ($request->has('search') && !empty($request->search)) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'LIKE', "%{$search}%")
+                    ->orWhere('sku', 'LIKE', "%{$search}%")
+                    ->orWhere('description', 'LIKE', "%{$search}%");
+            });
+        }
+
+        // Status filter
+        if ($request->has('status') && $request->status !== 'all') {
+            switch ($request->status) {
+                case 'active':
+                    $query->where('status', true);
+                    break;
+                case 'inactive':
+                    $query->where('status', false);
+                    break;
+                case 'in_stock':
+                    $query->where('stock_quantity', '>', 0);
+                    break;
+                case 'out_of_stock':
+                    $query->where('stock_quantity', '<=', 0);
+                    break;
+            }
+        }
+
+        // Sort filter
+        switch ($request->sort ?? 'newest') {
+            case 'newest':
+                $query->latest();
+                break;
+            case 'oldest':
+                $query->oldest();
+                break;
+            case 'name_asc':
+                $query->orderBy('name', 'asc');
+                break;
+            case 'name_desc':
+                $query->orderBy('name', 'desc');
+                break;
+            case 'price_asc':
+                $query->orderBy('price', 'asc');
+                break;
+            case 'price_desc':
+                $query->orderBy('price', 'desc');
+                break;
+        }
+
+        // Pagination
+        $products = $query->paginate(10)->withQueryString();
+
+        // AJAX request - return HTML only
+        if ($request->ajax()) {
+            return response()->json([
+                'html' => view('admin.products.partials.product_list', compact('products'))->render(),
+                'pagination' => [
+                    'current_page' => $products->currentPage(),
+                    'last_page' => $products->lastPage(),
+                    'per_page' => $products->perPage(),
+                    'total' => $products->total(),
+                ]
+            ]);
+        }
+
+        // Regular request - return full view
         return view('admin.products.index', compact('products'));
     }
+
 
     // ✅ Show Add Product Form
     public function add_product()
