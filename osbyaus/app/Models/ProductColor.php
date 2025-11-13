@@ -15,13 +15,19 @@ class ProductColor extends Model
         'color_id',
     ];
 
+    public function variants()
+    {
+        return $this->hasMany(ProductVariant::class);
+    }
+
+    public function color()
+    {
+        return $this->belongsTo(Color::class);
+    }
+
     public function product()
     {
         return $this->belongsTo(Product::class);
     }
 
-    public function variants()
-    {
-        return $this->hasMany(ProductVariant::class);
-    }
 }

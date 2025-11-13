@@ -11,7 +11,6 @@ class Product extends Model
     use HasFactory;
 
     protected $fillable = [
-        'category_id',
         'name',
         'slug',
         'description',
@@ -39,7 +38,7 @@ class Product extends Model
         });
     }
 
-    /** Relationships */
+    /** Relationships - CORRECTED */
     public function categories()
     {
         return $this->belongsToMany(Category::class, 'product_category', 'product_id', 'category_id');
@@ -50,15 +49,6 @@ class Product extends Model
         return $this->hasMany(ProductImage::class);
     }
 
-    public function sizes()
-    {
-        return $this->hasMany(ProductSize::class);
-    }
-
-    public function colors()
-    {
-        return $this->hasMany(ProductColor::class);
-    }
 
     public function variants()
     {
@@ -83,4 +73,27 @@ class Product extends Model
         }
         return 0;
     }
+
+    public function colors()
+    {
+        return $this->belongsToMany(Color::class, 'product_colors', 'product_id', 'color_id')
+            ->withTimestamps();
+    }
+
+    public function sizes()
+    {
+        return $this->belongsToMany(Size::class, 'product_sizes', 'product_id', 'size_id')
+            ->withTimestamps();
+    }
+
+    public function productColors()
+    {
+        return $this->hasMany(ProductColor::class);
+    }
+
+    public function productSizes()
+    {
+        return $this->hasMany(ProductSize::class);
+    }
+
 }

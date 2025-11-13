@@ -18,4 +18,19 @@ class Size extends Model
     protected $casts = [
         'is_active' => 'boolean',
     ];
+
+
+    public function productSizes()
+    {
+        return $this->hasMany(ProductSize::class);
+    }
+
+    public function products()
+    {
+        return $this->belongsToMany(Product::class, 'product_sizes', 'size_id', 'product_id')
+            ->withTimestamps();
+    }
+
+
+
 }

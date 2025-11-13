@@ -18,4 +18,18 @@ class Color extends Model
     protected $casts = [
         'is_active' => 'boolean',
     ];
+
+
+    public function productColors()
+    {
+        return $this->hasMany(ProductColor::class);
+    }
+
+    public function products()
+    {
+        return $this->belongsToMany(Product::class, 'product_colors', 'color_id', 'product_id')
+            ->withTimestamps();
+    }
+
+
 }
