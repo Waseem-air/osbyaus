@@ -43,14 +43,7 @@
                                         </ul>
                                 </li>
 
-
-                                <li class="menu-item">
-                                    <a href="{{ route('admin.color.index') }}" class="">
-                                        <div class="icon"><i class="icon-pie-chart"></i></div>
-                                        <div class="text">Colors</div>
-                                    </a>
-                                </li>
-
+                                <!-- Categories -->
                                 <li class="menu-item">
                                     <a href="{{ route('admin.category.index') }}" class="">
                                         <div class="icon"><i class="icon-layers"></i></div>
@@ -58,6 +51,7 @@
                                     </a>
                                 </li>
 
+                                <!-- Attributes Dropdown -->
                                 <li class="menu-item has-children">
                                     <a href="javascript:void(0);" class="menu-item-button">
                                         <div class="icon">
@@ -68,18 +62,23 @@
                                         <div class="text">Attributes</div>
                                     </a>
                                     <ul class="sub-menu">
+                                        <!-- Colors -->
                                         <li class="sub-menu-item">
-                                            <a href="attributes.html" class="">
-                                                <div class="text">Attributes</div>
+                                            <a href="{{ route('admin.color.index') }}" class="">
+                                                <div class="text">Colors</div>
                                             </a>
                                         </li>
+
+                                        <!-- Sizes -->
                                         <li class="sub-menu-item">
-                                            <a href="add-attributes.html" class="">
-                                                <div class="text">Add attributes</div>
+                                            <a href="{{ route('admin.size.index') }}" class="">
+                                                <div class="text">Sizes</div>
                                             </a>
                                         </li>
                                     </ul>
                                 </li>
+
+
                                 <li class="menu-item has-children">
                                     <a href="javascript:void(0);" class="menu-item-button">
                                         <div class="icon">

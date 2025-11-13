@@ -25,7 +25,7 @@ class Category extends Model
 
     public function products()
     {
-        return $this->hasMany(Product::class);
+        return $this->belongsToMany(Product::class, 'product_category');
     }
 
     // Automatically generate slug

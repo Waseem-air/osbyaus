@@ -4,6 +4,7 @@ use App\Http\Controllers\admin\AdminController;
 use App\Http\Controllers\admin\CategoryController;
 use App\Http\Controllers\admin\ColorController;
 use App\Http\Controllers\admin\ProductController;
+use App\Http\Controllers\admin\SizeController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('admin')->name('admin.')->group(function () {
@@ -21,6 +22,16 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::post('/{id}/toggle-status', [ColorController::class, 'toggle_color_status'])->name('toggle-status');
         Route::delete('/{id}/delete', [ColorController::class, 'delete_color'])->name('delete');
     });
+    // Size Routes
+    Route::prefix('sizes')->name('size.')->group(function () {
+        Route::get('/', [SizeController::class, 'size_list'])->name('index');
+        Route::post('/store', [SizeController::class, 'store_size'])->name('store');
+        Route::get('/{id}/get', [SizeController::class, 'get_size'])->name('get');
+        Route::post('/{id}/update', [SizeController::class, 'update_size'])->name('update');
+        Route::post('/{id}/toggle-status', [SizeController::class, 'toggle_size_status'])->name('toggle-status');
+        Route::delete('/{id}/delete', [SizeController::class, 'delete_size'])->name('delete');
+    });
+
     // 🏷️ Category Routes
     Route::prefix('categories')->name('category.')->group(function () {
         Route::get('/', [CategoryController::class, 'category_list'])->name('index');
