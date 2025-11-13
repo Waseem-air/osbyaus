@@ -1,6 +1,109 @@
 @extends("admin.layout.main")
 
 @section('content')
+    <style>
+        .main-product-image {
+            width: 400px;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .product-image-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px 0;
+        }
+
+        .image-preview-small {
+            width: 100px;
+            height: 100px;
+            border-radius: 6px;
+            overflow: hidden;
+            border: 2px solid #e0e0e0;
+        }
+
+        .preview-thumb {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .status-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .main-badge {
+            background: #28a745;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .tf-button.small {
+            padding: 6px 12px;
+            font-size: 12px;
+            min-height: auto;
+        }
+
+        .tf-button.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .color-circle {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: inline-block;
+            border: 2px solid #e0e0e0;
+        }
+
+        .category-tag {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+        }
+
+        .size-badge {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+        }
+
+        .discount-badge {
+            background: #dc3545;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .table-product-images .table-title {
+            padding: 0 20px;
+        }
+
+        .table-product-images .flex.flex-column {
+            padding: 0 20px;
+        }
+
+        .product-image-item:hover {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            margin: 0 -20px;
+            padding: 15px 20px;
+        }
+    </style>
+
     <div class="main-content">
         <div class="main-content-inner">
             <div class="main-content-wrap">
@@ -94,24 +197,59 @@
                         </div>
                     </div>
 
-                    <!-- Additional Images -->
+                    <!-- Additional Images - Redesigned Section -->
                     @if($product->images->count() > 0)
                         <div class="image-gallery-section mb-6">
                             <h4 class="mb-3">Product Images</h4>
-                            <div class="image-gallery col-3 gap-3">
-                                @foreach($product->images as $image)
-                                    <div class="image-preview relative" data-image-id="{{ $image->id }}">
-                                        <img src="{{ asset($image->image_path) }}" alt="Product Image" class="gallery-image">
-                                        @if($image->is_main)
-                                            <span class="main-badge">Main</span>
-                                        @endif
-                                        <button type="button" class="delete-image-btn delete-product-image absolute top-1 right-1"
-                                                data-id="{{ $image->id }}"
-                                                title="Delete Image">
-                                            <i class="icon-trash-2"></i>
-                                        </button>
-                                    </div>
-                                @endforeach
+                            <div class="wg-box">
+                                <div class="wg-table table-product-images">
+                                    <ul class="table-title flex mb-24">
+                                        <li>
+                                            <div class="body-title">Image Preview</div>
+                                        </li>
+                                        <li>
+                                            <div class="body-title">Status</div>
+                                        </li>
+                                        <li>
+                                            <div class="body-title">Actions</div>
+                                        </li>
+                                    </ul>
+                                    <ul class="flex flex-column gap14">
+                                        @foreach($product->images as $image)
+                                            <li class="product-image-item">
+                                                <div class="flex items-center gap-3">
+                                                    <div class="image-preview-small">
+                                                        <img src="{{ asset($image->image_path) }}" alt="Product Image" class="preview-thumb">
+                                                    </div>
+                                                    <span class="body-text">Image {{ $loop->iteration }}</span>
+                                                </div>
+                                                <div class="status-info">
+                                                    @if($image->is_main)
+                                                        <span class="main-badge">Main Image</span>
+                                                    @else
+                                                        <span class="body-text text-muted">Additional</span>
+                                                    @endif
+                                                </div>
+                                                <div class="action-buttons">
+                                                    <button type="button" class="set-main-btn tf-button style-2 small {{ $image->is_main ? 'disabled' : '' }}"
+                                                            data-id="{{ $image->id }}"
+                                                            title="Set as Main Image"
+                                                        {{ $image->is_main ? 'disabled' : '' }}>
+                                                        <i class="icon-star"></i> Set Main
+                                                    </button>
+                                                    <button type="button" class="delete-image-btn tf-button style-3 small delete-product-image"
+                                                            data-id="{{ $image->id }}"
+                                                            title="Delete Image">
+                                                        <i class="icon-trash-2"></i> Delete
+                                                    </button>
+                                                </div>
+                                            </li>
+                                            @if(!$loop->last)
+                                                <li class="divider"></li>
+                                            @endif
+                                        @endforeach
+                                    </ul>
+                                </div>
                             </div>
                         </div>
                     @endif
@@ -161,42 +299,6 @@
                         </div>
                     @endif
 
-                    {{--                    <!-- Variants -->--}}
-                    {{--                    @if($product->variants->count() > 0)--}}
-                    {{--                        <div class="variants-section">--}}
-                    {{--                            <h4 class="mb-3">Product Variants</h4>--}}
-                    {{--                            <div class="wg-table">--}}
-                    {{--                                <ul class="table-title flex gap20 mb-14">--}}
-                    {{--                                    <li><div class="body-title">Color</div></li>--}}
-                    {{--                                    <li><div class="body-title">Size</div></li>--}}
-                    {{--                                    <li><div class="body-title">Price</div></li>--}}
-                    {{--                                    <li><div class="body-title">Stock</div></li>--}}
-                    {{--                                    <li><div class="body-title">SKU</div></li>--}}
-                    {{--                                </ul>--}}
-                    {{--                                <ul class="flex flex-column">--}}
-                    {{--                                    @foreach($product->variants as $variant)--}}
-                    {{--                                        <li class="wg-product item-row gap20">--}}
-                    {{--                                            <div class="flex items-center gap-2">--}}
-                    {{--                                                @if($variant->color)--}}
-                    {{--                                                    <span class="color-circle small" style="background-color: {{ $variant->color->hex_code }};"></span>--}}
-                    {{--                                                    <span class="body-text">{{ $variant->color->name }}</span>--}}
-                    {{--                                                @endif--}}
-                    {{--                                            </div>--}}
-                    {{--                                            <div class="body-text">--}}
-                    {{--                                                @if($variant->size)--}}
-                    {{--                                                    {{ $variant->size->name }} ({{ $variant->size->short_code }})--}}
-                    {{--                                                @endif--}}
-                    {{--                                            </div>--}}
-                    {{--                                            <div class="body-text">${{ number_format($variant->price, 2) }}</div>--}}
-                    {{--                                            <div class="body-text">{{ $variant->stock_quantity }}</div>--}}
-                    {{--                                            <div class="body-text">{{ $variant->sku }}</div>--}}
-                    {{--                                        </li>--}}
-                    {{--                                    @endforeach--}}
-                    {{--                                </ul>--}}
-                    {{--                            </div>--}}
-                    {{--                        </div>--}}
-                    {{--                    @endif--}}
-
                     <!-- Description -->
                     <div class="description-section mt-6">
                         <h4 class="mb-3">Description</h4>
@@ -210,90 +312,6 @@
     </div>
 @endsection
 
-@push('styles')
-    <style>
-        .main-product-image {
-            width: 400px;
-            height: 400px;
-            object-fit: cover;
-            border-radius: 8px;
-        }
-
-        .image-gallery .image-preview {
-            position: relative;
-            border-radius: 8px;
-            overflow: hidden;
-        }
-
-        .gallery-image {
-            width: 100%;
-            height: 150px;
-            object-fit: cover;
-        }
-
-        .delete-image-btn {
-            background: rgba(255, 0, 0, 0.8);
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 30px;
-            height: 30px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-
-        .image-preview:hover .delete-image-btn {
-            opacity: 1;
-        }
-
-        .main-badge {
-            position: absolute;
-            top: 5px;
-            left: 5px;
-            background: #28a745;
-            color: white;
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-size: 12px;
-        }
-
-        .color-circle {
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            display: inline-block;
-            border: 2px solid #e0e0e0;
-        }
-
-        .color-circle.small {
-            width: 16px;
-            height: 16px;
-        }
-
-        .category-tag {
-            background: #f8f9fa;
-            border: 1px solid #dee2e6;
-        }
-
-        .size-badge {
-            background: #f8f9fa;
-            border: 1px solid #dee2e6;
-        }
-
-        .discount-badge {
-            background: #dc3545;
-            color: white;
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-size: 12px;
-            font-weight: bold;
-        }
-    </style>
-@endpush
 
 @push('scripts')
     <script>
@@ -382,7 +400,7 @@
             $(document).on('click', '.delete-product-image', function(e) {
                 e.preventDefault();
                 const imageId = $(this).data('id');
-                const imageElement = $(this).closest('.image-preview');
+                const imageElement = $(this).closest('.product-image-item');
 
                 Swal.fire({
                     title: 'Delete Image?',
@@ -423,17 +441,17 @@
                                         showConfirmButton: false
                                     });
 
-                                    // Remove image preview with animation
+                                    // Remove image item with animation
                                     imageElement.fadeOut(300, function() {
                                         $(this).remove();
 
                                         // If no images left, show message
-                                        if ($('.image-gallery .image-preview').length === 0) {
+                                        if ($('.product-image-item').length === 0) {
                                             $('.image-gallery-section').html(`
-                                            <div class="text-center py-4">
-                                                <div class="body-text text-muted">No images available</div>
-                                            </div>
-                                        `);
+                                                <div class="text-center py-4">
+                                                    <div class="body-text text-muted">No images available</div>
+                                                </div>
+                                            `);
                                         }
                                     });
                                 } else {
@@ -464,13 +482,69 @@
                 });
             });
 
-            // Set main image on click
-            $(document).on('click', '.gallery-image', function() {
-                const imageSrc = $(this).attr('src');
-                $('.main-product-image').attr('src', imageSrc);
+            // ========================
+            // Set Main Image
+            // ========================
+            $(document).on('click', '.set-main-btn:not(.disabled)', function(e) {
+                e.preventDefault();
+                const imageId = $(this).data('id');
+                const button = $(this);
+
+                const loadingAlert = Swal.fire({
+                    title: 'Updating...',
+                    text: 'Setting image as main...',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+
+                $.ajax({
+                    url: `/admin/products/image/${imageId}/set-main`,
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': csrfToken,
+                        'Accept': 'application/json'
+                    },
+                    success: function(response) {
+                        Swal.close();
+
+                        if (response.status === 'success') {
+                            Swal.fire({
+                                title: 'Updated!',
+                                text: response.message || 'Main image updated successfully!',
+                                icon: 'success',
+                                timer: 1500,
+                                showConfirmButton: false
+                            }).then(() => {
+                                location.reload();
+                            });
+                        } else {
+                            Swal.fire({
+                                title: 'Error!',
+                                text: response.message || 'Failed to update main image.',
+                                icon: 'error'
+                            });
+                        }
+                    },
+                    error: function(xhr) {
+                        Swal.close();
+
+                        let errorMessage = 'Failed to update main image. Please try again.';
+
+                        if (xhr.responseJSON && xhr.responseJSON.message) {
+                            errorMessage = xhr.responseJSON.message;
+                        }
+
+                        Swal.fire({
+                            title: 'Error!',
+                            text: errorMessage,
+                            icon: 'error'
+                        });
+                    }
+                });
             });
 
         });
     </script>
 @endpush
-

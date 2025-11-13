@@ -391,4 +391,37 @@ class ProductController extends Controller
             ], 500);
         }
     }
+
+    // Add this method to your ProductController
+    public function set_main_image($id)
+    {
+        try {
+            DB::beginTransaction();
+
+            $image = ProductImage::findOrFail($id);
+
+            // Remove main status from all images of this product
+            ProductImage::where('product_id', $image->product_id)
+                ->update(['is_main' => false]);
+
+            // Set this image as main
+            $image->is_main = true;
+            $image->save();
+
+            DB::commit();
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Main image updated successfully!'
+            ]);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Set Main Image Error: ' . $e->getMessage());
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Failed to update main image. Please try again.'
+            ], 500);
+        }
+    }
 }

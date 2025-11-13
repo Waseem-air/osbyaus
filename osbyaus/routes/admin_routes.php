@@ -52,6 +52,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::post('/{id}/update', [ProductController::class, 'update_product'])->name('update');
     Route::delete('/{id}/delete', [ProductController::class, 'delete_product'])->name('delete');
     Route::delete('/image/{id}/delete', [ProductController::class, 'delete_product_image'])->name('image.delete');
+    Route::post('/image/{id}/set-main', [ProductController::class, 'set_main_image'])->name('image.set-main');
 });
 
 });
