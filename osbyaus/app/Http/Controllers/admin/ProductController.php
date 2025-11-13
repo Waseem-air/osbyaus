@@ -19,20 +19,6 @@ use Illuminate\Support\Str;
 
 class ProductController extends Controller
 {
-    // ✅ Show Product List - Updated for HTML display
-//    public function product_list()
-//    {
-//        $products = Product::with([
-//            'categories',
-//            'images',
-//            'colors',
-//            'sizes',
-//            'variants'
-//        ])->latest()->get();
-//        return view('admin.products.index', compact('products'));
-//    }
-
-
     // ✅ Show Product List with AJAX support
     public function product_list(Request $request)
     {
@@ -95,7 +81,7 @@ class ProductController extends Controller
         }
 
         // Pagination
-        $products = $query->paginate(10)->withQueryString();
+        $products = $query->paginate(15)->withQueryString();
 
         // AJAX request - return HTML only
         if ($request->ajax()) {

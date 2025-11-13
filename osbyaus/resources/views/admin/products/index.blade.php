@@ -150,8 +150,8 @@
         .page-link {
             padding: 10px 16px;
             border: 1px solid var(--Stroke);
-            background: var(--White);
-            color: var(--Body-Text);
+            background: var(--White) !important;
+            color: var(--Body-Text) !important;
             text-decoration: none;
             border-radius: 8px;
             font-size: 14px;
@@ -165,15 +165,15 @@
         }
 
         .page-link:hover {
-            background-color: var(--hv-item);
-            border-color: var(--Main);
-            color: var(--Main);
+            background-color: var(--hv-item) !important;
+            border-color: var(--Main) !important;
+            color: var(--Main) !important;
         }
 
         .page-item.active .page-link {
-            background: var(--Main);
-            color: var(--White);
-            border-color: var(--Main);
+            background: var(--Main) !important;
+            color: var(--White) !important;
+            border-color: var(--Main) !important;
         }
 
         .page-item.disabled .page-link {

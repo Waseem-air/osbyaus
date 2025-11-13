@@ -4,16 +4,22 @@
         /* Tag Input Styles */
         .tag-input-box {
             position: relative;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            padding: 8px;
-            min-height: 45px;
+            border: 1px solid var(--Stroke);
+            border-radius: 8px;
+            padding: 12px;
+            min-height: 52px;
             cursor: pointer;
-            background: white;
+            background: var(--White);
+            transition: all 0.3s ease;
+        }
+
+        .tag-input-box:hover {
+            border-color: var(--Secondary);
         }
 
         .tag-input-box.invalid {
-            border-color: #dc3545;
+            border-color: var(--Palette-Red-500);
+            box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.1);
         }
 
         .tag-input-box select {
@@ -27,11 +33,12 @@
         }
 
         .placeholder {
-            color: #6c757d;
+            color: var(--Text-Holder);
             position: absolute;
             top: 50%;
             transform: translateY(-50%);
             left: 12px;
+            font-size: 14px;
         }
 
         .placeholder.hidden {
@@ -45,14 +52,21 @@
         }
 
         .tag {
-            background: #007bff;
-            color: white;
-            padding: 4px 8px;
-            border-radius: 4px;
+            background: var(--Secondary);
+            color: var(--White);
+            padding: 6px 12px;
+            border-radius: 20px;
             display: flex;
             align-items: center;
             gap: 6px;
-            font-size: 14px;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .tag:hover {
+            background: var(--Style);
+            transform: translateY(-1px);
         }
 
         .color-tag {
@@ -66,14 +80,16 @@
             height: 12px;
             border-radius: 50%;
             display: inline-block;
+            border: 1px solid var(--White);
+            box-shadow: 0 0 0 1px var(--Stroke);
         }
 
         .tag button {
             background: none;
             border: none;
-            color: white;
+            color: var(--White);
             cursor: pointer;
-            font-size: 16px;
+            font-size: 14px;
             line-height: 1;
             padding: 0;
             width: 16px;
@@ -81,13 +97,21 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .tag button:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.1);
         }
 
         .error-message {
-            color: #dc3545;
+            color: var(--Palette-Red-500);
             font-size: 12px;
-            margin-top: 4px;
+            margin-top: 6px;
             display: none;
+            font-weight: 500;
         }
 
         .error-message.show {
@@ -96,19 +120,27 @@
 
         /* Image Preview */
         .preview-container {
-            margin-top: 15px;
+            margin-top: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
         }
 
         .preview-item {
             position: relative;
             width: 100px;
             height: 100px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
+            border: 2px solid var(--Stroke);
+            border-radius: 12px;
             overflow: hidden;
-            margin-bottom: 10px;
-            display: inline-block;
-            margin-right: 10px;
+            background: var(--Surface-3);
+            transition: all 0.3s ease;
+        }
+
+        .preview-item:hover {
+            border-color: var(--Secondary);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 116, 51, 0.15);
         }
 
         .preview-item img {
@@ -119,36 +151,48 @@
 
         .remove-btn {
             position: absolute;
-            top: 4px;
-            right: 4px;
-            background: rgba(0,0,0,0.7);
-            color: white;
+            top: 6px;
+            right: 6px;
+            background: var(--Palette-Red-500);
+            color: var(--White);
             border: none;
             border-radius: 50%;
-            width: 20px;
-            height: 20px;
+            width: 24px;
+            height: 24px;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 14px;
+            font-size: 12px;
             line-height: 1;
             padding: 0;
+            transition: all 0.3s ease;
+            opacity: 0.9;
+        }
+
+        .remove-btn:hover {
+            background: var(--Secondary);
+            transform: scale(1.1);
+            opacity: 1;
         }
 
         /* Toggle Switch */
         .status-toggle {
             display: flex;
             align-items: center;
-            gap: 10px;
-            margin-top: 20px;
+            gap: 12px;
+            margin-top: 24px;
+            padding: 16px;
+            background: var(--Surface-3);
+            border-radius: 12px;
+            border: 1px solid var(--Stroke);
         }
 
         .switch {
             position: relative;
             display: inline-block;
-            width: 50px;
-            height: 24px;
+            width: 52px;
+            height: 28px;
         }
 
         .switch input {
@@ -164,35 +208,45 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background-color: #ccc;
+            background-color: var(--Surface);
             transition: .4s;
-            border-radius: 24px;
+            border-radius: 34px;
+            border: 1px solid var(--Stroke);
         }
 
         .slider:before {
             position: absolute;
             content: "";
-            height: 16px;
-            width: 16px;
-            left: 4px;
-            bottom: 4px;
-            background-color: white;
+            height: 20px;
+            width: 20px;
+            left: 3px;
+            bottom: 3px;
+            background-color: var(--White);
             transition: .4s;
             border-radius: 50%;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         }
 
         input:checked + .slider {
-            background-color: #007bff;
+            background-color: var(--Secondary);
+            border-color: var(--Secondary);
         }
 
         input:checked + .slider:before {
-            transform: translateX(26px);
+            transform: translateX(24px);
+            background-color: var(--White);
+        }
+
+        input:focus + .slider {
+            box-shadow: 0 0 0 3px rgba(255, 116, 51, 0.2);
         }
 
         /* Loading States */
         .btn-loading {
-            opacity: 0.6;
+            opacity: 0.7;
             pointer-events: none;
+            background: var(--Surface) !important;
+            border-color: var(--Stroke) !important;
         }
 
         .btn-loading .spinner {
@@ -200,7 +254,7 @@
             width: 16px;
             height: 16px;
             border: 2px solid transparent;
-            border-top: 2px solid currentColor;
+            border-top: 2px solid var(--Secondary);
             border-radius: 50%;
             animation: spin 1s linear infinite;
             margin-right: 8px;
@@ -214,19 +268,124 @@
         /* Form Controls */
         .form-control {
             width: 100%;
-            padding: 8px 12px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
+            padding: 12px 16px;
+            border: 1px solid var(--Stroke);
+            border-radius: 8px;
             font-size: 14px;
+            background: var(--Input);
+            color: var(--Body-Text);
+            transition: all 0.3s ease;
         }
 
         .form-control:focus {
-            border-color: #007bff;
+            border-color: var(--Secondary);
             outline: none;
-            box-shadow: 0 0 0 2px rgba(0,123,255,0.25);
+            box-shadow: 0 0 0 3px rgba(255, 116, 51, 0.1);
+            background: var(--White);
+        }
+
+        .form-control::placeholder {
+            color: var(--Text-Holder);
+        }
+
+        .form-control.invalid {
+            border-color: var(--Palette-Red-500);
+            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+        }
+
+        /* Additional Secondary Color Applications */
+        .preview-item.main-image {
+            border-color: var(--Secondary);
+            box-shadow: 0 0 0 2px var(--Secondary);
+        }
+
+        .tag.secondary {
+            background: var(--Secondary);
+        }
+
+        .tag.secondary:hover {
+            background: var(--Palette-Red-500);
+        }
+
+        .status-text {
+            color: var(--Body-Text);
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .status-text.active {
+            color: var(--Palette-Green-500);
+        }
+
+        .status-text.inactive {
+            color: var(--Palette-Red-500);
+        }
+
+        /* File Upload Area */
+        .file-upload-area {
+            border: 2px dashed var(--Stroke);
+            border-radius: 12px;
+            padding: 32px;
+            text-align: center;
+            background: var(--Surface-3);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .file-upload-area:hover {
+            border-color: var(--Secondary);
+            background: var(--hv-item);
+        }
+
+        .file-upload-area.dragover {
+            border-color: var(--Secondary);
+            background: var(--hv-item);
+            box-shadow: 0 0 0 3px rgba(255, 116, 51, 0.1);
+        }
+
+        /* Price Input Groups */
+        .price-input-group {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .price-input {
+            flex: 1;
+        }
+
+        .currency-symbol {
+            color: var(--Secondary);
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        /* Stock Indicators */
+        .stock-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .stock-indicator.low {
+            background: var(--Palette-Red-500);
+            color: var(--White);
+        }
+
+        .stock-indicator.medium {
+            background: var(--Palette-Orange-400);
+            color: var(--White);
+        }
+
+        .stock-indicator.high {
+            background: var(--Palette-Green-500);
+            color: var(--White);
         }
     </style>
-
     <!-- main-content -->
     <div class="main-content">
         <!-- main-content-wrap -->
