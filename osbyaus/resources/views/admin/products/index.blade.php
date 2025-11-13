@@ -43,221 +43,221 @@
 
                                     <!-- Price -->
                                     <div class="body-text text-main-dark mt-4">
-                                        ${{ number_format($product->final_price, 2) }}
-                                        @if($product->discount_price)
-                                            <br><small class="text-muted text-decoration-line-through">${{ number_format($product->price, 2) }}</small>
-                                        @endif
-                                    </div>
+    {{ \App\Helpers\AppHelper::currency_symbol() }}{{ number_format($product->final_price, 2) }}
+    @if($product->discount_price)
+        <br><small class="text-muted text-decoration-line-through">${{ number_format($product->price, 2) }}</small>
+    @endif
+</div>
 
-                                    <!-- Colors & Sizes -->
-                                    <div class="size-display-group">
-                                        @foreach($product->colors->take(3) as $productColor)
-                                            @if($productColor)
-                                                <div class="size-display">
-                                                    <span class="color-circle" style="background-color: {{ $productColor->hex_code }};"></span>
-                                                </div>
-                                            @endif
-                                        @endforeach
-
-                                        <div class="size-display">
-                                            <p>
-                                                @foreach($product->sizes->take(3) as $productSize)
-                                                    @if($productSize)
-                                                        {{ $productSize->short_code }}@if(!$loop->last)/@endif
-                                                    @endif
-                                                @endforeach
-                                            </p>
-                                        </div>
-                                    </div>
-
-                                    <!-- Stock -->
-                                    <div class="body-text text-main-dark mt-4">
-                                        {{ $product->stock_quantity }}
-                                    </div>
-
-                                    <!-- Status -->
-                                    <div>
-                                        @if($product->stock_quantity > 0)
-                                            <div class="block-available bg-1 fw-7">In Stock</div>
-                                        @else
-                                            <div class="block-stock bg-1 fw-7">Out of stock</div>
-                                        @endif
-                                    </div>
-
-                                    <!-- Actions -->
-                                    <!-- In your product list HTML -->
-                                    <div class="list-icon-function">
-                                        <a href="{{ route('admin.product.show', $product->id) }}" class="item eye" title="View">
-                                            <i class="icon-eye"></i>
-                                        </a>
-                                        <a href="{{ route('admin.product.edit', $product->id) }}" class="item edit" title="Edit">
-                                            <i class="icon-edit-3"></i>
-                                        </a>
-                                        <a href="#" class="item trash delete-product"
-                                           title="Delete"
-                                           data-id="{{ $product->id }}"
-                                           data-name="{{ $product->name }}">
-                                            <i class="icon-trash-2"></i>
-                                        </a>
-                                    </div>
-                                </li>
-                            @endforeach
-                        </ul>
-                    </div>
-
-                    <div class="divider"></div>
-                    <div class="flex items-center justify-between flex-wrap gap10">
-                        <div class="text-tiny">Showing {{ $products->count() }} entries</div>
-                        <!-- Pagination would go here -->
-                    </div>
-                </div>
+<!-- Colors & Sizes -->
+<div class="size-display-group">
+    @foreach($product->colors->take(3) as $productColor)
+        @if($productColor)
+            <div class="size-display">
+                <span class="color-circle" style="background-color: {{ $productColor->hex_code }};"></span>
             </div>
-        </div>
+        @endif
+    @endforeach
+
+    <div class="size-display">
+        <p>
+            @foreach($product->sizes->take(3) as $productSize)
+                @if($productSize)
+                    {{ $productSize->short_code }}@if(!$loop->last)/@endif
+                @endif
+            @endforeach
+        </p>
     </div>
+</div>
+
+<!-- Stock -->
+<div class="body-text text-main-dark mt-4">
+    {{ $product->stock_quantity }}
+</div>
+
+<!-- Status -->
+<div>
+    @if($product->stock_quantity > 0)
+        <div class="block-available bg-1 fw-7">In Stock</div>
+    @else
+        <div class="block-stock bg-1 fw-7">Out of stock</div>
+    @endif
+</div>
+
+<!-- Actions -->
+<!-- In your product list HTML -->
+<div class="list-icon-function">
+    <a href="{{ route('admin.product.show', $product->id) }}" class="item eye" title="View">
+        <i class="icon-eye"></i>
+    </a>
+    <a href="{{ route('admin.product.edit', $product->id) }}" class="item edit" title="Edit">
+        <i class="icon-edit-3"></i>
+    </a>
+    <a href="#" class="item trash delete-product"
+       title="Delete"
+       data-id="{{ $product->id }}"
+       data-name="{{ $product->name }}">
+        <i class="icon-trash-2"></i>
+    </a>
+</div>
+</li>
+@endforeach
+</ul>
+</div>
+
+<div class="divider"></div>
+<div class="flex items-center justify-between flex-wrap gap10">
+<div class="text-tiny">Showing {{ $products->count() }} entries</div>
+<!-- Pagination would go here -->
+</div>
+</div>
+</div>
+</div>
+</div>
 
 @endsection
 
 @push('scripts')
-    <script>
-        $(document).ready(function() {
-            const csrfToken = $('meta[name="csrf-token"]').attr('content') || '';
+<script>
+$(document).ready(function() {
+const csrfToken = $('meta[name="csrf-token"]').attr('content') || '';
 
-            // ========================
-            // Delete Product
-            // ========================
-            $(document).on('click', '.delete-product', function(e) {
-                e.preventDefault();
-                const productId = $(this).data('id');
-                const productName = $(this).data('name');
-                SweetAlertHelper.confirm(
-                    `Are you sure you want to delete "${productName}"? This action cannot be undone and all associated data will be lost.`,
-                    'Delete Product?',
-                    () => {
-                        const loadingAlert = SweetAlertHelper.loading('Deleting product...');
-                        $.ajax({
-                            url: `/admin/products/${productId}/delete`,
-                            method: 'DELETE',
-                            headers: {
-                                'X-CSRF-TOKEN': csrfToken,
-                                'Accept': 'application/json'
-                            },
-                            success: function(response) {
-                                SweetAlertHelper.close(); // Close loading alert
-                                if (response.status === 'success') {
-                                    SweetAlertHelper.successAutoClose(
-                                        response.message || 'Product deleted successfully!',
-                                        'Deleted!'
-                                    );
-                                    // Remove product row from table with animation
-                                    $(`[data-product-id="${productId}"]`).fadeOut(300, function() {
-                                        $(this).remove();
-                                        // Check if no products left
-                                        if ($('.wg-table .wg-product').length === 0) {
-                                            $('.wg-table').html(`
-                                                <div class="text-center py-5">
-                                                    <div class="body-text text-muted mb-3">No products found</div>
-                                                    <a class="tf-button style-1 w208" href="{{ route('admin.product.add') }}">
-                                                        <i class="icon-plus"></i> Add First Product
-                                                    </a>
-                                                </div>
-                                            `);
-                                        }
-                                    });
-                                } else {
-                                    SweetAlertHelper.error(
-                                        response.message || 'Failed to delete product.',
-                                        'Delete Failed!'
-                                    );
-                                }
-                            },
-                            error: function(xhr) {
-                                SweetAlertHelper.close(); // Close loading alert
-                                let errorMessage = 'Failed to delete product. Please try again.';
-                                if (xhr.responseJSON && xhr.responseJSON.message) {
-                                    errorMessage = xhr.responseJSON.message;
-                                }
-                                SweetAlertHelper.error(
-                                    errorMessage,
-                                    'Delete Failed!'
-                                );
-                            }
-                        });
-                    },
-                    {
-                        confirmButtonText: 'Yes, delete it!',
-                        cancelButtonText: 'Cancel',
-                        icon: 'warning',
-                        confirmButtonColor: '#d33',
-                        cancelButtonColor: '#3085d6'
-                    }
-                );
-            });
+// ========================
+// Delete Product
+// ========================
+$(document).on('click', '.delete-product', function(e) {
+e.preventDefault();
+const productId = $(this).data('id');
+const productName = $(this).data('name');
+SweetAlertHelper.confirm(
+`Are you sure you want to delete "${productName}"? This action cannot be undone and all associated data will be lost.`,
+'Delete Product?',
+() => {
+const loadingAlert = SweetAlertHelper.loading('Deleting product...');
+$.ajax({
+url: `/admin/products/${productId}/delete`,
+method: 'DELETE',
+headers: {
+'X-CSRF-TOKEN': csrfToken,
+'Accept': 'application/json'
+},
+success: function(response) {
+SweetAlertHelper.close(); // Close loading alert
+if (response.status === 'success') {
+SweetAlertHelper.successAutoClose(
+    response.message || 'Product deleted successfully!',
+    'Deleted!'
+);
+// Remove product row from table with animation
+$(`[data-product-id="${productId}"]`).fadeOut(300, function() {
+    $(this).remove();
+    // Check if no products left
+    if ($('.wg-table .wg-product').length === 0) {
+        $('.wg-table').html(`
+            <div class="text-center py-5">
+                <div class="body-text text-muted mb-3">No products found</div>
+                <a class="tf-button style-1 w208" href="{{ route('admin.product.add') }}">
+                    <i class="icon-plus"></i> Add First Product
+                </a>
+            </div>
+        `);
+    }
+});
+} else {
+SweetAlertHelper.error(
+    response.message || 'Failed to delete product.',
+    'Delete Failed!'
+);
+}
+},
+error: function(xhr) {
+SweetAlertHelper.close(); // Close loading alert
+let errorMessage = 'Failed to delete product. Please try again.';
+if (xhr.responseJSON && xhr.responseJSON.message) {
+errorMessage = xhr.responseJSON.message;
+}
+SweetAlertHelper.error(
+errorMessage,
+'Delete Failed!'
+);
+}
+});
+},
+{
+confirmButtonText: 'Yes, delete it!',
+cancelButtonText: 'Cancel',
+icon: 'warning',
+confirmButtonColor: '#d33',
+cancelButtonColor: '#3085d6'
+}
+);
+});
 
-            // ========================
-            // Delete Product Image
-            // ========================
-            $(document).on('click', '.delete-product-image', function(e) {
-                e.preventDefault();
-                const imageId = $(this).data('id');
-                const imageElement = $(this).closest('.image-preview');
+// ========================
+// Delete Product Image
+// ========================
+$(document).on('click', '.delete-product-image', function(e) {
+e.preventDefault();
+const imageId = $(this).data('id');
+const imageElement = $(this).closest('.image-preview');
 
-                SweetAlertHelper.confirm(
-                    'Are you sure you want to delete this image? This action cannot be undone.',
-                    'Delete Image?',
-                    () => {
-                        const loadingAlert = SweetAlertHelper.loading('Deleting image...');
+SweetAlertHelper.confirm(
+'Are you sure you want to delete this image? This action cannot be undone.',
+'Delete Image?',
+() => {
+const loadingAlert = SweetAlertHelper.loading('Deleting image...');
 
-                        $.ajax({
-                            url: `/admin/products/image/${imageId}/delete`,
-                            method: 'DELETE',
-                            headers: {
-                                'X-CSRF-TOKEN': csrfToken,
-                                'Accept': 'application/json'
-                            },
-                            success: function(response) {
-                                SweetAlertHelper.close();
+$.ajax({
+url: `/admin/products/image/${imageId}/delete`,
+method: 'DELETE',
+headers: {
+'X-CSRF-TOKEN': csrfToken,
+'Accept': 'application/json'
+},
+success: function(response) {
+SweetAlertHelper.close();
 
-                                if (response.status === 'success') {
-                                    SweetAlertHelper.successAutoClose(
-                                        response.message || 'Image deleted successfully!',
-                                        'Deleted!'
-                                    );
+if (response.status === 'success') {
+SweetAlertHelper.successAutoClose(
+    response.message || 'Image deleted successfully!',
+    'Deleted!'
+);
 
-                                    // Remove image preview with animation
-                                    imageElement.fadeOut(300, function() {
-                                        $(this).remove();
-                                    });
-                                } else {
-                                    SweetAlertHelper.error(
-                                        response.message || 'Failed to delete image.',
-                                        'Delete Failed!'
-                                    );
-                                }
-                            },
-                            error: function(xhr) {
-                                SweetAlertHelper.close();
+// Remove image preview with animation
+imageElement.fadeOut(300, function() {
+    $(this).remove();
+});
+} else {
+SweetAlertHelper.error(
+    response.message || 'Failed to delete image.',
+    'Delete Failed!'
+);
+}
+},
+error: function(xhr) {
+SweetAlertHelper.close();
 
-                                let errorMessage = 'Failed to delete image. Please try again.';
+let errorMessage = 'Failed to delete image. Please try again.';
 
-                                if (xhr.responseJSON && xhr.responseJSON.message) {
-                                    errorMessage = xhr.responseJSON.message;
-                                }
+if (xhr.responseJSON && xhr.responseJSON.message) {
+errorMessage = xhr.responseJSON.message;
+}
 
-                                SweetAlertHelper.error(
-                                    errorMessage,
-                                    'Delete Failed!'
-                                );
-                            }
-                        });
-                    },
-                    {
-                        confirmButtonText: 'Yes, delete it!',
-                        cancelButtonText: 'Cancel',
-                        icon: 'warning'
-                    }
-                );
-            });
+SweetAlertHelper.error(
+errorMessage,
+'Delete Failed!'
+);
+}
+});
+},
+{
+confirmButtonText: 'Yes, delete it!',
+cancelButtonText: 'Cancel',
+icon: 'warning'
+}
+);
+});
 
-        });
-    </script>
+});
+</script>
 @endpush

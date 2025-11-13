@@ -39,7 +39,7 @@
 
                         <!-- Product Info -->
                         <div class="product-info flex-1">
-                            <h2 class="mb-3">{{ $product->name }}</h2>
+                            <h4 class="mb-3">{{ $product->name }}</h4>
                             <div class="flex items-center gap-4 mb-4">
                                 <div class="body-text">
                                     <strong>SKU:</strong> {{ $product->sku }}
@@ -57,9 +57,9 @@
                             <!-- Price Information -->
                             <div class="price-section mb-4">
                                 <div class="flex items-center gap-3">
-                                    <h3 class="text-main-dark mb-0">${{ number_format($product->final_price, 2) }}</h3>
+                                    <h3 class="text-main-dark mb-0">{{ App\Helpers\AppHelper::currency_symbol() }}{{ number_format($product->final_price, 2) }}</h3>
                                     @if($product->discount_price)
-                                        <span class="text-muted text-decoration-line-through">${{ number_format($product->price, 2) }}</span>
+                                        <span class="text-muted text-decoration-line-through">{{ App\Helpers\AppHelper::currency_symbol() }}{{ number_format($product->price, 2) }}</span>
                                         <span class="discount-badge">-{{ $product->discount_percentage }}%</span>
                                     @endif
                                 </div>
@@ -98,7 +98,7 @@
                     @if($product->images->count() > 0)
                         <div class="image-gallery-section mb-6">
                             <h4 class="mb-3">Product Images</h4>
-                            <div class="image-gallery grid grid-cols-4 gap-3">
+                            <div class="image-gallery col-3 gap-3">
                                 @foreach($product->images as $image)
                                     <div class="image-preview relative" data-image-id="{{ $image->id }}">
                                         <img src="{{ asset($image->image_path) }}" alt="Product Image" class="gallery-image">
