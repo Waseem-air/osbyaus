@@ -7,9 +7,8 @@ return new class extends Migration {
     public function up(): void {
         Schema::create('product_colors', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('product_id')->constrained()->onDelete('cascade');
-            $table->string('name'); // e.g. Red, Blue
-            $table->string('hex_code')->nullable(); // #FFFFFF
+            $table->foreignId('product_id')->nullable();
+            $table->foreignId('color_id')->nullable();
             $table->timestamps();
         });
     }

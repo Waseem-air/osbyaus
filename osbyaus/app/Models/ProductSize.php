@@ -12,13 +12,7 @@ class ProductSize extends Model
 
     protected $fillable = [
         'product_id',
-        'name',
-        'bust',
-        'waist',
-        'hip',
-        'length',
-        'shoulder',
-        'sleeve',
+        'size_id',
     ];
 
     public function product()

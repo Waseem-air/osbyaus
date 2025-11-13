@@ -16,12 +16,12 @@ return new class extends Migration {
             $table->integer('stock_quantity')->default(0);
             $table->enum('status', ['active', 'inactive'])->default('active');
             $table->string('sku')->unique()->nullable();
-            $table->string('brand')->nullable();
+            $table->string('embellishment')->nullable();
             $table->string('thumbnail')->nullable();
             $table->boolean('is_featured')->default(false);
             $table->boolean('is_new_arrival')->default(false);
             $table->string('fabric')->nullable();
-            $table->string('fit')->nullable();
+            $table->string('cut')->nullable();
             $table->string('style')->nullable();
             $table->json('tags')->nullable();
             $table->timestamps();
