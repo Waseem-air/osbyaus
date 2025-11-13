@@ -1,0 +1,143 @@
+/* ============================================================
+   🔹 FORM STYLES — VALIDATION, INPUT STATES & LOADING BUTTONS
+   ============================================================ */
+
+/* ==============================
+   🔸 Input & Label Base Styling
+============================== */
+.tf-field.style-1 input {
+    padding-right: 45px;
+    transition: all 0.3s ease;
+    border: 1px solid var(--line, #ebebeb);
+    border-radius: 4px;
+    background-color: #fff;
+    color: var(--text);
+}
+
+/* ==============================
+   🔸 Error Messages
+============================== */
+.error-text {
+    display: block;
+    font-size: 0.8rem;
+    margin-top: 6px;
+    padding-left: 5px;
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
+    height: 0;
+    overflow: hidden;
+    font-weight: 500;
+}
+
+.error-text.show {
+    opacity: 1;
+    transform: translateY(0);
+    height: auto;
+    margin-top: 8px;
+}
+
+.error-text.name_error,
+.error-text.email_error,
+.error-text.phone_error,
+.error-text.password_error,
+.error-text.password_confirmation_error {
+    color: var(--error);
+}
+
+
+.tf-field-input.success {
+    border-color: var(--success) !important;
+    box-shadow: 0 0 0 1px rgba(46, 204, 113, 0.2) !important;
+}
+
+.field-success .tf-field-label {
+    color: var(--success) !important;
+    font-weight: 600;
+}
+
+
+.tf-field-input.success:focus {
+    border-color: var(--success) !important;
+    box-shadow: 0 0 0 2px rgba(46, 204, 113, 0.25) !important;
+}
+
+/* Mobile adjustments */
+@media only screen and (max-width: 767px) {
+    .tf-btn:not(.btn-xl, .btn-md, .btn-line, .style-2, .style-3) {
+        padding: 10px 24px;
+    }
+}
+
+/* ==============================
+   🔸 Success Animation
+============================== */
+.tf-btn.success {
+    background-color: var(--success) !important;
+    border-color: var(--success) !important;
+    color: #fff !important;
+    box-shadow: 0 4px 10px rgba(49, 165, 109, 0.3);
+}
+
+
+.password-field {
+    position: relative;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    font-size: 0.95rem;
+    color: #aaa;
+    transition: all 0.3s ease;
+}
+
+.toggle-password:hover {
+    color: var(--main);
+    background: rgba(var(--main-rgb), 0.08);
+    border-radius: 50%;
+    padding: 4px;
+}
+
+
+/* ==============================
+   🔸 Themed Loading Spinner (Bootstrap Style)
+============================== */
+.tf-btn.loading {
+    position: relative;
+    color: transparent !important;
+    pointer-events: none;
+}
+
+/* Spinner Loader */
+.tf-btn.loading::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 1.25rem; /* 20px like Bootstrap spinner */
+    height: 1.25rem;
+    border: 0.15em solid rgba(var(--main-rgb), 0.25); /* lighter ring */
+    border-top-color: var(--main);                    /* active part */
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    animation: spinner-border 0.75s linear infinite;
+}
+
+/* Spin Animation */
+@keyframes spinner-border {
+    100% {
+        transform: translate(-50%, -50%) rotate(360deg);
+    }
+}
+
+/* Optional: white spinner for filled buttons */
+.tf-btn.btn-fill.loading::after {
+    border: 0.15em solid rgba(255, 255, 255, 0.25);
+    border-top-color: #fff;
+}
+
+
