@@ -204,10 +204,12 @@
                             @foreach($categories as $category)
                                 <div class="wg-product item-row gap20" id="category-{{ $category->id }}">
                                     <div class="name">
+                                        @isset($category->image)
                                         <div class="image">
                                             <img src="{{ asset($category->image ?? 'assets/images/default-category.jpg') }}"
                                                  alt="{{ $category->name }}" width="60" height="60" style="object-fit: cover; border-radius: 8px;">
                                         </div>
+                                        @endisset
                                         <div class="title line-clamp-2 mb-0">
                                             <a href="#" class="body-text fw-bold">{{ $category->name }}</a>
                                             @if($category->description)
@@ -274,48 +276,60 @@
         $(document).ready(function() {
             const csrfToken = $('meta[name="csrf-token"]').attr('content') || '';
 
-            /**
-             * Show SweetAlert2 alerts
-             * @param {string} message - Alert message
-             * @param {string} type - success | error | warning | info
-             */
-            function showAlert(message, type = 'success') {
-                Swal.fire({
-                    icon: type,
-                    title: message,
-                    timer: 3000,
-                    timerProgressBar: true,
-                    showConfirmButton: false,
-                    position: 'top-end',
-                    toast: true
-                });
-            }
-
-            /**
-             * Display validation errors in form fields
-             * @param {object} errors - validation errors
-             * @param {string} prefix - optional prefix for edit forms
-             */
-            function displayErrors(errors, prefix = '') {
+            // Clear errors function
+            function clearAllErrors() {
                 $('.error-message').text('');
                 $('.form-group').removeClass('has-error');
+                $('.tf-field-input').removeClass('error');
+            }
 
-                if (errors && typeof errors === 'object') {
-                    $.each(errors, function(key, errorArray) {
-                        const errorElement = $(`#${prefix}${key.charAt(0).toUpperCase() + key.slice(1)}Error`);
-                        const formGroup = errorElement.closest('.form-group');
+            // Clear field error on input
+            function clearFieldError(field) {
+                const fieldName = field.attr('name');
+                field.closest('.form-group').removeClass('has-error');
+                field.removeClass('error');
 
-                        if (errorElement.length && errorArray.length > 0) {
-                            errorElement.text(errorArray[0]);
-                            formGroup.addClass('has-error');
-                        }
-
-                        // Also show global alert for first error
-                        if (errorArray.length > 0 && prefix === '') {
-                            showAlert(errorArray[0], 'error');
-                        }
-                    });
+                // Add success state if value is valid
+                if (field.val().trim() !== '') {
+                    field.addClass('success');
+                } else {
+                    field.removeClass('success');
                 }
+            }
+
+            // Set loading state
+            function setLoadingState(button, isLoading) {
+                const spinner = button.find('.spinner');
+                if (isLoading) {
+                    button.addClass('btn-loading loading').prop('disabled', true);
+                    spinner.removeClass('d-none');
+                } else {
+                    button.removeClass('btn-loading loading').prop('disabled', false);
+                    spinner.addClass('d-none');
+                }
+            }
+
+            // Show form errors
+            function showFormErrors(errors, prefix = '') {
+                $.each(errors, function(key, errorArray) {
+                    const errorElement = $(`#${prefix}${key.charAt(0).toUpperCase() + key.slice(1)}Error`);
+                    const formGroup = errorElement.closest('.form-group');
+                    const inputField = $(`[name="${key}"]`);
+
+                    if (errorElement.length && errorArray.length > 0) {
+                        errorElement.text(errorArray[0]);
+                        formGroup.addClass('has-error');
+                        inputField.addClass('error');
+                        inputField.removeClass('success');
+                    }
+
+                    // Auto-hide errors after 3 seconds
+                    setTimeout(() => {
+                        errorElement.text('');
+                        formGroup.removeClass('has-error');
+                        inputField.removeClass('error');
+                    }, 3000);
+                });
             }
 
             // ========================
@@ -323,12 +337,12 @@
             // ========================
             $('#addCategoryForm').on('submit', function(e) {
                 e.preventDefault();
+                const form = $(this);
                 const formData = new FormData(this);
-                const btn = $('#addCategoryBtn');
-                const spinner = btn.find('.spinner');
+                const submitBtn = $('#addCategoryBtn');
 
-                btn.addClass('btn-loading').prop('disabled', true);
-                spinner.removeClass('d-none');
+                clearAllErrors();
+                setLoadingState(submitBtn, true);
 
                 $.ajax({
                     url: '{{ route("admin.category.store") }}',
@@ -337,24 +351,40 @@
                     data: formData,
                     processData: false,
                     contentType: false,
-                    success: function(data) {
-                        if (data.status === 'success') {
+                    success: function(response) {
+                        setLoadingState(submitBtn, false);
+
+                        if (response.status === 'success') {
                             $('#addCategoryModal').modal('hide');
-                            showAlert(data.message, 'success');
-                            setTimeout(() => location.reload(), 1200);
-                        } else if (data.status === 'error') {
-                            displayErrors(data.errors);
-                            if (data.message) showAlert(data.message, 'error');
+
+                            SweetAlertHelper.successAutoClose(
+                                response.message || 'Category added successfully!',
+                                'Success!'
+                            ).then(() => {
+                                setTimeout(() => location.reload(), 1200);
+                            });
+                        } else if (response.status === 'error') {
+                            showFormErrors(response.errors);
+                            if (response.message) {
+                                SweetAlertHelper.error(
+                                    response.message,
+                                    'Validation Error!'
+                                );
+                            }
                         }
                     },
                     error: function(xhr) {
+                        setLoadingState(submitBtn, false);
+
                         const errors = xhr.responseJSON?.errors;
-                        if (errors) displayErrors(errors);
-                        else showAlert('An error occurred while adding the category.', 'error');
-                    },
-                    complete: function() {
-                        btn.removeClass('btn-loading').prop('disabled', false);
-                        spinner.addClass('d-none');
+                        if (errors) {
+                            showFormErrors(errors);
+                        } else {
+                            SweetAlertHelper.error(
+                                'An error occurred while adding the category.',
+                                'Operation Failed!'
+                            );
+                        }
                     }
                 });
             });
@@ -367,19 +397,36 @@
                 if (btn.hasClass('edit-category')) {
                     const categoryId = btn.data('id');
 
+                    // Show loading state
+                    const loadingAlert = SweetAlertHelper.loading('Loading category data...');
+
                     $.ajax({
                         url: `/admin/categories/${categoryId}/get`,
-                        headers: { 'X-CSRF-TOKEN': csrfToken, 'Accept': 'application/json' },
-                        success: function(data) {
-                            if (data.status === 'success') {
-                                const cat = data.category;
+                        headers: {
+                            'X-CSRF-TOKEN': csrfToken,
+                            'Accept': 'application/json'
+                        },
+                        success: function(response) {
+                            SweetAlertHelper.close(); // Close loading alert
+
+                            if (response.status === 'success') {
+                                const cat = response.category;
                                 $('#editCategoryId').val(cat.id);
                                 $('#editCategoryName').val(cat.name);
                                 $('#editCategoryDescription').val(cat.description || '');
+                            } else {
+                                SweetAlertHelper.error(
+                                    response.message || 'Failed to load category data.',
+                                    'Load Failed!'
+                                );
                             }
                         },
-                        error: function() {
-                            showAlert('Failed to load category data.', 'error');
+                        error: function(xhr) {
+                            SweetAlertHelper.close(); // Close loading alert
+                            SweetAlertHelper.error(
+                                'Failed to load category data. Please try again.',
+                                'Load Failed!'
+                            );
                         }
                     });
                 }
@@ -392,11 +439,10 @@
                 e.preventDefault();
                 const categoryId = $('#editCategoryId').val();
                 const formData = new FormData(this);
-                const btn = $('#editCategoryBtn');
-                const spinner = btn.find('.spinner');
+                const submitBtn = $('#editCategoryBtn');
 
-                btn.addClass('btn-loading').prop('disabled', true);
-                spinner.removeClass('d-none');
+                clearAllErrors();
+                setLoadingState(submitBtn, true);
 
                 $.ajax({
                     url: `/admin/categories/${categoryId}/update`,
@@ -405,24 +451,40 @@
                     data: formData,
                     processData: false,
                     contentType: false,
-                    success: function(data) {
-                        if (data.status === 'success') {
+                    success: function(response) {
+                        setLoadingState(submitBtn, false);
+
+                        if (response.status === 'success') {
                             $('#editCategoryModal').modal('hide');
-                            showAlert(data.message, 'success');
-                            setTimeout(() => location.reload(), 1200);
-                        } else if (data.status === 'error') {
-                            displayErrors(data.errors, 'edit');
-                            if (data.message) showAlert(data.message, 'error');
+
+                            SweetAlertHelper.successAutoClose(
+                                response.message || 'Category updated successfully!',
+                                'Success!'
+                            ).then(() => {
+                                setTimeout(() => location.reload(), 1200);
+                            });
+                        } else if (response.status === 'error') {
+                            showFormErrors(response.errors, 'edit');
+                            if (response.message) {
+                                SweetAlertHelper.error(
+                                    response.message,
+                                    'Validation Error!'
+                                );
+                            }
                         }
                     },
                     error: function(xhr) {
+                        setLoadingState(submitBtn, false);
+
                         const errors = xhr.responseJSON?.errors;
-                        if (errors) displayErrors(errors, 'edit');
-                        else showAlert('An error occurred while updating the category.', 'error');
-                    },
-                    complete: function() {
-                        btn.removeClass('btn-loading').prop('disabled', false);
-                        spinner.addClass('d-none');
+                        if (errors) {
+                            showFormErrors(errors, 'edit');
+                        } else {
+                            SweetAlertHelper.error(
+                                'An error occurred while updating the category.',
+                                'Operation Failed!'
+                            );
+                        }
                     }
                 });
             });
@@ -434,63 +496,134 @@
                 const categoryId = $(this).data('id');
                 const categoryName = $(this).data('name');
 
-                Swal.fire({
-                    title: 'Delete Category?',
-                    text: `Are you sure you want to delete "${categoryName}"?`,
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText: 'Yes, delete it!',
-                    cancelButtonText: 'Cancel',
-                    confirmButtonColor: '#dc3545',
-                    cancelButtonColor: '#6c757d',
-                    reverseButtons: true
-                }).then((result) => {
-                    if (result.isConfirmed) {
+                SweetAlertHelper.confirm(
+                    `Are you sure you want to delete "${categoryName}"? This action cannot be undone.`,
+                    'Delete Category?',
+                    () => {
+                        // This callback runs when user confirms
+                        const loadingAlert = SweetAlertHelper.loading('Deleting category...');
+
                         $.ajax({
                             url: `/admin/categories/${categoryId}/delete`,
                             method: 'DELETE',
                             headers: { 'X-CSRF-TOKEN': csrfToken },
-                            success: function(data) {
-                                if (data.status === 'success') {
-                                    showAlert(data.message, 'success');
+                            success: function(response) {
+                                SweetAlertHelper.close(); // Close loading alert
+
+                                if (response.status === 'success') {
+                                    SweetAlertHelper.successAutoClose(
+                                        response.message || 'Category deleted successfully!',
+                                        'Deleted!'
+                                    );
+
                                     $('#category-' + categoryId).fadeOut(300, function() {
                                         $(this).remove();
                                         if ($('#categoriesList .wg-product').length === 0) {
                                             $('#categoriesList').html(`
-                                        <div class="text-center py-5">
-                                            <div class="body-text text-muted mb-3">No categories found</div>
-                                            <button class="tf-button style-1 w208" data-bs-toggle="modal" data-bs-target="#addCategoryModal">
-                                                <i class="icon-plus"></i> Add First Category
-                                            </button>
-                                        </div>
-                                    `);
+                                            <div class="text-center py-5">
+                                                <div class="body-text text-muted mb-3">No categories found</div>
+                                                <button class="tf-button style-1 w208" data-bs-toggle="modal" data-bs-target="#addCategoryModal">
+                                                    <i class="icon-plus"></i> Add First Category
+                                                </button>
+                                            </div>
+                                        `);
                                         }
                                     });
                                 } else {
-                                    showAlert(data.message || 'Failed to delete category.', 'error');
+                                    SweetAlertHelper.error(
+                                        response.message || 'Failed to delete category.',
+                                        'Delete Failed!'
+                                    );
                                 }
                             },
-                            error: function() {
-                                showAlert('Failed to delete category.', 'error');
+                            error: function(xhr) {
+                                SweetAlertHelper.close(); // Close loading alert
+                                SweetAlertHelper.error(
+                                    'Failed to delete category. Please try again.',
+                                    'Delete Failed!'
+                                );
                             }
                         });
+                    },
+                    {
+                        confirmButtonText: 'Yes, delete it!',
+                        cancelButtonText: 'Cancel',
+                        icon: 'warning'
+                    }
+                );
+            });
+
+            // ========================
+            // Bulk Actions with SweetAlertHelper
+            // ========================
+            $('#bulkActionBtn').on('click', function() {
+                const selectedIds = $('input[name="selected_categories[]"]:checked').map(function() {
+                    return $(this).val();
+                }).get();
+
+                if (selectedIds.length === 0) {
+                    SweetAlertHelper.warning(
+                        'Please select at least one category to perform bulk actions.',
+                        'No Selection!'
+                    );
+                    return;
+                }
+
+                SweetAlertHelper.html(
+                    `
+                <div class="text-left">
+                    <p>You have selected <strong>${selectedIds.length}</strong> categories.</p>
+                    <div class="form-group mt-3">
+                        <label for="bulkAction" class="form-label">Choose Action:</label>
+                        <select class="form-select" id="bulkAction">
+                            <option value="delete">Delete Selected</option>
+                            <option value="activate">Activate Selected</option>
+                            <option value="deactivate">Deactivate Selected</option>
+                        </select>
+                    </div>
+                </div>
+                `,
+                    'Bulk Actions',
+                    'info'
+                ).then((result) => {
+                    if (result.isConfirmed) {
+                        const action = $('#bulkAction').val();
+                        // Handle bulk action here
                     }
                 });
             });
 
             // ========================
-            // Reset forms when modals close
+            // Form Event Handlers
             // ========================
+
+            // Clear errors on input
+            $('.tf-field-input').on('input', function() {
+                clearFieldError($(this));
+            });
+
+            // Reset forms when modals close
             $('#addCategoryModal').on('hidden.bs.modal', function() {
                 $('#addCategoryForm')[0].reset();
                 $('#addCategoryImagePreview').removeClass('show');
+                clearAllErrors();
             });
 
             $('#editCategoryModal').on('hidden.bs.modal', function() {
                 $('#editCategoryForm')[0].reset();
+                clearAllErrors();
+            });
+
+            // Show info when no image is selected
+            $('#addCategoryImage').on('change', function() {
+                if (!this.files.length) {
+                    SweetAlertHelper.info(
+                        'No image selected. A default image will be used.',
+                        'Image Info'
+                    );
+                }
             });
 
         });
     </script>
-
 @endpush

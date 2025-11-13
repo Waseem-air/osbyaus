@@ -37,6 +37,8 @@
 
     <!-- Icon -->
     <link rel="stylesheet" href="{{ asset('admin/admin-ecomus/icon/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/custom-sweetalert.css') }}">
+    <link href="{{ asset('css/form-errors.css') }}" rel="stylesheet">
 
     <!-- Favicon and Touch Icons  -->
     <link rel="shortcut icon" href="{{ asset('admin/admin-ecomus/images/favicon.png') }}">

@@ -42,25 +42,22 @@
                                             </li>
                                         </ul>
                                 </li>
-                                <li class="menu-item has-children">
-                                    <a href="javascript:void(0);" class="menu-item-button">
-                                        <div class="icon"><i class="icon-layers"></i></div>
-                                        <div class="text">Category</div>
-                                    </a>
-                                    <ul class="sub-menu">
-                                        <li class="sub-menu-item">
-                                            <a href="{{ route ('admin.category.index') }}" class="">
-                                                <div class="text">Category list</div>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                     <li class="menu-item">
-                                    <a href="report.html" class="">
+
+
+                                <li class="menu-item">
+                                    <a href="{{ route('admin.color.index') }}" class="">
                                         <div class="icon"><i class="icon-pie-chart"></i></div>
-                                        <div class="text">Store Menu</div>
+                                        <div class="text">Colors</div>
                                     </a>
                                 </li>
+
+                                <li class="menu-item">
+                                    <a href="{{ route('admin.category.index') }}" class="">
+                                        <div class="icon"><i class="icon-layers"></i></div>
+                                        <div class="text">Categories</div>
+                                    </a>
                                 </li>
+
                                 <li class="menu-item has-children">
                                     <a href="javascript:void(0);" class="menu-item-button">
                                         <div class="icon">

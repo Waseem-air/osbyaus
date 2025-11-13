@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\admin\AdminController;
 use App\Http\Controllers\admin\CategoryController;
+use App\Http\Controllers\admin\ColorController;
 use App\Http\Controllers\admin\ProductController;
 use Illuminate\Support\Facades\Route;
 
@@ -11,6 +12,15 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/transaction', [AdminController::class, 'transaction'])->name('transaction');
     Route::get('/store-menu', [AdminController::class, 'store_menu'])->name('store.menu');
 
+    // Color Routes
+    Route::prefix('colors')->name('color.')->group(function () {
+        Route::get('/', [ColorController::class, 'color_list'])->name('index');
+        Route::post('/store', [ColorController::class, 'store_color'])->name('store');
+        Route::get('/{id}/get', [ColorController::class, 'get_color'])->name('get');
+        Route::post('/{id}/update', [ColorController::class, 'update_color'])->name('update');
+        Route::post('/{id}/toggle-status', [ColorController::class, 'toggle_color_status'])->name('toggle-status');
+        Route::delete('/{id}/delete', [ColorController::class, 'delete_color'])->name('delete');
+    });
     // 🏷️ Category Routes
     Route::prefix('categories')->name('category.')->group(function () {
         Route::get('/', [CategoryController::class, 'category_list'])->name('index');

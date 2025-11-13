@@ -6,6 +6,9 @@
 <script src="{{ asset('admin/admin-ecomus/js/switcher.js') }}"></script>
 <script defer src="{{ asset('admin/admin-ecomus/js/theme-settings.js') }}"></script>
 <script defer src="{{ asset('admin/admin-ecomus/js/main.js') }}"></script>
+
+<script defer src="{{ asset('js/sweet-alert-helper.js') }}"></script>
+
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

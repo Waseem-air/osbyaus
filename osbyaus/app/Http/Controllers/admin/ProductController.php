@@ -10,6 +10,8 @@ use App\Models\ProductSize;
 use App\Models\ProductColor;
 use App\Models\ProductVariant;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
@@ -59,7 +61,7 @@ class ProductController extends Controller
         }
 
         try {
-            \DB::beginTransaction();
+            DB::beginTransaction();
 
             // Create main product
             $product = new Product();
@@ -90,7 +92,7 @@ class ProductController extends Controller
                 $color = new ProductColor();
                 $color->product_id = $product->id;
                 $color->name = $colorName;
-                
+
                 // Get hex code from the color data if available
                 $colorData = $this->getColorData($colorName);
                 $color->hex_code = $colorData['hex'] ?? '#000000';
@@ -102,7 +104,7 @@ class ProductController extends Controller
                 foreach ($request->file('images') as $key => $image) {
                     $imageName = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
                     $image->move(public_path('uploads/products'), $imageName);
-                    
+
                     $productImage = new ProductImage();
                     $productImage->product_id = $product->id;
                     $productImage->image_path = 'uploads/products/' . $imageName;
@@ -111,8 +113,7 @@ class ProductController extends Controller
                 }
             }
 
-            \DB::commit();
-
+            DB::commit();
             return response()->json([
                 'status' => 'success',
                 'message' => 'Product added successfully!',
@@ -120,8 +121,8 @@ class ProductController extends Controller
             ]);
 
         } catch (\Exception $e) {
-            \DB::rollBack();
-            \Log::error('Product Store Error: ' . $e->getMessage());
+            DB::rollBack();
+            Log::error('Product Store Error: ' . $e->getMessage());
             return response()->json([
                 'status' => 'error',
                 'message' => 'Failed to add product. Please try again.'
@@ -139,7 +140,7 @@ class ProductController extends Controller
                 'product' => $product
             ]);
         } catch (\Exception $e) {
-            \Log::error('Product Fetch Error: ' . $e->getMessage());
+            Log::error('Product Fetch Error: ' . $e->getMessage());
             return response()->json([
                 'status' => 'error',
                 'message' => 'Product not found'
@@ -175,7 +176,7 @@ class ProductController extends Controller
         }
 
         try {
-            \DB::beginTransaction();
+            DB::beginTransaction();
 
             $product = Product::findOrFail($id);
             $product->category_id = $request->category_id;
@@ -217,7 +218,7 @@ class ProductController extends Controller
                 foreach ($request->file('images') as $image) {
                     $imageName = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
                     $image->move(public_path('uploads/products'), $imageName);
-                    
+
                     $productImage = new ProductImage();
                     $productImage->product_id = $product->id;
                     $productImage->image_path = 'uploads/products/' . $imageName;
@@ -226,7 +227,7 @@ class ProductController extends Controller
                 }
             }
 
-            \DB::commit();
+            DB::commit();
 
             return response()->json([
                 'status' => 'success',
@@ -235,8 +236,8 @@ class ProductController extends Controller
             ]);
 
         } catch (\Exception $e) {
-            \DB::rollBack();
-            \Log::error('Product Update Error: ' . $e->getMessage());
+            DB::rollBack();
+            Log::error('Product Update Error: ' . $e->getMessage());
             return response()->json([
                 'status' => 'error',
                 'message' => 'Failed to update product. Please try again.'
@@ -255,7 +256,7 @@ class ProductController extends Controller
     public function delete_product($id)
     {
         try {
-            \DB::beginTransaction();
+            DB::beginTransaction();
 
             $product = Product::findOrFail($id);
 
@@ -268,17 +269,15 @@ class ProductController extends Controller
 
             // Delete product (cascade will delete related records)
             $product->delete();
-
-            \DB::commit();
-
+            DB::commit();
             return response()->json([
                 'status' => 'success',
                 'message' => 'Product deleted successfully!'
             ]);
 
         } catch (\Exception $e) {
-            \DB::rollBack();
-            \Log::error('Product Delete Error: ' . $e->getMessage());
+            DB::rollBack();
+            Log::error('Product Delete Error: ' . $e->getMessage());
             return response()->json([
                 'status' => 'error',
                 'message' => 'Failed to delete product. Please try again.'
@@ -291,11 +290,11 @@ class ProductController extends Controller
     {
         try {
             $image = ProductImage::findOrFail($id);
-            
+
             if (file_exists(public_path($image->image_path))) {
                 unlink(public_path($image->image_path));
             }
-            
+
             $image->delete();
 
             return response()->json([
@@ -304,7 +303,7 @@ class ProductController extends Controller
             ]);
 
         } catch (\Exception $e) {
-            \Log::error('Product Image Delete Error: ' . $e->getMessage());
+            Log::error('Product Image Delete Error: ' . $e->getMessage());
             return response()->json([
                 'status' => 'error',
                 'message' => 'Failed to delete image. Please try again.'
@@ -321,7 +320,6 @@ class ProductController extends Controller
             'red' => ['hex' => '#ff0000', 'text' => '#ffffff'],
             'blue' => ['hex' => '#0000ff', 'text' => '#ffffff'],
             'green' => ['hex' => '#008000', 'text' => '#ffffff'],
-            // Add all other colors from your select options
         ];
 
         return $colors[strtolower($colorName)] ?? ['hex' => '#000000', 'text' => '#ffffff'];

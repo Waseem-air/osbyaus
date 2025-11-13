@@ -40,7 +40,7 @@
                                 <i class="icon-upload-cloud fs-2 mb-2"></i>
                                 <span class="text-muted small">Drop your image here or <span class="text-primary">click to browse</span></span>
                                 <img id="categoryImagePreview" src="" alt="" class="img-fluid mt-2 d-none" style="max-height:120px; border-radius:4px;">
-                                <input type="file" class="d-none" id="categoryImage" name="image" accept="image/*" required>
+                                <input type="file" class="d-none" id="categoryImage" name="image" accept="image/*">
                             </label>
                         </div>
                         <div class="text-danger small mt-1" id="imageError"></div>
