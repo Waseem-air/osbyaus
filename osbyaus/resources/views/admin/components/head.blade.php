@@ -33,9 +33,11 @@
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
         }
-
         textarea.form-control {
-            height: 60px !important;
+            height: 80px !important;
+        }
+        .wg-table.table-product-list .wg-product .title .body-text {
+            font-size: 14px !important;
         }
     </style>
 
