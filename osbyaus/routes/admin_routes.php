@@ -3,6 +3,7 @@
 use App\Http\Controllers\admin\AdminController;
 use App\Http\Controllers\admin\CategoryController;
 use App\Http\Controllers\admin\ColorController;
+use App\Http\Controllers\admin\CustomerController;
 use App\Http\Controllers\admin\ProductController;
 use App\Http\Controllers\admin\SizeController;
 use Illuminate\Support\Facades\Route;
@@ -54,6 +55,21 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::delete('/{id}/delete', [ProductController::class, 'delete_product'])->name('delete');
         Route::delete('/image/{id}/delete', [ProductController::class, 'delete_product_image'])->name('image.delete');
         Route::post('/image/{id}/set-main', [ProductController::class, 'set_main_image'])->name('image.set-main');
+    });
+
+
+
+
+
+
+    // 🏷️ customer Routes
+    Route::prefix('customers')->name('customer.')->group(function () {
+        Route::get('/', [CustomerController::class, 'customer_list'])->name('index');
+        Route::get('/{id}/show', [CustomerController::class, 'show_customer'])->name('show');
+        Route::post('/store', [CustomerController::class, 'store_customer'])->name('store');
+        Route::get('/{id}/get', [CustomerController::class, 'get_customer'])->name('get');
+        Route::post('/{id}/update', [CustomerController::class, 'update_customer'])->name('update');
+        Route::delete('/{id}/delete', [CustomerController::class, 'delete_customer'])->name('delete');
     });
 
 

@@ -24,6 +24,17 @@
                                         <div class="text">Transaction</div>
                                     </a>
                                 </li>
+
+
+                                <!-- Categories -->
+                                <li class="menu-item">
+                                    <a href="{{ route('admin.customer.index') }}" class="">
+                                        <div class="icon"><i class="icon-user"></i></div>
+                                        <div class="text">Customers</div>
+                                    </a>
+                                </li>
+
+
                                <li class="menu-item has-children">
                                         <a href="javascript:void(0);" class="menu-item-button">
                                             <div class="icon"><i class="icon-file-plus"></i></div>

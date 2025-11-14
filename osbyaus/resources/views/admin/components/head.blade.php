@@ -33,6 +33,10 @@
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
         }
+
+        textarea.form-control {
+            height: 60px !important;
+        }
     </style>
 
     <!-- Icon -->
