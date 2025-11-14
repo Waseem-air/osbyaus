@@ -1,128 +1,133 @@
 @extends("admin.layout.main")
 @section('styles')
-        <style>
-            .wg-table.table-all-category .wg-product > *:nth-child(1), .wg-table.table-all-category ul.table-title > *:nth-child(1) {
-                width: 281px;
-                flex-shrink: 0;
-            }
-            @media (min-width: 768px) and (max-width: 1199px) {
-                .wg-table.table-all-category > ul,
-                .wg-table.table-all-category > div {
-                    min-width: 100% !important;
-                    width: 100% !important;
-                }
-            }
+    <style>
+        .wg-table.table-all-category .wg-product > *:nth-child(1), .wg-table.table-all-category ul.table-title > *:nth-child(1) {
+            width: 281px;
+            flex-shrink: 0;
+        }
 
-            /* Alert Styles */
-            .alert-container {
-                position: fixed;
-                top: 20px;
-                right: 20px;
-                z-index: 9999;
-                min-width: 300px;
+        @media (min-width: 768px) and (max-width: 1199px) {
+            .wg-table.table-all-category > ul,
+            .wg-table.table-all-category > div {
+                min-width: 100% !important;
+                width: 100% !important;
             }
+        }
 
-            .alert {
-                border-radius: 8px;
-                padding: 15px;
-                margin-bottom: 10px;
-                box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-                display: flex;
-                justify-content: between;
-                align-items: center;
-            }
+        /* Alert Styles */
+        .alert-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            min-width: 300px;
+        }
 
-            .alert-success {
-                background: #d4edda;
-                border: 1px solid #c3e6cb;
-                color: #155724;
-            }
+        .alert {
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: between;
+            align-items: center;
+        }
 
-            .alert-error {
-                background: #f8d7da;
-                border: 1px solid #f5c6cb;
-                color: #721c24;
-            }
+        .alert-success {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
 
-            .alert-warning {
-                background: #fff3cd;
-                border: 1px solid #ffeaa7;
-                color: #856404;
-            }
+        .alert-error {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
 
-            .d-none {
-                display: none !important;
-            }
+        .alert-warning {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            color: #856404;
+        }
 
-            /* Loading States */
-            .btn-loading {
-                opacity: 0.6;
-                pointer-events: none;
-            }
+        .d-none {
+            display: none !important;
+        }
 
-            .btn-loading .spinner {
-                display: inline-block;
-                width: 16px;
-                height: 16px;
-                border: 2px solid transparent;
-                border-top: 2px solid currentColor;
-                border-radius: 50%;
-                animation: spin 1s linear infinite;
-                margin-right: 8px;
-            }
+        /* Loading States */
+        .btn-loading {
+            opacity: 0.6;
+            pointer-events: none;
+        }
 
-            @keyframes spin {
-                0% { transform: rotate(0deg); }
-                100% { transform: rotate(360deg); }
-            }
+        .btn-loading .spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid transparent;
+            border-top: 2px solid currentColor;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 8px;
+        }
 
-            .flex {
-                display: flex;
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
             }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
 
-            .justify-between {
-                justify-content: space-between;
-            }
+        .flex {
+            display: flex;
+        }
 
-            .justify-end {
-                justify-content: flex-end;
-            }
+        .justify-between {
+            justify-content: space-between;
+        }
 
-            .items-center {
-                align-items: center;
-            }
+        .justify-end {
+            justify-content: flex-end;
+        }
 
-            .gap20 {
-                gap: 20px;
-            }
+        .items-center {
+            align-items: center;
+        }
 
-            .mb-20 {
-                margin-bottom: 20px;
-            }
+        .gap20 {
+            gap: 20px;
+        }
 
-            .mb-30 {
-                margin-bottom: 30px;
-            }
+        .mb-20 {
+            margin-bottom: 20px;
+        }
 
-            .mt-30 {
-                margin-top: 30px;
-            }
+        .mb-30 {
+            margin-bottom: 30px;
+        }
 
-            /* Custom modal styling */
-            .modal-header {
-                border-bottom: 1px solid #e9ecef;
-                padding: 1.5rem;
-            }
+        .mt-30 {
+            margin-top: 30px;
+        }
 
-            .modal-footer {
-                border-top: 1px solid #e9ecef;
-                padding: 1.5rem;
-            }
+        /* Custom modal styling */
+        .modal-header {
+            border-bottom: 1px solid #e9ecef;
+            padding: 1.5rem;
+        }
 
-            .modal-body {
-                padding: 1.5rem;
-            }
-        </style>
+        .modal-footer {
+            border-top: 1px solid #e9ecef;
+            padding: 1.5rem;
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+        }
+    </style>
 
 @endsection
 
@@ -151,37 +156,9 @@
                     <!-- Search Form -->
                     <form class="form-search">
                         <fieldset class="name">
-                            <input type="text" placeholder="Search categories..." name="search" required>
-                            <button type="submit" class="search-icon">
-                                <i class="icon-search"></i>
-                            </button>
+                            <input type="text" id="searchCategory" placeholder="Search categories..." name="search">
                         </fieldset>
                     </form>
-
-                    <!-- Status Filter -->
-                    <div class="dropdown">
-                        <button class="tf-button style-2 w150">
-                            Status <i class="icon-chevron-down"></i>
-                        </button>
-                        <div class="dropdown-content">
-                            <a href="#">Active</a>
-                            <a href="#">Inactive</a>
-                            <a href="#">All</a>
-                        </div>
-                    </div>
-
-                    <!-- Sort Filter -->
-                    <div class="dropdown">
-                        <button class="tf-button style-2 w150">
-                            Sort By <i class="icon-chevron-down"></i>
-                        </button>
-                        <div class="dropdown-content">
-                            <a href="#">Newest First</a>
-                            <a href="#">Oldest First</a>
-                            <a href="#">A-Z</a>
-                            <a href="#">Z-A</a>
-                        </div>
-                    </div>
 
                     <!-- Add New Button -->
                     <button class="tf-button style-1 w208" data-bs-toggle="modal" data-bs-target="#addCategoryModal">
@@ -193,11 +170,21 @@
                 <div class="wg-box mt-5">
                     <div class="wg-table table-all-category">
                         <ul class="table-title flex gap20 mb-14">
-                            <li><div class="body-title">Category</div></li>
-                            <li><div class="body-title">Slug</div></li>
-                            <li><div class="body-title">Status</div></li>
-                            <li><div class="body-title">Created</div></li>
-                            <li><div class="body-title">Actions</div></li>
+                            <li>
+                                <div class="body-title">Category</div>
+                            </li>
+                            <li>
+                                <div class="body-title">Slug</div>
+                            </li>
+                            <li>
+                                <div class="body-title">Status</div>
+                            </li>
+                            <li>
+                                <div class="body-title">Created</div>
+                            </li>
+                            <li>
+                                <div class="body-title">Actions</div>
+                            </li>
                         </ul>
 
                         <div class="flex flex-column" id="categoriesList">
@@ -205,10 +192,12 @@
                                 <div class="wg-product item-row gap20" id="category-{{ $category->id }}">
                                     <div class="name">
                                         @isset($category->image)
-                                        <div class="image">
-                                            <img src="{{ asset($category->image ?? 'assets/images/default-category.jpg') }}"
-                                                 alt="{{ $category->name }}" width="60" height="60" style="object-fit: cover; border-radius: 8px;">
-                                        </div>
+                                            <div class="image">
+                                                <img
+                                                    src="{{ asset($category->image ?? 'assets/images/default-category.jpg') }}"
+                                                    alt="{{ $category->name }}" width="60" height="60"
+                                                    style="object-fit: cover; border-radius: 8px;">
+                                            </div>
                                         @endisset
                                         <div class="title line-clamp-2 mb-0">
                                             <a href="#" class="body-text fw-bold">{{ $category->name }}</a>
@@ -228,7 +217,8 @@
                                     </span>
                                     </div>
 
-                                    <div class="body-text text-main-dark">{{ $category->created_at->format('M d, Y') }}</div>
+                                    <div
+                                        class="body-text text-main-dark">{{ $category->created_at->format('M d, Y') }}</div>
 
                                     <div class="item-actions">
                                         <!-- Edit -->
@@ -249,7 +239,8 @@
                                         </a>
 
                                         <!-- View -->
-                                        <a href="{{ route('admin.category.show', $category->id) }}" title="View Category">
+                                        <a href="{{ route('admin.category.show', $category->id) }}"
+                                           title="View Category">
                                             <i class="icon-eye"></i>
                                         </a>
                                     </div>
@@ -273,7 +264,7 @@
 
 @push('scripts')
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
             const csrfToken = $('meta[name="csrf-token"]').attr('content') || '';
 
             // Clear errors function
@@ -311,7 +302,7 @@
 
             // Show form errors
             function showFormErrors(errors, prefix = '') {
-                $.each(errors, function(key, errorArray) {
+                $.each(errors, function (key, errorArray) {
                     const errorElement = $(`#${prefix}${key.charAt(0).toUpperCase() + key.slice(1)}Error`);
                     const formGroup = errorElement.closest('.form-group');
                     const inputField = $(`[name="${key}"]`);
@@ -335,7 +326,7 @@
             // ========================
             // Add Category Form Submit
             // ========================
-            $('#addCategoryForm').on('submit', function(e) {
+            $('#addCategoryForm').on('submit', function (e) {
                 e.preventDefault();
                 const form = $(this);
                 const formData = new FormData(this);
@@ -347,11 +338,11 @@
                 $.ajax({
                     url: '{{ route("admin.category.store") }}',
                     method: 'POST',
-                    headers: { 'X-CSRF-TOKEN': csrfToken },
+                    headers: {'X-CSRF-TOKEN': csrfToken},
                     data: formData,
                     processData: false,
                     contentType: false,
-                    success: function(response) {
+                    success: function (response) {
                         setLoadingState(submitBtn, false);
 
                         if (response.status === 'success') {
@@ -373,7 +364,7 @@
                             }
                         }
                     },
-                    error: function(xhr) {
+                    error: function (xhr) {
                         setLoadingState(submitBtn, false);
 
                         const errors = xhr.responseJSON?.errors;
@@ -392,7 +383,7 @@
             // ========================
             // Edit Category - Load Data
             // ========================
-            $('#editCategoryModal').on('show.bs.modal', function(event) {
+            $('#editCategoryModal').on('show.bs.modal', function (event) {
                 const btn = $(event.relatedTarget);
                 if (btn.hasClass('edit-category')) {
                     const categoryId = btn.data('id');
@@ -406,7 +397,7 @@
                             'X-CSRF-TOKEN': csrfToken,
                             'Accept': 'application/json'
                         },
-                        success: function(response) {
+                        success: function (response) {
                             SweetAlertHelper.close(); // Close loading alert
 
                             if (response.status === 'success') {
@@ -421,7 +412,7 @@
                                 );
                             }
                         },
-                        error: function(xhr) {
+                        error: function (xhr) {
                             SweetAlertHelper.close(); // Close loading alert
                             SweetAlertHelper.error(
                                 'Failed to load category data. Please try again.',
@@ -435,7 +426,7 @@
             // ========================
             // Edit Category Form Submit
             // ========================
-            $('#editCategoryForm').on('submit', function(e) {
+            $('#editCategoryForm').on('submit', function (e) {
                 e.preventDefault();
                 const categoryId = $('#editCategoryId').val();
                 const formData = new FormData(this);
@@ -447,11 +438,11 @@
                 $.ajax({
                     url: `/admin/categories/${categoryId}/update`,
                     method: 'POST',
-                    headers: { 'X-CSRF-TOKEN': csrfToken },
+                    headers: {'X-CSRF-TOKEN': csrfToken},
                     data: formData,
                     processData: false,
                     contentType: false,
-                    success: function(response) {
+                    success: function (response) {
                         setLoadingState(submitBtn, false);
 
                         if (response.status === 'success') {
@@ -473,7 +464,7 @@
                             }
                         }
                     },
-                    error: function(xhr) {
+                    error: function (xhr) {
                         setLoadingState(submitBtn, false);
 
                         const errors = xhr.responseJSON?.errors;
@@ -492,7 +483,7 @@
             // ========================
             // Delete Category
             // ========================
-            $(document).on('click', '.delete-category', function() {
+            $(document).on('click', '.delete-category', function () {
                 const categoryId = $(this).data('id');
                 const categoryName = $(this).data('name');
 
@@ -506,8 +497,8 @@
                         $.ajax({
                             url: `/admin/categories/${categoryId}/delete`,
                             method: 'DELETE',
-                            headers: { 'X-CSRF-TOKEN': csrfToken },
-                            success: function(response) {
+                            headers: {'X-CSRF-TOKEN': csrfToken},
+                            success: function (response) {
                                 SweetAlertHelper.close(); // Close loading alert
 
                                 if (response.status === 'success') {
@@ -516,7 +507,7 @@
                                         'Deleted!'
                                     );
 
-                                    $('#category-' + categoryId).fadeOut(300, function() {
+                                    $('#category-' + categoryId).fadeOut(300, function () {
                                         $(this).remove();
                                         if ($('#categoriesList .wg-product').length === 0) {
                                             $('#categoriesList').html(`
@@ -536,7 +527,7 @@
                                     );
                                 }
                             },
-                            error: function(xhr) {
+                            error: function (xhr) {
                                 SweetAlertHelper.close(); // Close loading alert
                                 SweetAlertHelper.error(
                                     'Failed to delete category. Please try again.',
@@ -556,8 +547,8 @@
             // ========================
             // Bulk Actions with SweetAlertHelper
             // ========================
-            $('#bulkActionBtn').on('click', function() {
-                const selectedIds = $('input[name="selected_categories[]"]:checked').map(function() {
+            $('#bulkActionBtn').on('click', function () {
+                const selectedIds = $('input[name="selected_categories[]"]:checked').map(function () {
                     return $(this).val();
                 }).get();
 
@@ -598,24 +589,24 @@
             // ========================
 
             // Clear errors on input
-            $('.tf-field-input').on('input', function() {
+            $('.tf-field-input').on('input', function () {
                 clearFieldError($(this));
             });
 
             // Reset forms when modals close
-            $('#addCategoryModal').on('hidden.bs.modal', function() {
+            $('#addCategoryModal').on('hidden.bs.modal', function () {
                 $('#addCategoryForm')[0].reset();
                 $('#addCategoryImagePreview').removeClass('show');
                 clearAllErrors();
             });
 
-            $('#editCategoryModal').on('hidden.bs.modal', function() {
+            $('#editCategoryModal').on('hidden.bs.modal', function () {
                 $('#editCategoryForm')[0].reset();
                 clearAllErrors();
             });
 
             // Show info when no image is selected
-            $('#addCategoryImage').on('change', function() {
+            $('#addCategoryImage').on('change', function () {
                 if (!this.files.length) {
                     SweetAlertHelper.info(
                         'No image selected. A default image will be used.',
@@ -624,6 +615,33 @@
                 }
             });
 
+        });
+    </script>
+
+    <script>
+        // ===============================
+        // Search Categories Without AJAX
+        // ===============================
+        $('#searchCategory').on('keyup', function () {
+            const value = $(this).val().toLowerCase();
+
+            $('#categoriesList .wg-product').filter(function () {
+                const text = $(this).text().toLowerCase();
+                $(this).toggle(text.indexOf(value) > -1);
+            });
+
+            // Show empty message if no result
+            if ($('#categoriesList .wg-product:visible').length === 0) {
+                if (!$('#noResults').length) {
+                    $('#categoriesList').append(`
+                <div id="noResults" class="text-center py-5">
+                    <div class="body-text text-muted mb-3">No categories found</div>
+                </div>
+            `);
+                }
+            } else {
+                $('#noResults').remove();
+            }
         });
     </script>
 @endpush
