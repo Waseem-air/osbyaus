@@ -104,11 +104,6 @@
             .wg-product .name {
                 margin-bottom: 10px;
             }
-
-            .search-bar-container {
-                flex-direction: column;
-                align-items: flex-start;
-            }
         }
     </style>
 

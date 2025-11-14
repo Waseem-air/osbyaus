@@ -1,54 +1,164 @@
 @extends("admin.layout.main")
-@section('styles')
+@section('content')
     <style>
-        .size-badge {
-            display: inline-block;
-            padding: 6px 12px;
-            background: #f8f9fa;
-            border: 1px solid #dee2e6;
-            border-radius: 6px;
-            font-weight: 500;
-            color: #495057;
-        }
 
-        .wg-table.table-all-sizes .wg-product > *:nth-child(1),
-        .wg-table.table-all-sizes ul.table-title > *:nth-child(1) {
-            width: 200px;
-            flex-shrink: 0;
-        }
+        /* ========================== */
+        /* Modern Toggle Switch Style */
+        /* ========================== */
 
-        .wg-table.table-all-sizes .wg-product > *:nth-child(2),
-        .wg-table.table-all-sizes ul.table-title > *:nth-child(2) {
-            width: 120px;
-            flex-shrink: 0;
-        }
-
-        @media (min-width: 768px) and (max-width: 1199px) {
-            .wg-table.table-all-sizes > ul,
-            .wg-table.table-all-sizes > div {
-                min-width: 100% !important;
-                width: 100% !important;
-            }
-        }
-
-        .status-toggle {
-            cursor: pointer;
+        .status-toggle .form-check {
+            padding: 0;
+            margin: 0;
         }
 
         .status-toggle .form-check-input {
+            width: 48px !important;
+            height: 24px !important;
+            background-color: #d5d5d5;
+            border: none;
+            border-radius: 30px;
             cursor: pointer;
-            width: 3em;
-            height: 1.5em;
+            position: relative;
+            transition: background-color .25s ease-in-out;
+            box-shadow: inset 0 0 3px rgba(0,0,0,0.2);
         }
 
+        /* Circle inside switch */
+        .status-toggle .form-check-input::before {
+            content: '';
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 18px;
+            height: 18px;
+            background: #fff;
+            border-radius: 50%;
+            transition: transform .25s ease-in-out;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.25);
+        }
+
+        /* When checked */
         .status-toggle .form-check-input:checked {
-            background-color: #198754;
-            border-color: #198754;
+            background-color: var(--Palette-Green-500) !important;
+        }
+
+        /* Move circle to right when ON */
+        .status-toggle .form-check-input:checked::before {
+            transform: translateX(24px);
+        }
+
+        /* Remove focus glow */
+        .status-toggle .form-check-input:focus {
+            box-shadow: none;
+        }
+
+        /* Disabled state */
+        .status-toggle .form-check-input:disabled {
+            opacity: .5;
+            cursor: not-allowed;
+        }
+        /* ========================== */
+        /* Sizes Table (Matches Colors Table) */
+        /* ========================== */
+        .wg-table.table-all-sizes {
+            display: flex;
+            flex-direction: column;
+            gap: 1px;
+            width: 100%;
+            padding: 2px;
+        }
+
+        /* Table Header */
+        .wg-table.table-all-sizes ul.table-title {
+            display: flex;
+            justify-content: flex-start;
+            gap: 20px;
+            font-weight: 600;
+            color: var(--Heading);
+            padding-bottom: 2px;
+        }
+
+        .wg-table.table-all-sizes ul.table-title li {
+            flex: 1;
+            min-width: 120px;
+        }
+
+        .wg-table.table-all-sizes ul.table-title li:first-child {
+            flex: 2;
+        }
+
+        /* Table Rows */
+        .wg-table.table-all-sizes .wg-product {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 12px 15px;
+        }
+
+        /* Columns */
+        .wg-table.table-all-sizes .wg-product > div {
+            flex: 1;
+            min-width: 120px;
+            color: var(--Body-Text);
+        }
+
+        /* Name column */
+        .wg-table.table-all-sizes .wg-product .name {
+            flex: 2;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Size Badge */
+        .size-badge {
+            padding: 5px 14px;
+            background: var(--Surface-2);
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--Heading);
+            border: 1px solid var(--Stroke);
+            display: inline-block;
+        }
+
+        /* Status Badge (Clickable) */
+        .status-badge {
+            padding: 4px 12px !important;
+            border-radius: 20px !important;
+            font-size: 12px !important;
+            font-weight: 600 !important;
+            justify-content: center !important;
+            cursor: pointer !important;
+            user-select: none !important;
+        }
+
+        .status-badge.active {
+            background-color: var(--Palette-Green-500) !important;
+            color: var(--White) !important;
+            border: 1px solid var(--Palette-Green-500) !important;
+        }
+
+        .status-badge.inactive {
+            background-color: var(--Palette-Red-400) !important;
+            color: var(--White) !important;
+            border: 1px solid var(--Palette-Red-400) !important;
+        }
+
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .wg-table.table-all-sizes ul.table-title,
+            .wg-table.table-all-sizes .wg-product {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .wg-product .name {
+                margin-bottom: 10px;
+            }
         }
     </style>
-@endsection
-
-@section('content')
     <!-- main-content -->
     <div class="main-content">
 
@@ -80,17 +190,6 @@
                         </fieldset>
                     </form>
 
-                    <!-- Status Filter -->
-                    <div class="dropdown">
-                        <button class="tf-button style-2 w150">
-                            Status <i class="icon-chevron-down"></i>
-                        </button>
-                        <div class="dropdown-content">
-                            <a href="#">Active</a>
-                            <a href="#">Inactive</a>
-                            <a href="#">All</a>
-                        </div>
-                    </div>
 
                     <!-- Add New Button -->
                     <button class="tf-button style-1 w208" data-bs-toggle="modal" data-bs-target="#addSizeModal">
@@ -122,14 +221,13 @@
                                         <span class="size-badge">{{ $size->short_code }}</span>
                                     </div>
 
-                                    <div class="body-text status-toggle">
-                                        <div class="form-check form-switch">
-                                            <input class="form-check-input toggle-status"
-                                                   type="checkbox"
-                                                   data-id="{{ $size->id }}"
-                                                {{ $size->is_active ? 'checked' : '' }}>
-                                        </div>
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input toggle-status"
+                                               type="checkbox"
+                                               data-id="{{ $size->id }}"
+                                            {{ $size->is_active ? 'checked' : '' }}>
                                     </div>
+
 
                                     <div class="body-text text-main-dark">{{ $size->created_at->format('M d, Y') }}</div>
 
@@ -511,6 +609,27 @@
                 clearAllErrors();
             });
 
+        });
+    </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const searchInput = document.querySelector(".form-search input");
+            const rows = document.querySelectorAll(".wg-product");
+
+            searchInput.addEventListener("keyup", function () {
+                const value = this.value.toLowerCase().trim();
+
+                rows.forEach(row => {
+                    const text = row.innerText.toLowerCase();
+
+                    if (text.includes(value)) {
+                        row.style.display = "flex";
+                    } else {
+                        row.style.display = "none";
+                    }
+                });
+            });
         });
     </script>
 @endpush
