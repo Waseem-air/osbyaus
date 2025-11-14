@@ -1,3 +1,194 @@
+<style>
+    /* ========================== */
+    /* Table Wrapper & Layout     */
+    /* ========================== */
+    .wg-table.table-all-product {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 10px !important;
+        width: 100% !important;
+        padding: 15px !important;
+        font-family: 'Plus Jakarta Sans', sans-serif !important;
+        background-color: var(--bg-table) !important;
+        border-radius: 12px !important;
+    }
+
+    /* ========================== */
+    /* Table Header               */
+    /* ========================== */
+    .wg-table.table-all-product ul.table-title {
+        display: flex !important;
+        justify-content: flex-start !important;
+        gap: 20px !important;
+        font-weight: 600 !important;
+        color: var(--Heading) !important;
+        border-bottom: 2px solid var(--Stroke) !important;
+        padding-bottom: 10px !important;
+    }
+
+    /* Header Columns */
+    .wg-table.table-all-product ul.table-title li {
+        flex: 1 !important;
+        min-width: 120px !important;
+        color: var(--Body-Text) !important;
+    }
+
+    /* Make first column wider */
+    .wg-table.table-all-product ul.table-title li:first-child {
+        flex: 2 !important;
+    }
+
+    /* ========================== */
+    /* Table Rows                 */
+    /* ========================== */
+    .wg-table.table-all-product .wg-product {
+        display: flex !important;
+        align-items: center !important;
+        gap: 20px !important;
+        padding: 12px 15px !important;
+        background-color: var(--White) !important;
+        border-radius: 12px !important;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.05) !important;
+        transition: transform 0.2s, box-shadow 0.2s !important;
+        border-bottom: 1px solid var(--Stroke) !important;
+    }
+
+    /* Hover effect */
+    .wg-table.table-all-product .wg-product:hover {
+        transform: translateY(-2px) !important;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1) !important;
+    }
+
+    /* Columns in row */
+    .wg-table.table-all-product .wg-product > div {
+        flex: 1 !important;
+        min-width: 120px !important;
+        color: var(--Body-Text) !important;
+    }
+
+    /* Name column */
+    .wg-table.table-all-product .wg-product .name {
+        flex: 2 !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 10px !important;
+    }
+
+    /* Product image */
+    .wg-table.table-all-product .wg-product .image img {
+        width: 50px !important;
+        height: 50px !important;
+        object-fit: cover !important;
+        border-radius: 50% !important;
+        display: block !important;
+        border: 1px solid var(--Stroke) !important;
+    }
+
+    /* Name + SKU */
+    .wg-table.table-all-product .wg-product .title {
+        display: flex !important;
+        flex-direction: column !important;
+    }
+
+    .wg-table.table-all-product .wg-product .title a {
+        color: var(--Heading) !important;
+        font-weight: 600 !important;
+        text-decoration: none !important;
+    }
+
+    .wg-table.table-all-product .wg-product .title p {
+        color: var(--Note) !important;
+        font-size: 12px !important;
+        margin: 2px 0 0 !important;
+    }
+
+    /* Price */
+    .wg-table.table-all-product .wg-product .body-text {
+        font-size: 14px !important;
+        color: var(--Body-Text) !important;
+    }
+
+    .wg-table.table-all-product .wg-product .body-text small {
+        color: var(--Note) !important;
+        font-size: 12px !important;
+    }
+
+    /* Colors & Sizes */
+    .size-display-group {
+        display: flex !important;
+        align-items: center !important;
+        gap: 8px !important;
+    }
+
+    .size-display .color-circle {
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        display: inline-block;
+        border: 1px solid var(--Stroke);
+    }
+
+    /* Stock status badges */
+    .block-available, .block-stock {
+        padding: 6px 12px !important;
+        border-radius: 20px !important;
+        font-size: 12px !important;
+        font-weight: 600 !important;
+        display: inline-block !important;
+    }
+
+    .block-available {
+        background-color: var(--Palette-Green-500) !important;
+        color: var(--White) !important;
+    }
+
+    .block-stock {
+        background-color: var(--Palette-Red-500) !important;
+        color: var(--White) !important;
+    }
+
+    /* Actions column */
+    .list-icon-function a.item {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
+        font-size: 16px !important;
+        transition: all 0.2s;
+    }
+
+    .list-icon-function a.item:hover {
+        background-color: var(--Main) !important;
+        color: var(--White) !important;
+    }
+
+    /* Responsive Adjustments */
+    @media (max-width: 1199px) {
+        .wg-table.table-all-product ul.table-title li,
+        .wg-table.table-all-product .wg-product > div {
+            min-width: 100px !important;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .wg-table.table-all-product ul.table-title,
+        .wg-table.table-all-product .wg-product {
+            flex-direction: column !important;
+            align-items: flex-start !important;
+        }
+
+        .wg-table.table-all-product .wg-product .name {
+            margin-bottom: 10px !important;
+        }
+
+        .list-icon-function {
+            margin-top: 10px !important;
+        }
+    }
+
+</style>
 @if($products->count() > 0)
     <div class="wg-box mt-5">
         <div class="wg-table table-product-list">
@@ -91,20 +282,19 @@
                         </div>
 
                         <!-- Actions -->
-                        <div class="list-icon-function">
-                            <a href="{{ route('admin.product.show', $product->id) }}" class="item eye"
-                               title="View" style="background: var(--Surface-3); color: var(--Icon);">
+                        <div class="item-actions">
+                            <a href="{{ route('admin.product.show', $product->id) }}"
+                               title="View">
                                 <i class="icon-eye"></i>
                             </a>
-                            <a href="{{ route('admin.product.edit', $product->id) }}" class="item edit"
-                               title="Edit" style="background: var(--Surface-3); color: var(--Icon);">
-                                <i class="icon-edit-3"></i>
+                            <a href="{{ route('admin.product.edit', $product->id) }}"
+                               title="Edit">
+                                <i class="icon-edit"></i>
                             </a>
-                            <a href="#" class="item trash delete-product"
+                            <a href="#" class=" trash delete-product"
                                title="Delete"
                                data-id="{{ $product->id }}"
-                               data-name="{{ $product->name }}"
-                               style="background: var(--Surface-3); color: var(--Icon);">
+                               data-name="{{ $product->name }}">
                                 <i class="icon-trash-2"></i>
                             </a>
                         </div>

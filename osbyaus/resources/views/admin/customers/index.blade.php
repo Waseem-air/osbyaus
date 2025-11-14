@@ -1,6 +1,4 @@
 @extends("admin.layout.main")
-
-
 @section('content')
     <!-- main-content -->
     <div class="main-content">

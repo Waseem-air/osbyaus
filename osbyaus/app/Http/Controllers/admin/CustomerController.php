@@ -63,7 +63,7 @@ class CustomerController extends Controller
         }
 
         // Pagination
-        $customers = $query->paginate(10)->withQueryString();
+        $customers = $query->paginate(15)->withQueryString();
 
         // AJAX request - return HTML only
         if ($request->ajax()) {

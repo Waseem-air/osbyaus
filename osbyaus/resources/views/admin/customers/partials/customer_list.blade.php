@@ -1,3 +1,161 @@
+<style>
+    /* ========================== */
+    /* Table Wrapper & Layout     */
+    /* ========================== */
+    .wg-table.table-all-customer {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 10px !important;
+        width: 100% !important;
+        padding: 10px !important;
+    }
+
+    /* ========================== */
+    /* Table Header               */
+    /* ========================== */
+    .wg-table.table-all-customer ul.table-title {
+        display: flex !important;
+        justify-content: flex-start !important;
+        gap: 20px !important;
+        font-weight: 600 !important;
+        color: var(--Heading) !important;
+    }
+
+    /* Header Columns */
+    .wg-table.table-all-customer ul.table-title li {
+        flex: 1 !important;
+        min-width: 120px !important;
+        color: var(--Body-Text) !important;
+    }
+
+    /* Make name column wider */
+    .wg-table.table-all-customer ul.table-title li:first-child {
+        flex: 2 !important;
+    }
+
+    /* ========================== */
+    /* Table Rows                 */
+    /* ========================== */
+    .wg-table.table-all-customer .wg-product {
+        display: flex !important;
+        align-items: center !important;
+        gap: 20px !important;
+        padding: 12px 15px !important;
+    }
+    /* Columns in rows */
+    .wg-table.table-all-customer .wg-product > div {
+        flex: 1 !important;
+        min-width: 120px !important;
+        color: var(--Body-Text) !important;
+    }
+
+    /* Name column */
+    .wg-table.table-all-customer .wg-product .name {
+        flex: 2 !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 10px !important;
+    }
+
+    /* Avatar images */
+    .wg-table.table-all-customer .wg-product .image img {
+        width: 50px !important;
+        height: 50px !important;
+        object-fit: cover !important;
+        border-radius: 50% !important;
+        display: block !important;
+        border: 1px solid var(--Stroke) !important;
+    }
+
+    /* Name + verified badge */
+    .wg-table.table-all-customer .wg-product .title {
+        display: flex !important;
+        flex-direction: column !important;
+    }
+
+    .wg-table.table-all-customer .wg-product .title a {
+        color: var(--Heading) !important;
+        font-weight: 600 !important;
+        text-decoration: none !important;
+    }
+
+    .wg-table.table-all-customer .wg-product .title .text-success {
+        font-size: 12px !important;
+        color: var(--success) !important;
+    }
+
+    .wg-table.table-all-customer .wg-product .title .text-warning {
+        font-size: 12px !important;
+        color: var(--warning) !important;
+    }
+
+    /* Contact info & city */
+    .wg-table.table-all-customer .wg-product .body-text {
+        font-size: 14px !important;
+        color: var(--Body-Text) !important;
+    }
+
+    /* Status badges */
+    .status-badge {
+        padding: 4px 12px !important;
+        border-radius: 20px !important;
+        font-size: 12px !important;
+        font-weight: 600 !important;
+        justify-content: center !important;
+        cursor: pointer !important;
+        user-select: none !important;
+    }
+
+    .status-badge.active {
+        background-color: var(--Palette-Green-500) !important;
+        color: var(--White) !important;
+        border: 1px solid var(--Palette-Green-500) !important;
+    }
+
+    .status-badge.inactive {
+        background-color: var(--Palette-Red-400) !important;
+        color: var(--White) !important;
+        border: 1px solid var(--Palette-Red-400) !important;
+    }
+
+    /* Actions column */
+    .item-actions a {
+        color: var(--Body-Text) !important;
+        margin-right: 8px !important;
+        font-size: 16px !important;
+        transition: color 0.2s !important;
+    }
+
+    .item-actions a:hover {
+        color: var(--Main) !important;
+    }
+
+    /* ========================== */
+    /* Responsive Adjustments      */
+    /* ========================== */
+    @media (max-width: 1199px) {
+        .wg-table.table-all-customer ul.table-title li,
+        .wg-table.table-all-customer .wg-product > div {
+            min-width: 100px !important;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .wg-table.table-all-customer ul.table-title,
+        .wg-table.table-all-customer .wg-product {
+            flex-direction: column !important;
+            align-items: flex-start !important;
+        }
+
+        .wg-table.table-all-customer .wg-product .name {
+            margin-bottom: 10px !important;
+        }
+
+        .item-actions {
+            margin-top: 10px !important;
+        }
+    }
+</style>
 @if($customers->count() > 0)
     <div class="wg-box mt-5">
         <div class="wg-table table-all-customer">
@@ -6,10 +164,7 @@
                     <div class="body-title">Customer</div>
                 </li>
                 <li>
-                    <div class="body-title">Contact Info</div>
-                </li>
-                <li>
-                    <div class="body-title">City</div>
+                    <div class="body-title">Phone Number</div>
                 </li>
                 <li>
                     <div class="body-title">Status</div>
@@ -44,15 +199,8 @@
                         </div>
 
                         <div class="body-text">
-                            <div>{{ $customer->email }}</div>
                             @if($customer->phone)
-                                <div class="text-muted small">{{ $customer->phone }}</div>
-                            @endif
-                        </div>
-
-                        <div class="body-text">
-                            @if($customer->city)
-                                <div>{{ $customer->city }}</div>
+                                <div>{{ $customer->phone }}</div>
                             @else
                                 <div class="text-muted">Not specified</div>
                             @endif
