@@ -166,95 +166,96 @@
                     </button>
                 </div>
 
-                <!-- Categories List -->
+                 <!-- Categories Table -->
                 <div class="wg-box mt-5">
-                    <div class="wg-table table-all-category">
-                        <ul class="table-title flex gap20 mb-14">
-                            <li>
-                                <div class="body-title">Category</div>
-                            </li>
-                            <li>
-                                <div class="body-title">Slug</div>
-                            </li>
-                            <li>
-                                <div class="body-title">Status</div>
-                            </li>
-                            <li>
-                                <div class="body-title">Created</div>
-                            </li>
-                            <li>
-                                <div class="body-title">Actions</div>
-                            </li>
-                        </ul>
-
-                        <div class="flex flex-column" id="categoriesList">
-                            @foreach($categories as $category)
-                                <div class="wg-product item-row gap20" id="category-{{ $category->id }}">
-                                    <div class="name">
-                                        @isset($category->image)
-                                            <div class="image">
-                                                <img
-                                                    src="{{ asset($category->image ?? 'assets/images/default-category.jpg') }}"
-                                                    alt="{{ $category->name }}" width="60" height="60"
-                                                    style="object-fit: cover; border-radius: 8px;">
-                                            </div>
-                                        @endisset
-                                        <div class="title line-clamp-2 mb-0">
-                                            <a href="#" class="body-text fw-bold">{{ $category->name }}</a>
-                                            @if($category->description)
-                                                <div class="body-text text-muted mt-1 line-clamp-1">
-                                                    {{ Str::limit($category->description, 50) }}
+                    <div class="table-container">
+                        <table class="category-table">
+                            <thead>
+                                <tr>
+                                    <th>Category</th>
+                                    <th>Slug</th>
+                                    <th>Status</th>
+                                    <th>Created</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="categoriesList">
+                                <!-- PHP Backend Code - Same as original -->
+                                @foreach($categories as $category)
+                                    <tr class="item-row" id="category-{{ $category->id }}">
+                                        <td>
+                                            <div class="category-info">
+                                                @isset($category->image)
+                                                    <img src="{{ asset($category->image ?? 'assets/images/default-category.jpg') }}" 
+                                                         alt="{{ $category->name }}" 
+                                                         class="category-image">
+                                                @else
+                                                    <img src="assets/images/default-category.jpg" 
+                                                         alt="{{ $category->name }}" 
+                                                         class="category-image">
+                                                @endisset
+                                                <div>
+                                                    <div class="category-name">
+                                                        <a href="#" class="body-text fw-bold">{{ $category->name }}</a>
+                                                    </div>
+                                                    @if($category->description)
+                                                        <div class="category-description line-clamp-1">
+                                                            {{ Str::limit($category->description, 50) }}
+                                                        </div>
+                                                    @endif
                                                 </div>
-                                            @endif
-                                        </div>
-                                    </div>
+                                            </div>
+                                        </td>
+                                        <td class="body-text text-main-dark">{{ $category->slug }}</td>
+                                        <td>
+                                            <span class="block-stock {{ $category->is_active ? 'bg-1' : 'bg-2' }} fw-7">
+                                                {{ $category->is_active ? 'Active' : 'Inactive' }}
+                                            </span>
+                                        </td>
+                                        <td class="body-text text-main-dark">{{ $category->created_at->format('M d, Y') }}</td>
+                                        <td>
+                                            <div class="item-actions">
+                                                <!-- Edit -->
+                                                <a href="javascript:void(0)" class="edit-category"
+                                                   data-id="{{ $category->id }}"
+                                                   data-bs-toggle="modal"
+                                                   data-bs-target="#editCategoryModal"
+                                                   title="Edit Category">
+                                                    <i class="icon-edit"></i>
+                                                </a>
 
-                                    <div class="body-text text-main-dark">{{ $category->slug }}</div>
+                                                <!-- Delete -->
+                                                <a href="javascript:void(0)" class="delete-category"
+                                                   data-id="{{ $category->id }}"
+                                                   data-name="{{ $category->name }}"
+                                                   title="Delete Category">
+                                                    <i class="icon-trash-2"></i>
+                                                </a>
 
-                                    <div class="body-text">
-                                    <span class="status-badge {{ $category->is_active ? 'active' : 'inactive' }}">
-                                        {{ $category->is_active ? 'Active' : 'Inactive' }}
-                                    </span>
-                                    </div>
+                                                <!-- View -->
+                                                <a href="{{ route('admin.category.show', $category->id) }}"
+                                                   title="View Category">
+                                                    <i class="icon-eye"></i>
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @endforeach
 
-                                    <div
-                                        class="body-text text-main-dark">{{ $category->created_at->format('M d, Y') }}</div>
-
-                                    <div class="item-actions">
-                                        <!-- Edit -->
-                                        <a href="javascript:void(0)" class="edit-category"
-                                           data-id="{{ $category->id }}"
-                                           data-bs-toggle="modal"
-                                           data-bs-target="#editCategoryModal"
-                                           title="Edit Category">
-                                            <i class="icon-edit"></i>
-                                        </a>
-
-                                        <!-- Delete -->
-                                        <a href="javascript:void(0)" class="delete-category"
-                                           data-id="{{ $category->id }}"
-                                           data-name="{{ $category->name }}"
-                                           title="Delete Category">
-                                            <i class="icon-trash-2"></i>
-                                        </a>
-
-                                        <!-- View -->
-                                        <a href="{{ route('admin.category.show', $category->id) }}"
-                                           title="View Category">
-                                            <i class="icon-eye"></i>
-                                        </a>
-                                    </div>
-                                </div>
-                            @endforeach
-
-                            @if($categories->isEmpty())
-                                <div class="text-center py-5">
-                                    <div class="body-text text-muted mb-3">No categories found</div>
-                                </div>
-                            @endif
-                        </div>
+                                @if($categories->isEmpty())
+                                    <tr>
+                                        <td colspan="5">
+                                            <div class="text-center py-5">
+                                                <div class="body-text text-muted mb-3">No categories found</div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @endif
+                            </tbody>
+                        </table>
                     </div>
                 </div>
+                <!-- /Categories Table -->
             </div>
         </div>
 
