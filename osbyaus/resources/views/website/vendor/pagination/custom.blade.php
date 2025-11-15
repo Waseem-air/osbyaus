@@ -1,5 +1,5 @@
 @if ($paginator->hasPages())
-    <ul class="pagination">
+    <ul class="pagination custom-pagination">
         {{-- Previous Page Link --}}
         @if ($paginator->onFirstPage())
             <li class="page-item disabled" aria-disabled="true">

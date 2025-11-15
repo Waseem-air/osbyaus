@@ -11,13 +11,11 @@
                 <div class="col-12">
                     <div class="row ec_breadcrumb_inner">
                         <div class="col-md-12 col-sm-12">
-                            <!-- ec-breadcrumb-list start -->
                             <ul class="ec-breadcrumb-list text-left">
                                 <li class="ec-breadcrumb-item"><a href="{{ route('home') }}"><i class="fi-rr-home"></i></a></li>
                                 <li class="ec-breadcrumb-item">Products</li>
                                 <li class="ec-breadcrumb-item active">All Products</li>
                             </ul>
-                            <!-- ec-breadcrumb-list end -->
                         </div>
                     </div>
                 </div>
@@ -36,97 +34,117 @@
                         <!-- Sidebar Category Block -->
                         <div class="ec-sidebar-block">
                             <div class="ec-category-wrapper">
-                                <!-- Availability Filter -->
-                                <div class="ec-category-items">
-                                    <h3 class="ec-category-title">Availability</h3>
-                                    <div class="ec-category-item">
-                                        <input class="form-check-input availability-filter" type="checkbox" id="in-stock" value="in_stock">
-                                        <label for="in-stock">In stock</label>
-                                    </div>
-                                    <div class="ec-category-item">
-                                        <input class="form-check-input availability-filter" type="checkbox" id="out-stock" value="out_of_stock">
-                                        <label for="out-stock">Out of stock</label>
-                                    </div>
-                                </div>
+                                <form id="filter-form" method="POST" action="{{ route('products.filter') }}">
+                                    @csrf
 
-                                <!-- Size Filter -->
-                                <div class="ec-category-items">
-                                    <h3 class="ec-category-title">Size</h3>
-                                    <div class="d-flex align-items-start">
-                                        <div class="w-100">
-                                            @foreach($sizes as $size)
-                                                <div class="ec-category-item">
-                                                    <input class="form-check-input size-filter" type="checkbox"
-                                                           id="size-{{ $size->id }}" value="{{ $size->id }}"
-                                                        {{ $size->is_active ? '' : 'disabled' }}>
-                                                    <label for="size-{{ $size->id }}">{{ $size->short_code ?? $size->name }}</label>
-                                                </div>
-                                            @endforeach
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Price Range Filter -->
-                                <div class="ec-category-items">
-                                    <h3 class="ec-category-title">Price Range</h3>
-                                    <div class="range-slider">
-                                        <span class="price-input up-input">
-                                            <input type="number" class="left-input" id="min-price" value="0" min="0" max="1000" readonly/>
-                                            <input type="number" class="right-input" id="max-price" value="1000" min="0" max="1000" readonly/>
-                                        </span>
-                                        <div class="slider-range">
-                                            <input type="range" id="price-min" value="0" min="0" max="1000" step="10"/>
-                                            <input type="range" id="price-max" value="1000" min="0" max="1000" step="10"/>
-                                        </div>
-                                        <span class="price-input down-input">
-                                            <input type="number" class="left-input" value="0" min="0" max="1000" readonly/>
-                                            <input type="number" class="right-input" value="1000" min="0" max="1000" readonly/>
-                                        </span>
-                                    </div>
-                                </div>
-
-                                <!-- Embellishment Filter -->
-                                <div class="ec-category-items">
-                                    <h3 class="ec-category-title">Embellishment</h3>
-                                    @foreach($embellishments as $embellishment)
+                                    <!-- Availability Filter -->
+                                    <div class="ec-category-items">
+                                        <h3 class="ec-category-title">Availability</h3>
                                         <div class="ec-category-item">
-                                            <input class="form-check-input embellishment-filter" type="checkbox"
-                                                   id="embellishment-{{ $embellishment }}" value="{{ $embellishment }}">
-                                            <label for="embellishment-{{ $embellishment }}">{{ $embellishment }}</label>
+                                            <input class="form-check-input availability-filter" type="checkbox"
+                                                   name="availability[]" id="in-stock" value="in_stock"
+                                                {{ in_array('in_stock', $filters['availability'] ?? []) ? 'checked' : '' }}>
+                                            <label for="in-stock">In stock</label>
                                         </div>
-                                    @endforeach
-                                </div>
-
-                                <!-- Cut Style Filter -->
-                                <div class="ec-category-items">
-                                    <h3 class="ec-category-title">Cut Style</h3>
-                                    @foreach($cuts as $cut)
                                         <div class="ec-category-item">
-                                            <input class="form-check-input cut-filter" type="checkbox"
-                                                   id="cut-{{ $cut }}" value="{{ $cut }}">
-                                            <label for="cut-{{ $cut }}">{{ $cut }}</label>
+                                            <input class="form-check-input availability-filter" type="checkbox"
+                                                   name="availability[]" id="out-stock" value="out_of_stock"
+                                                {{ in_array('out_of_stock', $filters['availability'] ?? []) ? 'checked' : '' }}>
+                                            <label for="out-stock">Out of stock</label>
                                         </div>
-                                    @endforeach
-                                </div>
+                                    </div>
 
-                                <!-- Fabric Filter -->
-                                <div class="ec-category-items">
-                                    <h3 class="ec-category-title">Fabric</h3>
-                                    @foreach($fabrics as $fabric)
-                                        <div class="ec-category-item">
-                                            <input class="form-check-input fabric-filter" type="checkbox"
-                                                   id="fabric-{{ $fabric }}" value="{{ $fabric }}">
-                                            <label for="fabric-{{ $fabric }}">{{ $fabric }}</label>
+                                    <!-- Size Filter -->
+                                    <div class="ec-category-items">
+                                        <h3 class="ec-category-title">Size</h3>
+                                        <div class="d-flex align-items-start">
+                                            <div class="w-100">
+                                                @foreach($sizes as $size)
+                                                    <div class="ec-category-item">
+                                                        <input class="form-check-input size-filter" type="checkbox"
+                                                               name="sizes[]" id="size-{{ $size->id }}" value="{{ $size->id }}"
+                                                            {{ in_array($size->id, $filters['sizes'] ?? []) ? 'checked' : '' }}
+                                                            {{ $size->is_active ? '' : 'disabled' }}>
+                                                        <label for="size-{{ $size->id }}">{{ $size->short_code ?? $size->name }}</label>
+                                                    </div>
+                                                @endforeach
+                                            </div>
                                         </div>
-                                    @endforeach
-                                </div>
+                                    </div>
 
-                                <!-- Clear Filters Button -->
-                                <div class="ec-category-items">
-                                    <button class="btn btn-outline-dark w-100" id="clear-filters">
-                                        <i class="fi-rr-refresh"></i> Clear All Filters
-                                    </button>
-                                </div>
+                                    <!-- Price Range Filter -->
+                                    <div class="ec-category-items">
+                                        <h3 class="ec-category-title">Price Range</h3>
+                                        <div class="range-slider">
+                                            <span class="price-input up-input">
+                                                <input type="number" class="left-input" id="min-price"
+                                                       name="min_price" value="{{ $filters['min_price'] ?? 0 }}"
+                                                       min="0" max="1000" readonly/>
+                                                <input type="number" class="right-input" id="max-price"
+                                                       name="max_price" value="{{ $filters['max_price'] ?? 1000 }}"
+                                                       min="0" max="1000" readonly/>
+                                            </span>
+                                            <div class="slider-range">
+                                                <input type="range" id="price-min" value="{{ $filters['min_price'] ?? 0 }}" min="0" max="1000" step="10"/>
+                                                <input type="range" id="price-max" value="{{ $filters['max_price'] ?? 1000 }}" min="0" max="1000" step="10"/>
+                                            </div>
+                                            <span class="price-input down-input">
+                                                <input type="number" class="left-input" value="{{ $filters['min_price'] ?? 0 }}" min="0" max="1000" readonly/>
+                                                <input type="number" class="right-input" value="{{ $filters['max_price'] ?? 1000 }}" min="0" max="1000" readonly/>
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Embellishment Filter -->
+                                    <div class="ec-category-items">
+                                        <h3 class="ec-category-title">Embellishment</h3>
+                                        @foreach($embellishments as $embellishment)
+                                            <div class="ec-category-item">
+                                                <input class="form-check-input embellishment-filter" type="checkbox"
+                                                       name="embellishments[]" id="embellishment-{{ $embellishment }}"
+                                                       value="{{ $embellishment }}"
+                                                    {{ in_array($embellishment, $filters['embellishments'] ?? []) ? 'checked' : '' }}>
+                                                <label for="embellishment-{{ $embellishment }}">{{ $embellishment }}</label>
+                                            </div>
+                                        @endforeach
+                                    </div>
+
+                                    <!-- Cut Style Filter -->
+                                    <div class="ec-category-items">
+                                        <h3 class="ec-category-title">Cut Style</h3>
+                                        @foreach($cuts as $cut)
+                                            <div class="ec-category-item">
+                                                <input class="form-check-input cut-filter" type="checkbox"
+                                                       name="cuts[]" id="cut-{{ $cut }}" value="{{ $cut }}"
+                                                    {{ in_array($cut, $filters['cuts'] ?? []) ? 'checked' : '' }}>
+                                                <label for="cut-{{ $cut }}">{{ $cut }}</label>
+                                            </div>
+                                        @endforeach
+                                    </div>
+
+                                    <!-- Fabric Filter -->
+                                    <div class="ec-category-items">
+                                        <h3 class="ec-category-title">Fabric</h3>
+                                        @foreach($fabrics as $fabric)
+                                            <div class="ec-category-item">
+                                                <input class="form-check-input fabric-filter" type="checkbox"
+                                                       name="fabrics[]" id="fabric-{{ $fabric }}" value="{{ $fabric }}"
+                                                    {{ in_array($fabric, $filters['fabrics'] ?? []) ? 'checked' : '' }}>
+                                                <label for="fabric-{{ $fabric }}">{{ $fabric }}</label>
+                                            </div>
+                                        @endforeach
+                                    </div>
+
+                                    <!-- Hidden sort field -->
+                                    <input type="hidden" name="sort" id="sort-input" value="{{ $filters['sort'] ?? 'latest' }}">
+
+                                    <!-- Clear Filters Button -->
+                                    <div class="ec-category-items">
+                                        <button type="button" class="btn btn-outline-dark w-100" id="clear-filters">
+                                            <i class="fi-rr-refresh"></i> Clear All Filters
+                                        </button>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -142,12 +160,12 @@
                         </span>
                         <div class="ec-select-inner">
                             <select name="sort-by" id="sort-by" class="form-select">
-                                <option value="latest" {{ request('sort') == 'latest' ? 'selected' : '' }}>Latest</option>
-                                <option value="featured" {{ request('sort') == 'featured' ? 'selected' : '' }}>Featured</option>
-                                <option value="name_asc" {{ request('sort') == 'name_asc' ? 'selected' : '' }}>Name, A to Z</option>
-                                <option value="name_desc" {{ request('sort') == 'name_desc' ? 'selected' : '' }}>Name, Z to A</option>
-                                <option value="price_asc" {{ request('sort') == 'price_asc' ? 'selected' : '' }}>Price, low to high</option>
-                                <option value="price_desc" {{ request('sort') == 'price_desc' ? 'selected' : '' }}>Price, high to low</option>
+                                <option value="latest" {{ ($filters['sort'] ?? 'latest') == 'latest' ? 'selected' : '' }}>Latest</option>
+                                <option value="featured" {{ ($filters['sort'] ?? '') == 'featured' ? 'selected' : '' }}>Featured</option>
+                                <option value="name_asc" {{ ($filters['sort'] ?? '') == 'name_asc' ? 'selected' : '' }}>Name, A to Z</option>
+                                <option value="name_desc" {{ ($filters['sort'] ?? '') == 'name_desc' ? 'selected' : '' }}>Name, Z to A</option>
+                                <option value="price_asc" {{ ($filters['sort'] ?? '') == 'price_asc' ? 'selected' : '' }}>Price, low to high</option>
+                                <option value="price_desc" {{ ($filters['sort'] ?? '') == 'price_desc' ? 'selected' : '' }}>Price, high to low</option>
                             </select>
                         </div>
                     </div>
@@ -170,7 +188,7 @@
                         <i class="fi-rr-search-alt" style="font-size: 3rem; color: #ccc;"></i>
                         <h4 class="mt-3">No products found</h4>
                         <p class="text-muted">Try adjusting your filters or search terms</p>
-                        <button class="btn btn-dark mt-2" id="reset-filters">Reset Filters</button>
+                        <a href="{{ route('products.clear-filters') }}" class="btn btn-dark mt-2">Reset Filters</a>
                     </div>
                 </div>
                 <!-- Products Section End -->
@@ -181,153 +199,52 @@
 @endsection
 
 @push('scripts')
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-        $(document).ready(function() {
-            let currentPage = 1;
+        document.addEventListener('DOMContentLoaded', function() {
             let isLoading = false;
             let timeout = null;
 
-            // Filters object
-            let filters = {
-                sizes: [],
-                availability: [],
-                minPrice: 0,
-                maxPrice: 1000,
-                embellishments: [],
-                cuts: [],
-                fabrics: [],
-                sort: 'latest'
-            };
-
             // Initialize price range slider
-            function initializePriceSlider() {
-                const priceMin = $('#price-min');
-                const priceMax = $('#price-max');
-                const minPriceDisplay = $('#min-price');
-                const maxPriceDisplay = $('#max-price');
+            const priceMin = document.getElementById('price-min');
+            const priceMax = document.getElementById('price-max');
+            const minPriceDisplay = document.getElementById('min-price');
+            const maxPriceDisplay = document.getElementById('max-price');
+            const sortInput = document.getElementById('sort-input');
+            const filterForm = document.getElementById('filter-form');
 
-                function updatePriceRange() {
-                    filters.minPrice = parseInt(priceMin.val());
-                    filters.maxPrice = parseInt(priceMax.val());
-                    minPriceDisplay.val(filters.minPrice);
-                    maxPriceDisplay.val(filters.maxPrice);
-                    loadProducts();
-                }
-
-                priceMin.on('input', updatePriceRange);
-                priceMax.on('input', updatePriceRange);
+            function updatePriceRange() {
+                const minVal = parseInt(priceMin.value);
+                const maxVal = parseInt(priceMax.value);
+                minPriceDisplay.value = minVal;
+                maxPriceDisplay.value = maxVal;
+                loadProducts();
             }
 
-            // Initialize filter event listeners
-            function initializeFilters() {
-                // Size filter
-                $('.size-filter').on('change', function() {
-                    const value = $(this).val();
-                    if ($(this).is(':checked')) {
-                        if (!filters.sizes.includes(value)) {
-                            filters.sizes.push(value);
-                        }
-                    } else {
-                        filters.sizes = filters.sizes.filter(size => size !== value);
-                    }
-                    loadProducts();
-                });
-
-                // Availability filter
-                $('.availability-filter').on('change', function() {
-                    const value = $(this).val();
-                    if ($(this).is(':checked')) {
-                        if (!filters.availability.includes(value)) {
-                            filters.availability.push(value);
-                        }
-                    } else {
-                        filters.availability = filters.availability.filter(avail => avail !== value);
-                    }
-                    loadProducts();
-                });
-
-                // Embellishment filter
-                $('.embellishment-filter').on('change', function() {
-                    const value = $(this).val();
-                    if ($(this).is(':checked')) {
-                        if (!filters.embellishments.includes(value)) {
-                            filters.embellishments.push(value);
-                        }
-                    } else {
-                        filters.embellishments = filters.embellishments.filter(emb => emb !== value);
-                    }
-                    loadProducts();
-                });
-
-                // Cut filter
-                $('.cut-filter').on('change', function() {
-                    const value = $(this).val();
-                    if ($(this).is(':checked')) {
-                        if (!filters.cuts.includes(value)) {
-                            filters.cuts.push(value);
-                        }
-                    } else {
-                        filters.cuts = filters.cuts.filter(cut => cut !== value);
-                    }
-                    loadProducts();
-                });
-
-                // Fabric filter
-                $('.fabric-filter').on('change', function() {
-                    const value = $(this).val();
-                    if ($(this).is(':checked')) {
-                        if (!filters.fabrics.includes(value)) {
-                            filters.fabrics.push(value);
-                        }
-                    } else {
-                        filters.fabrics = filters.fabrics.filter(fabric => fabric !== value);
-                    }
-                    loadProducts();
-                });
-
-                // Sort select
-                $('#sort-by').on('change', function() {
-                    filters.sort = $(this).val();
-                    loadProducts();
-                });
-
-                // Clear filters
-                $('#clear-filters, #reset-filters').on('click', function() {
-                    resetFilters();
-                    loadProducts();
-                });
+            if (priceMin && priceMax) {
+                priceMin.addEventListener('input', updatePriceRange);
+                priceMax.addEventListener('input', updatePriceRange);
             }
 
-            // Reset all filters
-            function resetFilters() {
-                // Uncheck all checkboxes
-                $('input[type="checkbox"]').prop('checked', false);
+            // Filter event listeners
+            document.querySelectorAll('.size-filter, .availability-filter, .embellishment-filter, .cut-filter, .fabric-filter').forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    loadProducts();
+                });
+            });
 
-                // Reset price range
-                $('#price-min').val(0);
-                $('#price-max').val(1000);
-                $('#min-price').val(0);
-                $('#max-price').val(1000);
+            // Sort select
+            document.getElementById('sort-by').addEventListener('change', function() {
+                sortInput.value = this.value;
+                loadProducts();
+            });
 
-                // Reset filters object
-                filters = {
-                    sizes: [],
-                    availability: [],
-                    minPrice: 0,
-                    maxPrice: 1000,
-                    embellishments: [],
-                    cuts: [],
-                    fabrics: [],
-                    sort: 'latest'
-                };
+            // Clear filters
+            document.getElementById('clear-filters').addEventListener('click', function() {
+                window.location.href = "{{ route('products.clear-filters') }}";
+            });
 
-                // Reset sort select
-                $('#sort-by').val('latest');
-            }
-
-            // Load products with AJAX
-            function loadProducts(page = 1) {
+            // Load products with AJAX POST
+            function loadProducts() {
                 if (isLoading) return;
 
                 // Clear previous timeout
@@ -335,153 +252,94 @@
                     clearTimeout(timeout);
                 }
 
-                // Set new timeout for debouncing
                 timeout = setTimeout(function() {
                     isLoading = true;
-                    currentPage = page;
 
                     // Show loading spinner
-                    $('#loading-spinner').show();
-                    $('#products-container').hide();
-                    $('#no-products').hide();
+                    document.getElementById('loading-spinner').style.display = 'block';
+                    document.getElementById('products-container').style.display = 'none';
+                    document.getElementById('no-products').style.display = 'none';
 
-                    // Prepare query parameters
-                    const params = new URLSearchParams();
-                    params.append('page', page);
-                    params.append('sort', filters.sort);
+                    // Get form data
+                    const formData = new FormData(filterForm);
 
-                    if (filters.sizes.length) params.append('sizes', filters.sizes.join(','));
-                    if (filters.availability.length) params.append('availability', filters.availability.join(','));
-                    if (filters.embellishments.length) params.append('embellishments', filters.embellishments.join(','));
-                    if (filters.cuts.length) params.append('cuts', filters.cuts.join(','));
-                    if (filters.fabrics.length) params.append('fabrics', filters.fabrics.join(','));
-                    params.append('min_price', filters.minPrice);
-                    params.append('max_price', filters.maxPrice);
-
-                    // Update URL without page reload
-                    const newUrl = `${window.location.pathname}?${params.toString()}`;
-                    window.history.pushState({}, '', newUrl);
-
-                    // AJAX request
-                    $.ajax({
-                        url: `{{ route('products.index') }}?${params.toString()}`,
-                        type: 'GET',
-                        dataType: 'json',
+                    // AJAX POST request
+                    fetch("{{ route('products.filter') }}", {
+                        method: 'POST',
                         headers: {
-                            'X-Requested-With': 'XMLHttpRequest'
+                            'X-Requested-With': 'XMLHttpRequest',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
                         },
-                        success: function(data) {
-                            $('#products-container').html(data.html);
-                            $('#results-count').text(`Showing: ${data.total} Results`);
+                        body: formData
+                    })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Network response was not ok');
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            document.getElementById('products-container').innerHTML = data.html;
+                            document.getElementById('results-count').textContent = `Showing: ${data.total} Results`;
 
                             // Show/hide containers
-                            $('#loading-spinner').hide();
-                            $('#products-container').show();
+                            document.getElementById('loading-spinner').style.display = 'none';
+                            document.getElementById('products-container').style.display = 'block';
 
                             if (data.total === 0) {
-                                $('#no-products').show();
-                                $('#products-container').hide();
+                                document.getElementById('no-products').style.display = 'block';
+                                document.getElementById('products-container').style.display = 'none';
                             }
-
-                            // Re-initialize pagination click handlers
-                            initializePagination();
-                        },
-                        error: function(xhr, status, error) {
+                        })
+                        .catch(error => {
                             console.error('Error loading products:', error);
-                            $('#loading-spinner').hide();
-                            $('#products-container').show();
-                        },
-                        complete: function() {
+                            document.getElementById('loading-spinner').style.display = 'none';
+                            document.getElementById('products-container').style.display = 'block';
+                            document.getElementById('products-container').innerHTML = '<div class="alert alert-danger">Error loading products. Please try again.</div>';
+                        })
+                        .finally(() => {
                             isLoading = false;
-                        }
-                    });
-                }, 300); // 300ms debounce
+                        });
+                }, 300); // Debounce delay
             }
 
-            // Initialize pagination click handlers
-            function initializePagination() {
-                $(document).off('click', '.pagination a').on('click', '.pagination a', function(e) {
+            // Handle pagination clicks
+            document.addEventListener('click', function(e) {
+                if (e.target.closest('.pagination a')) {
                     e.preventDefault();
-                    const url = new URL($(this).attr('href'));
+                    const url = new URL(e.target.closest('a').href);
                     const page = url.searchParams.get('page') || 1;
-                    loadProducts(page);
+
+                    // Add page to form and submit
+                    const pageInput = document.createElement('input');
+                    pageInput.type = 'hidden';
+                    pageInput.name = 'page';
+                    pageInput.value = page;
+                    filterForm.appendChild(pageInput);
+
+                    loadProducts();
+
+                    // Remove the page input after submission
+                    setTimeout(() => {
+                        filterForm.removeChild(pageInput);
+                    }, 1000);
+                }
+            });
+
+            // Smooth scroll to top function
+            function scrollToTop() {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
                 });
             }
 
-            // Initialize filters from URL parameters
-            function initializeFromURL() {
-                const urlParams = new URLSearchParams(window.location.search);
-
-                // Sort
-                if (urlParams.get('sort')) {
-                    filters.sort = urlParams.get('sort');
-                    $('#sort-by').val(filters.sort);
+            // Add scroll to top for pagination
+            document.addEventListener('click', function(e) {
+                if (e.target.closest('.pagination a')) {
+                    setTimeout(scrollToTop, 100);
                 }
-
-                // Sizes
-                if (urlParams.get('sizes')) {
-                    filters.sizes = urlParams.get('sizes').split(',');
-                    filters.sizes.forEach(size => {
-                        $(`#size-${size}`).prop('checked', true);
-                    });
-                }
-
-                // Availability
-                if (urlParams.get('availability')) {
-                    filters.availability = urlParams.get('availability').split(',');
-                    filters.availability.forEach(avail => {
-                        $(`#${avail.replace('_', '-')}`).prop('checked', true);
-                    });
-                }
-
-                // Embellishments
-                if (urlParams.get('embellishments')) {
-                    filters.embellishments = urlParams.get('embellishments').split(',');
-                    filters.embellishments.forEach(emb => {
-                        $(`#embellishment-${emb}`).prop('checked', true);
-                    });
-                }
-
-                // Cuts
-                if (urlParams.get('cuts')) {
-                    filters.cuts = urlParams.get('cuts').split(',');
-                    filters.cuts.forEach(cut => {
-                        $(`#cut-${cut}`).prop('checked', true);
-                    });
-                }
-
-                // Fabrics
-                if (urlParams.get('fabrics')) {
-                    filters.fabrics = urlParams.get('fabrics').split(',');
-                    filters.fabrics.forEach(fabric => {
-                        $(`#fabric-${fabric}`).prop('checked', true);
-                    });
-                }
-
-                // Price range
-                if (urlParams.get('min_price')) {
-                    filters.minPrice = parseInt(urlParams.get('min_price'));
-                    $('#price-min').val(filters.minPrice);
-                    $('#min-price').val(filters.minPrice);
-                }
-
-                if (urlParams.get('max_price')) {
-                    filters.maxPrice = parseInt(urlParams.get('max_price'));
-                    $('#price-max').val(filters.maxPrice);
-                    $('#max-price').val(filters.maxPrice);
-                }
-            }
-
-            // Initialize everything
-            function initialize() {
-                initializePriceSlider();
-                initializeFilters();
-                initializePagination();
-                initializeFromURL();
-            }
-
-            // Start initialization
-            initialize();
+            });
         });
     </script>
 @endpush
