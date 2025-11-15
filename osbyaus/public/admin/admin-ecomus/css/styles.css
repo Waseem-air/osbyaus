@@ -1036,6 +1036,14 @@ a:hover {
   font-weight: 700;
   line-height: 20px;
 }
+/* Mobile screen padding for .body-title */
+@media (max-width: 767.98px) {
+    .body-title {
+        padding-left: 35px !important;
+        align-items: center;
+    }
+}
+
 
 .body-title-2 {
   color: var(--Main-Dark);

@@ -39,6 +39,25 @@
     {{-- ================================ --}}
     <link rel="stylesheet" href="{{ asset('website/assets/css/style.css') }}" />
 
+    <style>/* ERROR TEXT — light red */
+.invalid-feedback {
+    color: #d9534f !important; /* light red */
+    font-size: 14px;
+    margin-top: 2px;
+}
+
+/* ERROR INPUT — fitted soft red border & bg */
+.auth-input.is-invalid {
+    border-color: #f5b5b5 !important; /* soft red border */
+    box-shadow: none !important;
+}
+
+/* OPTIONAL: spacing correction */
+.auth-form .col-12.mb-3 {
+    margin-bottom: 18px !important;
+}
+</style>
+
     {{-- ================================ --}}
     {{-- Extra Styles (Child Pages) --}}
     {{-- ================================ --}}

@@ -39,6 +39,157 @@
         .wg-table.table-product-list .wg-product .title .body-text {
             font-size: 14px !important;
         }
+        /* Input focus custom border color */
+/* Form control focus — only border color, transparent background */
+/* Admin panel input focus — only border color, transparent background */
+.admin-form .form-control:focus,
+.form-control:focus {
+    border: 0.5px solid #94010E !important; /* thin dark red border */
+    background-color: transparent !important;
+    box-shadow: 0 0 0 1px rgba(148, 1, 14, 0.6) !important; /* darker red shadow */
+    outline: none !important;
+}
+   .admin-table {
+            width: 100%;
+            font-size: 16px; /* increase font size */
+            border: none;
+        }
+
+        .admin-table th,
+        .admin-table td {
+            padding: 12px 15px;
+            border: none; /* remove borders */
+            text-align: left;
+        }
+
+        .admin-table thead {
+            font-size: 18px; /* slightly larger header font */
+        }
+        
+        .block-stock {
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-weight: 700;
+            font-size: 14px;
+        }
+        
+        .admin-table {
+            width: 100%;
+            font-size: 16px;
+            border: none;
+        }
+
+        .admin-table th,
+        .admin-table td {
+            padding: 12px 15px;
+            border: none;
+            text-align: left;
+        }
+
+        .admin-table thead {
+            font-size: 18px;
+        }
+        
+        .block-stock {
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-weight: 700;
+            font-size: 14px;
+        }
+        
+        /* Additional styles for responsiveness */
+        .table-container {
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        .admin-table {
+            min-width: 800px;
+        }
+        
+        /* Mobile-specific adjustments */
+        @media (max-width: 768px) {
+            .admin-table th,
+            .admin-table td {
+                padding: 10px 8px;
+                font-size: 14px;
+            }
+            
+            .admin-table thead {
+                font-size: 16px;
+            }
+            
+            .block-stock {
+                font-size: 12px;
+                padding: 4px 8px;
+            }
+        }
+        
+        .divider {
+            height: 1px;
+            background-color: #e0e0e0;
+            margin: 20px 0;
+        }
+        
+        /* Utility classes */
+        .flex {
+            display: flex;
+        }
+        
+        .items-center {
+            align-items: center;
+        }
+        
+        .justify-between {
+            justify-content: space-between;
+        }
+        
+        .flex-wrap {
+            flex-wrap: wrap;
+        }
+        
+        .gap10 {
+            gap: 10px;
+        }
+        
+        .gap20 {
+            gap: 20px;
+        }
+        
+        .mb-30 {
+            margin-bottom: 30px;
+        }
+        
+        .mt-5 {
+            margin-top: 5px;
+        }
+        
+        .text-tiny {
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .bg-1 {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+        }
+        
+        .fw-7 {
+            font-weight: 700;
+        }
+        
+        .wg-box {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        h3 {
+            margin: 0;
+            font-size: 24px;
+        }
     </style>
 
     <!-- Icon -->
