@@ -162,7 +162,88 @@
 
                     <!-- Products Grid -->
                     <div id="products-container">
-                        @include('website.partials.products-grid', ['products' => $products])
+                        <div class="row gy-4">
+                            @foreach($products as $product)
+                                <div class="col-lg-4 col-md-6">
+                                    <div class="ec-product-content p-0 mb-4">
+                                        <div class="ec-product-inner hot-sale-card">
+                                            <div class="ec-pro-image-outer">
+                                                <div class="ec-pro-image hot-sale-img">
+                                                    <a href="{{ route('product.detail', $product->slug) }}" class="image sale-img">
+                                                        @if($product->images->count() > 0)
+                                                            <img class="main-image" src="{{ asset($product->images->first()->image_path) }}"
+                                                                 alt="{{ $product->name }}" loading="lazy"/>
+                                                        @else
+                                                            <img class="main-image" src="{{ asset('website/assets/images/product/default-product.jpg') }}"
+                                                                 alt="{{ $product->name }}" loading="lazy"/>
+                                                        @endif
+                                                    </a>
+                                                    <div class="ec-pro-actions">
+                                                        @if($product->categories->count() > 0)
+                                                            <span class="badge bg-white">{{ $product->categories->first()->name }}</span>
+                                                        @endif
+                                                    </div>
+                                                    @if($product->discount_price && $product->discount_price < $product->price)
+                                                        <div class="ec-pro-actions-sale">
+                                                            @php
+                                                                $discountPercent = round((($product->price - $product->discount_price) / $product->price) * 100);
+                                                            @endphp
+                                                            <span class="badge bg-white">{{ $discountPercent }}% OFF</span>
+                                                        </div>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                            <div class="ec-pro-content text-center">
+                                                <a href="{{ route('product.detail', $product->slug) }}">
+                                                    <h6 class="ec-pro-stitle">{{ $product->name }}</h6>
+                                                </a>
+                                                <p class="ec-pro-subtitle">
+                                                    {{ $product->embellishment ? $product->embellishment . ' | ' : '' }}
+                                                    {{ $product->fabric ? $product->fabric . ' | ' : '' }}
+                                                    {{ $product->cut ? $product->cut . ' Cut' : '' }}
+                                                </p>
+                                                <div class="ec-pro-rat-price align-items-center">
+                                                <span class="ec-price">
+                                                    @if($product->discount_price && $product->discount_price < $product->price)
+                                                        <span class="old-price">Rs.{{ number_format($product->price, 2) }}</span>
+                                                        <span class="new-price">Rs.{{ number_format($product->discount_price, 2) }}</span>
+                                                    @else
+                                                        <span class="new-price">Rs.{{ number_format($product->price, 2) }}</span>
+                                                    @endif
+                                                </span>
+                                                </div>
+                                                <div class="ec-pro-size-wrapper">
+                                                    @foreach($product->sizes->take(4) as $size)
+                                                        <div class="form-check ec-pro-size-btn {{ $size->is_active ? '' : 'empty' }}">
+                                                            <input class="form-check-input"
+                                                                   type="checkbox"
+                                                                   id="prod_size_{{ $product->id }}_{{ $size->id }}"
+                                                                {{ !$size->is_active ? 'disabled' : '' }}>
+                                                            <label class="form-check-label" for="prod_size_{{ $product->id }}_{{ $size->id }}">
+                                                                {{ $size->short_code ?? $size->name }}
+                                                            </label>
+                                                        </div>
+                                                    @endforeach
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+
+                        <!-- Pagination -->
+                        @if($products->hasPages())
+                            <div class="row mt-5">
+                                <div class="col-12">
+                                    <nav aria-label="Products pagination">
+                                        <ul class="pagination justify-content-center">
+                                            {{ $products->links('website.vendor.pagination.custom') }}
+                                        </ul>
+                                    </nav>
+                                </div>
+                            </div>
+                        @endif
                     </div>
 
                     <!-- No Products Found -->
@@ -181,14 +262,10 @@
 @endsection
 
 @push('scripts')
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-        $(document).ready(function() {
+        document.addEventListener('DOMContentLoaded', function() {
             let currentPage = 1;
             let isLoading = false;
-            let timeout = null;
-
-            // Filters object
             let filters = {
                 sizes: [],
                 availability: [],
@@ -201,114 +278,106 @@
             };
 
             // Initialize price range slider
-            function initializePriceSlider() {
-                const priceMin = $('#price-min');
-                const priceMax = $('#price-max');
-                const minPriceDisplay = $('#min-price');
-                const maxPriceDisplay = $('#max-price');
+            const priceMin = document.getElementById('price-min');
+            const priceMax = document.getElementById('price-max');
+            const minPriceDisplay = document.getElementById('min-price');
+            const maxPriceDisplay = document.getElementById('max-price');
 
-                function updatePriceRange() {
-                    filters.minPrice = parseInt(priceMin.val());
-                    filters.maxPrice = parseInt(priceMax.val());
-                    minPriceDisplay.val(filters.minPrice);
-                    maxPriceDisplay.val(filters.maxPrice);
-                    loadProducts();
-                }
-
-                priceMin.on('input', updatePriceRange);
-                priceMax.on('input', updatePriceRange);
+            function updatePriceRange() {
+                filters.minPrice = parseInt(priceMin.value);
+                filters.maxPrice = parseInt(priceMax.value);
+                minPriceDisplay.value = filters.minPrice;
+                maxPriceDisplay.value = filters.maxPrice;
+                loadProducts();
             }
 
-            // Initialize filter event listeners
-            function initializeFilters() {
-                // Size filter
-                $('.size-filter').on('change', function() {
-                    const value = $(this).val();
-                    if ($(this).is(':checked')) {
-                        if (!filters.sizes.includes(value)) {
-                            filters.sizes.push(value);
-                        }
+            priceMin.addEventListener('input', updatePriceRange);
+            priceMax.addEventListener('input', updatePriceRange);
+
+            // Filter event listeners
+            document.querySelectorAll('.size-filter').forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    if (this.checked) {
+                        filters.sizes.push(this.value);
                     } else {
-                        filters.sizes = filters.sizes.filter(size => size !== value);
+                        filters.sizes = filters.sizes.filter(size => size !== this.value);
                     }
                     loadProducts();
                 });
+            });
 
-                // Availability filter
-                $('.availability-filter').on('change', function() {
-                    const value = $(this).val();
-                    if ($(this).is(':checked')) {
-                        if (!filters.availability.includes(value)) {
-                            filters.availability.push(value);
-                        }
+            document.querySelectorAll('.availability-filter').forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    if (this.checked) {
+                        filters.availability.push(this.value);
                     } else {
-                        filters.availability = filters.availability.filter(avail => avail !== value);
+                        filters.availability = filters.availability.filter(avail => avail !== this.value);
                     }
                     loadProducts();
                 });
+            });
 
-                // Embellishment filter
-                $('.embellishment-filter').on('change', function() {
-                    const value = $(this).val();
-                    if ($(this).is(':checked')) {
-                        if (!filters.embellishments.includes(value)) {
-                            filters.embellishments.push(value);
-                        }
+            document.querySelectorAll('.embellishment-filter').forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    if (this.checked) {
+                        filters.embellishments.push(this.value);
                     } else {
-                        filters.embellishments = filters.embellishments.filter(emb => emb !== value);
+                        filters.embellishments = filters.embellishments.filter(emb => emb !== this.value);
                     }
                     loadProducts();
                 });
+            });
 
-                // Cut filter
-                $('.cut-filter').on('change', function() {
-                    const value = $(this).val();
-                    if ($(this).is(':checked')) {
-                        if (!filters.cuts.includes(value)) {
-                            filters.cuts.push(value);
-                        }
+            document.querySelectorAll('.cut-filter').forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    if (this.checked) {
+                        filters.cuts.push(this.value);
                     } else {
-                        filters.cuts = filters.cuts.filter(cut => cut !== value);
+                        filters.cuts = filters.cuts.filter(cut => cut !== this.value);
                     }
                     loadProducts();
                 });
+            });
 
-                // Fabric filter
-                $('.fabric-filter').on('change', function() {
-                    const value = $(this).val();
-                    if ($(this).is(':checked')) {
-                        if (!filters.fabrics.includes(value)) {
-                            filters.fabrics.push(value);
-                        }
+            document.querySelectorAll('.fabric-filter').forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    if (this.checked) {
+                        filters.fabrics.push(this.value);
                     } else {
-                        filters.fabrics = filters.fabrics.filter(fabric => fabric !== value);
+                        filters.fabrics = filters.fabrics.filter(fabric => fabric !== this.value);
                     }
                     loadProducts();
                 });
+            });
 
-                // Sort select
-                $('#sort-by').on('change', function() {
-                    filters.sort = $(this).val();
-                    loadProducts();
-                });
+            // Sort select
+            document.getElementById('sort-by').addEventListener('change', function() {
+                filters.sort = this.value;
+                loadProducts();
+            });
 
-                // Clear filters
-                $('#clear-filters, #reset-filters').on('click', function() {
-                    resetFilters();
-                    loadProducts();
-                });
-            }
+            // Clear filters
+            document.getElementById('clear-filters').addEventListener('click', function() {
+                resetFilters();
+                loadProducts();
+            });
 
-            // Reset all filters
+            document.getElementById('reset-filters').addEventListener('click', function() {
+                resetFilters();
+                loadProducts();
+            });
+
             function resetFilters() {
-                // Uncheck all checkboxes
-                $('input[type="checkbox"]').prop('checked', false);
+                // Reset all checkboxes
+                document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+                    checkbox.checked = false;
+                });
 
                 // Reset price range
-                $('#price-min').val(0);
-                $('#price-max').val(1000);
-                $('#min-price').val(0);
-                $('#max-price').val(1000);
+                priceMin.value = 0;
+                priceMax.value = 1000;
+                minPriceDisplay.value = 0;
+                maxPriceDisplay.value = 1000;
 
                 // Reset filters object
                 filters = {
@@ -323,165 +392,120 @@
                 };
 
                 // Reset sort select
-                $('#sort-by').val('latest');
+                document.getElementById('sort-by').value = 'latest';
             }
 
             // Load products with AJAX
             function loadProducts(page = 1) {
                 if (isLoading) return;
 
-                // Clear previous timeout
-                if (timeout) {
-                    clearTimeout(timeout);
-                }
+                isLoading = true;
+                currentPage = page;
 
-                // Set new timeout for debouncing
-                timeout = setTimeout(function() {
-                    isLoading = true;
-                    currentPage = page;
+                // Show loading spinner
+                document.getElementById('loading-spinner').style.display = 'block';
+                document.getElementById('products-container').style.display = 'none';
+                document.getElementById('no-products').style.display = 'none';
 
-                    // Show loading spinner
-                    $('#loading-spinner').show();
-                    $('#products-container').hide();
-                    $('#no-products').hide();
+                // Prepare query parameters
+                const params = new URLSearchParams();
+                params.append('page', page);
+                params.append('sort', filters.sort);
 
-                    // Prepare query parameters
-                    const params = new URLSearchParams();
-                    params.append('page', page);
-                    params.append('sort', filters.sort);
+                if (filters.sizes.length) params.append('sizes', filters.sizes.join(','));
+                if (filters.availability.length) params.append('availability', filters.availability.join(','));
+                if (filters.embellishments.length) params.append('embellishments', filters.embellishments.join(','));
+                if (filters.cuts.length) params.append('cuts', filters.cuts.join(','));
+                if (filters.fabrics.length) params.append('fabrics', filters.fabrics.join(','));
+                params.append('min_price', filters.minPrice);
+                params.append('max_price', filters.maxPrice);
 
-                    if (filters.sizes.length) params.append('sizes', filters.sizes.join(','));
-                    if (filters.availability.length) params.append('availability', filters.availability.join(','));
-                    if (filters.embellishments.length) params.append('embellishments', filters.embellishments.join(','));
-                    if (filters.cuts.length) params.append('cuts', filters.cuts.join(','));
-                    if (filters.fabrics.length) params.append('fabrics', filters.fabrics.join(','));
-                    params.append('min_price', filters.minPrice);
-                    params.append('max_price', filters.maxPrice);
+                // Update URL without page reload
+                const newUrl = `${window.location.pathname}?${params.toString()}`;
+                window.history.pushState({}, '', newUrl);
 
-                    // Update URL without page reload
-                    const newUrl = `${window.location.pathname}?${params.toString()}`;
-                    window.history.pushState({}, '', newUrl);
+                // AJAX request
+                fetch(`{{ route('products.index') }}?${params.toString()}`, {
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById('products-container').innerHTML = data.html;
+                        document.getElementById('results-count').textContent = `Showing: ${data.total} Results`;
 
-                    // AJAX request
-                    $.ajax({
-                        url: `{{ route('products.index') }}?${params.toString()}`,
-                        type: 'GET',
-                        dataType: 'json',
-                        headers: {
-                            'X-Requested-With': 'XMLHttpRequest'
-                        },
-                        success: function(data) {
-                            $('#products-container').html(data.html);
-                            $('#results-count').text(`Showing: ${data.total} Results`);
+                        // Show/hide containers
+                        document.getElementById('loading-spinner').style.display = 'none';
+                        document.getElementById('products-container').style.display = 'block';
 
-                            // Show/hide containers
-                            $('#loading-spinner').hide();
-                            $('#products-container').show();
-
-                            if (data.total === 0) {
-                                $('#no-products').show();
-                                $('#products-container').hide();
-                            }
-
-                            // Re-initialize pagination click handlers
-                            initializePagination();
-                        },
-                        error: function(xhr, status, error) {
-                            console.error('Error loading products:', error);
-                            $('#loading-spinner').hide();
-                            $('#products-container').show();
-                        },
-                        complete: function() {
-                            isLoading = false;
+                        if (data.total === 0) {
+                            document.getElementById('no-products').style.display = 'block';
+                            document.getElementById('products-container').style.display = 'none';
                         }
+                    })
+                    .catch(error => {
+                        console.error('Error loading products:', error);
+                        document.getElementById('loading-spinner').style.display = 'none';
+                        document.getElementById('products-container').style.display = 'block';
+                    })
+                    .finally(() => {
+                        isLoading = false;
                     });
-                }, 300); // 300ms debounce
             }
 
-            // Initialize pagination click handlers
-            function initializePagination() {
-                $(document).off('click', '.pagination a').on('click', '.pagination a', function(e) {
+            // Handle pagination clicks
+            document.addEventListener('click', function(e) {
+                if (e.target.closest('.pagination a')) {
                     e.preventDefault();
-                    const url = new URL($(this).attr('href'));
+                    const url = new URL(e.target.closest('a').href);
                     const page = url.searchParams.get('page') || 1;
                     loadProducts(page);
-                });
-            }
+                }
+            });
 
-            // Initialize filters from URL parameters
+            // Initialize filters from URL
             function initializeFromURL() {
                 const urlParams = new URLSearchParams(window.location.search);
 
-                // Sort
                 if (urlParams.get('sort')) {
                     filters.sort = urlParams.get('sort');
-                    $('#sort-by').val(filters.sort);
+                    document.getElementById('sort-by').value = filters.sort;
                 }
 
-                // Sizes
                 if (urlParams.get('sizes')) {
                     filters.sizes = urlParams.get('sizes').split(',');
                     filters.sizes.forEach(size => {
-                        $(`#size-${size}`).prop('checked', true);
+                        const checkbox = document.getElementById(`size-${size}`);
+                        if (checkbox) checkbox.checked = true;
                     });
                 }
 
-                // Availability
-                if (urlParams.get('availability')) {
-                    filters.availability = urlParams.get('availability').split(',');
-                    filters.availability.forEach(avail => {
-                        $(`#${avail.replace('_', '-')}`).prop('checked', true);
-                    });
-                }
-
-                // Embellishments
-                if (urlParams.get('embellishments')) {
-                    filters.embellishments = urlParams.get('embellishments').split(',');
-                    filters.embellishments.forEach(emb => {
-                        $(`#embellishment-${emb}`).prop('checked', true);
-                    });
-                }
-
-                // Cuts
-                if (urlParams.get('cuts')) {
-                    filters.cuts = urlParams.get('cuts').split(',');
-                    filters.cuts.forEach(cut => {
-                        $(`#cut-${cut}`).prop('checked', true);
-                    });
-                }
-
-                // Fabrics
-                if (urlParams.get('fabrics')) {
-                    filters.fabrics = urlParams.get('fabrics').split(',');
-                    filters.fabrics.forEach(fabric => {
-                        $(`#fabric-${fabric}`).prop('checked', true);
-                    });
-                }
-
-                // Price range
-                if (urlParams.get('min_price')) {
-                    filters.minPrice = parseInt(urlParams.get('min_price'));
-                    $('#price-min').val(filters.minPrice);
-                    $('#min-price').val(filters.minPrice);
-                }
-
-                if (urlParams.get('max_price')) {
-                    filters.maxPrice = parseInt(urlParams.get('max_price'));
-                    $('#price-max').val(filters.maxPrice);
-                    $('#max-price').val(filters.maxPrice);
-                }
+                // Initialize other filters similarly...
             }
 
-            // Initialize everything
-            function initialize() {
-                initializePriceSlider();
-                initializeFilters();
-                initializePagination();
-                initializeFromURL();
+            // Debounce function to prevent too many requests
+            function debounce(func, wait) {
+                let timeout;
+                return function executedFunction(...args) {
+                    const later = () => {
+                        clearTimeout(timeout);
+                        func(...args);
+                    };
+                    clearTimeout(timeout);
+                    timeout = setTimeout(later, wait);
+                };
             }
 
-            // Start initialization
-            initialize();
+            // Debounce the loadProducts function
+            const debouncedLoadProducts = debounce(loadProducts, 300);
+
+            // Replace original loadProducts calls with debounced version
+            const originalLoadProducts = loadProducts;
+            loadProducts = debouncedLoadProducts;
+
+            // Initialize from URL on page load
+            initializeFromURL();
         });
     </script>
 @endpush

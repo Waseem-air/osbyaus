@@ -81,8 +81,6 @@ class ProductController extends Controller
         $cuts = Product::distinct()->whereNotNull('cut')->pluck('cut');
         $fabrics = Product::distinct()->whereNotNull('fabric')->pluck('fabric');
 
-        dd($request->all());
-
         if ($request->ajax()) {
             return response()->json([
                 'html' => view('website.partials.products-grid', compact('products'))->render(),
