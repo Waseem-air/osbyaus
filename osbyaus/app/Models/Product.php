@@ -96,4 +96,19 @@ class Product extends Model
         return $this->hasMany(ProductSize::class);
     }
 
+    /** Scope: Only active products */
+    public function scopeActive($query)
+    {
+        return $query->where('status', true);
+    }
+
+    /** Scope: Popular this week */
+    public function scopePopularThisWeek($query)
+    {
+        return $query->where('status', true)
+            ->whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()])
+            ->orderBy('created_at', 'desc');
+    }
+
+
 }

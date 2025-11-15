@@ -1,11 +1,11 @@
 <?php
 
-use App\Http\Controllers\admin\AdminController;
-use App\Http\Controllers\admin\CategoryController;
-use App\Http\Controllers\admin\ColorController;
-use App\Http\Controllers\admin\CustomerController;
-use App\Http\Controllers\admin\ProductController;
-use App\Http\Controllers\admin\SizeController;
+use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\ColorController;
+use App\Http\Controllers\Admin\CustomerController;
+use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\SizeController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('admin')->name('admin.')->group(function () {
