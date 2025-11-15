@@ -15,7 +15,10 @@ Route::get('/', [HomeController::class, 'home'])->name('home');
 // Product Routes
 Route::get('/products', [ProductController::class, 'index'])->name('products.index');
 Route::get('/product/{slug}', [ProductController::class, 'show'])->name('product.detail');
-Route::get('/products/filter', [ProductController::class, 'filter'])->name('products.filter');
+
+Route::post('/products/filter', [ProductController::class, 'index'])->name('products.filter');
+Route::get('/products/clear-filters', [ProductController::class, 'clearFilters'])->name('products.clear-filters');
+
 // Optional: Category-based product listing
 Route::get('/category/{slug}', [ProductController::class, 'categoryProducts'])->name('category.products');
 

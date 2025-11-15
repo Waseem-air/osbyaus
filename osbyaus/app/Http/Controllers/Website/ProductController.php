@@ -14,16 +14,25 @@ class ProductController extends Controller
         $query = Product::with(['images', 'categories', 'sizes'])
             ->where('status', 'active');
 
-        // Apply filters
-        if ($request->has('sizes')) {
-            $sizeIds = explode(',', $request->sizes);
+        // Apply filters from session or request
+        $filters = $request->session()->get('product_filters', []);
+
+        // If it's a POST request, update filters in session
+        if ($request->isMethod('post')) {
+            $filters = $request->except(['_token', 'page']);
+            $request->session()->put('product_filters', $filters);
+        }
+
+        // Apply filters from session
+        if (!empty($filters['sizes'])) {
+            $sizeIds = is_array($filters['sizes']) ? $filters['sizes'] : explode(',', $filters['sizes']);
             $query->whereHas('sizes', function($q) use ($sizeIds) {
                 $q->whereIn('sizes.id', $sizeIds);
             });
         }
 
-        if ($request->has('availability')) {
-            $availability = explode(',', $request->availability);
+        if (!empty($filters['availability'])) {
+            $availability = is_array($filters['availability']) ? $filters['availability'] : explode(',', $filters['availability']);
             if (in_array('in_stock', $availability)) {
                 $query->where('stock_quantity', '>', 0);
             }
@@ -32,27 +41,28 @@ class ProductController extends Controller
             }
         }
 
-        if ($request->has('min_price') && $request->has('max_price')) {
-            $query->whereBetween('price', [$request->min_price, $request->max_price]);
+        if (!empty($filters['min_price']) && !empty($filters['max_price'])) {
+            $query->whereBetween('price', [$filters['min_price'], $filters['max_price']]);
         }
 
-        if ($request->has('embellishments')) {
-            $embellishments = explode(',', $request->embellishments);
+        if (!empty($filters['embellishments'])) {
+            $embellishments = is_array($filters['embellishments']) ? $filters['embellishments'] : explode(',', $filters['embellishments']);
             $query->whereIn('embellishment', $embellishments);
         }
 
-        if ($request->has('cuts')) {
-            $cuts = explode(',', $request->cuts);
+        if (!empty($filters['cuts'])) {
+            $cuts = is_array($filters['cuts']) ? $filters['cuts'] : explode(',', $filters['cuts']);
             $query->whereIn('cut', $cuts);
         }
 
-        if ($request->has('fabrics')) {
-            $fabrics = explode(',', $request->fabrics);
+        if (!empty($filters['fabrics'])) {
+            $fabrics = is_array($filters['fabrics']) ? $filters['fabrics'] : explode(',', $filters['fabrics']);
             $query->whereIn('fabric', $fabrics);
         }
 
         // Apply sorting
-        switch ($request->get('sort', 'latest')) {
+        $sort = $request->get('sort', $filters['sort'] ?? 'latest');
+        switch ($sort) {
             case 'featured':
                 $query->orderBy('is_featured', 'desc')->orderBy('created_at', 'desc');
                 break;
@@ -88,7 +98,13 @@ class ProductController extends Controller
             ]);
         }
 
-        return view('website.products', compact('products', 'sizes', 'embellishments', 'cuts', 'fabrics'));
+        return view('website.products', compact('products', 'sizes', 'embellishments', 'cuts', 'fabrics', 'filters'));
+    }
+
+    public function clearFilters(Request $request)
+    {
+        $request->session()->forget('product_filters');
+        return redirect()->route('products.index');
     }
 
     public function show($slug)
@@ -109,6 +125,4 @@ class ProductController extends Controller
 
         return view('website.show', compact('product', 'relatedPopular'));
     }
-
-
 }

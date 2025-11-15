@@ -12661,3 +12661,76 @@ fieldset:disabled .btn {
 }
 
 /*# sourceMappingURL=bootstrap.css.map */
+
+/* ==========================================
+   CUSTOM PAGINATION (MATCH DARK BUTTON THEME)
+   ========================================== */
+
+.custom-pagination {
+    display: flex;
+    gap: 6px;
+    justify-content: center;
+    align-items: center;
+    padding: 12px 0;
+}
+
+.custom-pagination .page-item {
+    list-style: none;
+}
+
+/* Default State */
+.custom-pagination .page-link {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 42px;
+    height: 42px;
+
+    background-color: #010101;
+    color: #ffffff;
+    border: 1px solid #010101;
+
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 500;
+
+    transition: all .25s ease;
+}
+
+/* Hover = same behavior as btn-dark:hover */
+.custom-pagination .page-link:hover {
+    background-color: #ffffff;
+    color: #010101;
+    border-color: #ffffff;
+}
+
+/* Active page = same as .btn-dark.active */
+.custom-pagination .active .page-link {
+    background-color: #ffffff;
+    color: #010101;
+    border-color: #ffffff;
+    font-weight: bold;
+}
+
+/* Disabled */
+.custom-pagination .disabled .page-link {
+    background-color: #2b2b2b;
+    color: #777777;
+    border-color: #2b2b2b;
+    cursor: not-allowed;
+}
+
+/* Arrow buttons (+ bigger icon) */
+.custom-pagination .page-link[rel="prev"],
+.custom-pagination .page-link[rel="next"] {
+    font-size: 20px;
+    line-height: 1;
+    font-weight: bold;
+}
+
+/* Focus/Active shadow similar to .btn-dark:active:focus */
+.custom-pagination .page-link:focus,
+.custom-pagination .active .page-link:focus {
+    box-shadow: 0 0 0 4px rgba(82, 88, 93, 0.5);
+    outline: none;
+}
