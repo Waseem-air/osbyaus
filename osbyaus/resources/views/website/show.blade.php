@@ -99,14 +99,14 @@
                                             <div class="ec-single-price-stoke">
                                                 <div class="ec-single-price">
                                                     @if($product->discount_price && $product->discount_price < $product->price)
-                                                        <span class="new-price">Rs.{{ number_format($product->discount_price, 2) }}</span>
-                                                        <span class="ec-single-ps-title">Rs.{{ number_format($product->price, 2) }}</span>
+                                                        <span class="new-price">{{ App\Helpers\AppHelper::currency_symbol() }}.{{ number_format($product->discount_price, 2) }}</span>
+                                                        <span class="ec-single-ps-title">{{ App\Helpers\AppHelper::currency_symbol() }}.{{ number_format($product->price, 2) }}</span>
                                                         @php
                                                             $discountPercent = round((($product->price - $product->discount_price) / $product->price) * 100);
                                                         @endphp
                                                         <span class="ec-single-ps-title-badge">{{ $discountPercent }}%</span>
                                                     @else
-                                                        <span class="new-price">Rs.{{ number_format($product->price, 2) }}</span>
+                                                        <span class="new-price">{{ App\Helpers\AppHelper::currency_symbol() }}.{{ number_format($product->price, 2) }}</span>
                                                     @endif
                                                 </div>
                                             </div>
@@ -404,10 +404,10 @@
                                                 <div class="ec-pro-rat-price align-items-center">
                                             <span class="ec-price">
                                                 @if($relatedProduct->discount_price && $relatedProduct->discount_price < $relatedProduct->price)
-                                                    <span class="old-price">Rs.{{ number_format($relatedProduct->price, 2) }}</span>
-                                                    <span class="new-price">Rs.{{ number_format($relatedProduct->discount_price, 2) }}</span>
+                                                    <span class="old-price">{{ App\Helpers\AppHelper::currency_symbol() }}.{{ number_format($relatedProduct->price, 2) }}</span>
+                                                    <span class="new-price">{{ App\Helpers\AppHelper::currency_symbol() }}.{{ number_format($relatedProduct->discount_price, 2) }}</span>
                                                 @else
-                                                    <span class="new-price">Rs.{{ number_format($relatedProduct->price, 2) }}</span>
+                                                    <span class="new-price">{{ App\Helpers\AppHelper::currency_symbol() }}.{{ number_format($relatedProduct->price, 2) }}</span>
                                                 @endif
                                             </span>
                                                 </div>
