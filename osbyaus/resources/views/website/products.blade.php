@@ -203,21 +203,97 @@
         document.addEventListener('DOMContentLoaded', function() {
             let isLoading = false;
             let timeout = null;
+            let currentPage = 1;
+            let hasMore = true;
+            let totalProducts = {{ $products->total() }};
+            let perPage = 12;
 
-            // Initialize price range slider
+            // Initialize elements
             const priceMin = document.getElementById('price-min');
             const priceMax = document.getElementById('price-max');
             const minPriceDisplay = document.getElementById('min-price');
             const maxPriceDisplay = document.getElementById('max-price');
             const sortInput = document.getElementById('sort-input');
             const filterForm = document.getElementById('filter-form');
+            const loadMoreBtn = document.getElementById('load-more-btn');
+            const loadMoreLoader = document.getElementById('load-more-loader');
+            const endOfProducts = document.getElementById('end-of-products');
+            const loadedCount = document.getElementById('loaded-count');
+            const resultsCount = document.getElementById('results-count');
 
+            // Initialize load more button
+            function initializeLoadMore() {
+                updateLoadMoreVisibility();
+                updateLoadedCount();
+            }
+
+            // Show loading state immediately when filters change
+            function showFilterLoadingState() {
+                resultsCount.textContent = 'Filtering...';
+                const productsContainer = document.getElementById('products-container');
+                if (productsContainer) {
+                    productsContainer.style.opacity = '0.6';
+                }
+            }
+
+            // Update URL with current filter state
+            function updateURLWithFilters() {
+                const formData = new FormData(filterForm);
+                const params = new URLSearchParams();
+
+                for (const [key, value] of formData.entries()) {
+                    if (key !== '_token') {
+                        params.append(key, value);
+                    }
+                }
+
+                const newURL = window.location.pathname + '?' + params.toString();
+                window.history.pushState({path: newURL}, '', newURL);
+            }
+
+            // Update load more button visibility - FIXED VERSION
+            function updateLoadMoreVisibility() {
+                // Always check if there are more products to load based on the response
+                if (hasMore) {
+                    if (loadMoreBtn) {
+                        loadMoreBtn.style.display = 'block';
+                    }
+                    if (endOfProducts) {
+                        endOfProducts.style.display = 'none';
+                    }
+                } else {
+                    if (loadMoreBtn) {
+                        loadMoreBtn.style.display = 'none';
+                    }
+                    if (totalProducts > 0 && endOfProducts) {
+                        endOfProducts.style.display = 'block';
+                    }
+                }
+
+                if (loadMoreLoader) {
+                    loadMoreLoader.style.display = 'none';
+                }
+            }
+
+            // Update loaded count
+            function updateLoadedCount() {
+                const currentLoaded = Math.min(currentPage * perPage, totalProducts);
+                if (loadedCount) {
+                    loadedCount.textContent = `${currentLoaded} / ${totalProducts}`;
+                }
+                resultsCount.textContent = `Showing: ${currentLoaded} of ${totalProducts} Results`;
+            }
+
+            // Price range slider
             function updatePriceRange() {
+                showFilterLoadingState();
                 const minVal = parseInt(priceMin.value);
                 const maxVal = parseInt(priceMax.value);
                 minPriceDisplay.value = minVal;
                 maxPriceDisplay.value = maxVal;
+                resetLoadMore();
                 loadProducts();
+                updateURLWithFilters();
             }
 
             if (priceMin && priceMax) {
@@ -228,14 +304,20 @@
             // Filter event listeners
             document.querySelectorAll('.size-filter, .availability-filter, .embellishment-filter, .cut-filter, .fabric-filter').forEach(checkbox => {
                 checkbox.addEventListener('change', function() {
+                    showFilterLoadingState();
+                    resetLoadMore();
                     loadProducts();
+                    updateURLWithFilters();
                 });
             });
 
             // Sort select
             document.getElementById('sort-by').addEventListener('change', function() {
+                showFilterLoadingState();
                 sortInput.value = this.value;
+                resetLoadMore();
                 loadProducts();
+                updateURLWithFilters();
             });
 
             // Clear filters
@@ -243,27 +325,56 @@
                 window.location.href = "{{ route('products.clear-filters') }}";
             });
 
-            // Load products with AJAX POST
+            // Load more button
+            if (loadMoreBtn) {
+                loadMoreBtn.addEventListener('click', function() {
+                    loadMoreProducts();
+                });
+            }
+
+            // Reset load more state - FIXED VERSION
+            function resetLoadMore() {
+                currentPage = 1;
+                // Don't set hasMore to true here, let it be determined by the server response
+                if (loadMoreBtn) {
+                    loadMoreBtn.style.display = 'none';
+                }
+                if (loadMoreLoader) {
+                    loadMoreLoader.style.display = 'none';
+                }
+                if (endOfProducts) {
+                    endOfProducts.style.display = 'none';
+                }
+            }
+
+            // Load products with AJAX POST - FIXED VERSION
             function loadProducts() {
                 if (isLoading) return;
 
-                // Clear previous timeout
                 if (timeout) {
                     clearTimeout(timeout);
                 }
 
                 timeout = setTimeout(function() {
                     isLoading = true;
+                    currentPage = 1;
 
-                    // Show loading spinner
                     document.getElementById('loading-spinner').style.display = 'block';
                     document.getElementById('products-container').style.display = 'none';
                     document.getElementById('no-products').style.display = 'none';
+                    if (loadMoreBtn) {
+                        loadMoreBtn.style.display = 'none';
+                    }
+                    if (loadMoreLoader) {
+                        loadMoreLoader.style.display = 'none';
+                    }
+                    if (endOfProducts) {
+                        endOfProducts.style.display = 'none';
+                    }
 
-                    // Get form data
                     const formData = new FormData(filterForm);
+                    formData.append('page', currentPage);
 
-                    // AJAX POST request
                     fetch("{{ route('products.filter') }}", {
                         method: 'POST',
                         headers: {
@@ -279,16 +390,29 @@
                             return response.json();
                         })
                         .then(data => {
-                            document.getElementById('products-container').innerHTML = data.html;
-                            document.getElementById('results-count').textContent = `Showing: ${data.total} Results`;
+                            const productsContainer = document.getElementById('products-container');
+                            productsContainer.style.opacity = '1';
+                            productsContainer.innerHTML = data.html;
+                            totalProducts = data.total;
+                            hasMore = data.hasMore;
+                            perPage = data.perPage || 12;
 
-                            // Show/hide containers
                             document.getElementById('loading-spinner').style.display = 'none';
                             document.getElementById('products-container').style.display = 'block';
 
                             if (data.total === 0) {
                                 document.getElementById('no-products').style.display = 'block';
                                 document.getElementById('products-container').style.display = 'none';
+                                if (loadMoreBtn) {
+                                    loadMoreBtn.style.display = 'none';
+                                }
+                                if (endOfProducts) {
+                                    endOfProducts.style.display = 'none';
+                                }
+                            } else {
+                                updateLoadedCount();
+                                // Remove the conditional check here and rely solely on updateLoadMoreVisibility()
+                                updateLoadMoreVisibility();
                             }
                         })
                         .catch(error => {
@@ -296,49 +420,95 @@
                             document.getElementById('loading-spinner').style.display = 'none';
                             document.getElementById('products-container').style.display = 'block';
                             document.getElementById('products-container').innerHTML = '<div class="alert alert-danger">Error loading products. Please try again.</div>';
+                            updateLoadMoreVisibility();
                         })
                         .finally(() => {
                             isLoading = false;
                         });
-                }, 300); // Debounce delay
+                }, 300);
             }
 
-            // Handle pagination clicks
-            document.addEventListener('click', function(e) {
-                if (e.target.closest('.pagination a')) {
-                    e.preventDefault();
-                    const url = new URL(e.target.closest('a').href);
-                    const page = url.searchParams.get('page') || 1;
+            // Load more products
+            function loadMoreProducts() {
+                if (isLoading || !hasMore) return;
 
-                    // Add page to form and submit
-                    const pageInput = document.createElement('input');
-                    pageInput.type = 'hidden';
-                    pageInput.name = 'page';
-                    pageInput.value = page;
-                    filterForm.appendChild(pageInput);
+                isLoading = true;
+                currentPage++;
 
-                    loadProducts();
-
-                    // Remove the page input after submission
-                    setTimeout(() => {
-                        filterForm.removeChild(pageInput);
-                    }, 1000);
+                if (loadMoreBtn) {
+                    loadMoreBtn.style.display = 'none';
                 }
-            });
+                if (loadMoreLoader) {
+                    loadMoreLoader.style.display = 'block';
+                }
 
-            // Smooth scroll to top function
-            function scrollToTop() {
-                window.scrollTo({
-                    top: 0,
-                    behavior: 'smooth'
+                const formData = new FormData(filterForm);
+                formData.append('page', currentPage);
+                formData.append('load_more', true);
+
+                fetch("{{ route('products.filter') }}", {
+                    method: 'POST',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: formData
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        const productsGrid = document.getElementById('products-grid');
+                        if (productsGrid && data.html) {
+                            productsGrid.insertAdjacentHTML('beforeend', data.html);
+                        }
+
+                        hasMore = data.hasMore;
+                        totalProducts = data.total;
+                        updateLoadedCount();
+
+                        if (loadMoreLoader) {
+                            loadMoreLoader.style.display = 'none';
+                        }
+                        updateLoadMoreVisibility();
+
+                        if (hasMore && loadMoreBtn) {
+                            setTimeout(() => {
+                                loadMoreBtn.scrollIntoView({
+                                    behavior: 'smooth',
+                                    block: 'center',
+                                    inline: 'nearest'
+                                });
+                            }, 100);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error loading more products:', error);
+                        if (loadMoreLoader) {
+                            loadMoreLoader.style.display = 'none';
+                        }
+                        if (loadMoreBtn) {
+                            loadMoreBtn.style.display = 'block';
+                            loadMoreBtn.innerHTML = '<i class="fi-rr-exclamation"></i> Error - Click to Retry';
+                        }
+                        currentPage--;
+                    })
+                    .finally(() => {
+                        isLoading = false;
+                    });
+            }
+
+            // Initialize on page load
+            initializeLoadMore();
+
+            // Debug helper
+            document.querySelectorAll('input[type="checkbox"], select').forEach(element => {
+                element.addEventListener('change', function() {
+                    console.log('Filter changed:', this.name, this.value, this.checked);
                 });
-            }
-
-            // Add scroll to top for pagination
-            document.addEventListener('click', function(e) {
-                if (e.target.closest('.pagination a')) {
-                    setTimeout(scrollToTop, 100);
-                }
             });
         });
     </script>

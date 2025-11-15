@@ -14,16 +14,12 @@ class ProductController extends Controller
         $query = Product::with(['images', 'categories', 'sizes'])
             ->where('status', 'active');
 
-        // Apply filters from session or request
-        $filters = $request->session()->get('product_filters', []);
+        // Get filters directly from request
+        $filters = $request->except(['_token', 'page', 'load_more']);
+        $isFiltered = $request->get('is_filtered', false);
+        $initialLoad = $request->get('initial_load', false);
 
-        // If it's a POST request, update filters in session
-        if ($request->isMethod('post')) {
-            $filters = $request->except(['_token', 'page']);
-            $request->session()->put('product_filters', $filters);
-        }
-
-        // Apply filters from session
+        // Apply filters from request
         if (!empty($filters['sizes'])) {
             $sizeIds = is_array($filters['sizes']) ? $filters['sizes'] : explode(',', $filters['sizes']);
             $query->whereHas('sizes', function($q) use ($sizeIds) {
@@ -83,7 +79,12 @@ class ProductController extends Controller
                 break;
         }
 
-        $products = $query->paginate(12);
+        $perPage = 12;
+        $currentPage = $request->get('page', 1);
+
+        // Get total count before pagination for load more logic
+        $totalProducts = $query->count();
+        $products = $query->paginate($perPage, ['*'], 'page', $currentPage);
 
         // Get filter options
         $sizes = Size::where('is_active', true)->get();
@@ -92,9 +93,24 @@ class ProductController extends Controller
         $fabrics = Product::distinct()->whereNotNull('fabric')->pluck('fabric');
 
         if ($request->ajax()) {
+            $loadMore = $request->get('load_more', false);
+
+            if ($loadMore) {
+                $html = view('website.partials.products-load-more', compact('products'))->render();
+            } else {
+                $html = view('website.partials.products-grid', compact('products'))->render();
+            }
+
             return response()->json([
-                'html' => view('website.partials.products-grid', compact('products'))->render(),
-                'total' => $products->total()
+                'html' => $html,
+                'total' => $products->total(),
+                'hasMore' => $products->hasMorePages(), // Make sure this is correctly set
+                'currentPage' => $products->currentPage(),
+                'nextPage' => $products->currentPage() + 1,
+                'totalLoaded' => ($products->currentPage() * $perPage),
+                'perPage' => $perPage,
+                'lastPage' => $products->lastPage(),
+                'isFiltered' => $isFiltered
             ]);
         }
 
@@ -103,7 +119,6 @@ class ProductController extends Controller
 
     public function clearFilters(Request $request)
     {
-        $request->session()->forget('product_filters');
         return redirect()->route('products.index');
     }
 

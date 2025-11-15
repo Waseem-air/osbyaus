@@ -1,4 +1,4 @@
-<div class="row gy-4">
+<div class="row gy-4" id="products-grid">
     @foreach($products as $product)
         <div class="col-lg-4 col-md-6">
             <div class="ec-product-content p-0 mb-4">
@@ -41,10 +41,10 @@
                         <div class="ec-pro-rat-price align-items-center">
                         <span class="ec-price">
                             @if($product->discount_price && $product->discount_price < $product->price)
-                                <span class="old-price">{{ App\Helpers\AppHelper::currency_symbol() }}.{{ number_format($product->price, 2) }}</span>
-                                <span class="new-price">{{ App\Helpers\AppHelper::currency_symbol() }}.{{ number_format($product->discount_price, 2) }}</span>
+                                <span class="old-price">{{ App\Helpers\AppHelper::currency_symbol() }}{{ number_format($product->price, 2) }}</span>
+                                <span class="new-price">{{ App\Helpers\AppHelper::currency_symbol() }}{{ number_format($product->discount_price, 2) }}</span>
                             @else
-                                <span class="new-price">{{ App\Helpers\AppHelper::currency_symbol() }}.{{ number_format($product->price, 2) }}</span>
+                                <span class="new-price">{{ App\Helpers\AppHelper::currency_symbol() }}{{ number_format($product->price, 2) }}</span>
                             @endif
                         </span>
                         </div>
@@ -68,14 +68,25 @@
     @endforeach
 </div>
 
-@if($products->hasPages())
-    <div class="row mt-5">
-        <div class="col-12">
-            <nav aria-label="Products pagination">
-                <ul class="pagination justify-content-center">
-                    {{ $products->links('website.vendor.pagination.custom') }}
-                </ul>
-            </nav>
+<!-- Load More Section -->
+<div id="load-more-section" class="text-center mt-5">
+    <div id="load-more-loader" class="text-center py-4" style="display: none;">
+        <div class="spinner-border text-dark" role="status">
+            <span class="visually-hidden">Loading more...</span>
+        </div>
+        <p class="mt-2">Loading more...</p>
+    </div>
+
+    <button id="load-more-btn" class="btn btn-outline-dark btn-lg px-5" style="display: none;">
+        <i class="fi-rr-refresh"></i> Load More
+        <span id="loaded-count" class="badge bg-dark ms-2"></span>
+    </button>
+
+    <div id="end-of-products" class="text-center py-4" style="display: none;">
+        <div class="alert alert-light border">
+            <i class="fi-rr-check-circle text-success me-2"></i>
+            <strong>All products loaded!</strong>
+            <p class="mb-0 mt-1 text-muted">You've viewed all {{ $products->total() }} products</p>
         </div>
     </div>
-@endif
+</div>
