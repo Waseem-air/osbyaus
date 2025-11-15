@@ -213,12 +213,12 @@
                                 <div class="wg-product item-row gap20" id="size-{{ $size->id }}">
                                     <div class="name">
                                         <div class="title line-clamp-2 mb-0">
-                                            <a href="#" class="body-text fw-bold">{{ $size->name }}</a>
+                                            <a href="#" class="body-text  fw-bold">{{ $size->name }}</a>
                                         </div>
                                     </div>
 
                                     <div class="body-text">
-                                        <span class="size-badge">{{ $size->short_code }}</span>
+                                        <span class="size-badge text-white">{{ $size->short_code }}</span>
                                     </div>
 
                                     <div class="form-check form-switch">
