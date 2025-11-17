@@ -57,16 +57,47 @@
 
                         <!-- Header User Start -->
                         <div class="ec-header-user dropdown">
-                            <button class="profile dropdown-toggle" data-bs-toggle="dropdown">
-                                <i class="fi-rr-user"></i>
-                            </button>
-                            <ul class="dropdown-menu dropdown-menu-right">
-                                <li><a class="dropdown-item" href="user-dashboard.html">Dashboard</a></li>
-                                <li><a class="dropdown-item" href="register.html">Register</a></li>
-                                <li><a class="dropdown-item" href="login.html">Login</a></li>
-                            </ul>
+
+                            @auth
+                                <button class="profile dropdown-toggle" data-bs-toggle="dropdown">
+                                    <i class="fi-rr-user"></i>
+                                </button>
+
+                                <ul class="dropdown-menu dropdown-menu-right">
+                                    {{-- Role-based dashboard --}}
+                                    @if (auth()->user()->role === 'admin')
+                                        <li><a class="dropdown-item" href="{{ route('admin.dashboard') }}">Admin Dashboard</a></li>
+                                    @elseif (auth()->user()->role === 'seller')
+                                        <li><a class="dropdown-item" href="{{ route('seller.dashboard') }}">Seller Dashboard</a></li>
+                                    @elseif (auth()->user()->role === 'customer')
+                                        <li><a class="dropdown-item" href="{{ route('customer.dashboard') }}">Dashboard</a></li>
+                                    @else
+                                        <li><a class="dropdown-item" href="{{ route('customer.dashboard') }}">Dashboard</a></li>
+                                    @endif
+                                    <li>
+                                        <form action="{{ route('logout') }}" method="post">
+                                            @csrf
+                                            <button class="dropdown-item text-danger" type="submit">Logout</button>
+                                        </form>
+                                    </li>
+
+                                </ul>
+
+                            @else
+                                <!-- If guest -->
+                                <button class="profile dropdown-toggle" data-bs-toggle="dropdown">
+                                    <i class="fi-rr-user"></i>
+                                </button>
+
+                                <ul class="dropdown-menu dropdown-menu-right">
+                                    <li><a class="dropdown-item" href="{{ route('login') }}">Login</a></li>
+                                    <li><a class="dropdown-item" href="{{ route('register') }}">Register</a></li>
+                                </ul>
+                            @endauth
+
                         </div>
                         <!-- Header User End -->
+
 
                         <!-- Header Wishlisty Start -->
                         <a href="wishlist.html" class="wishlist_submit">
