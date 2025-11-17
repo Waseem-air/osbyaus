@@ -30,7 +30,7 @@
                     <!-- Ec Header Logo Start -->
                     <div class="align-self-center ec-header-logo d-lg-block d-none">
                         <div class="header-logo">
-                            <a href="index.html">
+                            <a href="{{ route('home') }}">
                                 <img src="website/assets/images/logo/logo.svg" alt="Site Logo" />
                             </a>
                         </div>
@@ -40,7 +40,7 @@
                     <!-- Ec Header Logo Start -->
                     <div class="align-self-center me-auto ec-header-logo d-lg-none">
                         <div class="header-logo">
-                            <a href="index.html">
+                            <a href="{{ route('home') }}">
                                 <img src="website/assets/images/logo/logo-sm.svg" class="w-100" alt="Site Logo" />
                             </a>
                         </div>
@@ -130,13 +130,13 @@
                 <div class="col ec-main-menu-block align-self-center d-none d-lg-block p-0">
                     <div class="ec-main-menu">
                         <ul>
-                            <li class="dropdown"><a href="javascript:void(0)">New Arrival</a></li>
-                            <li class="dropdown"><a href="javascript:void(0)">Ready To Wear</a></li>
-                            <li class="dropdown"><a href="javascript:void(0)">Party Wear</a></li>
-                            <li class="dropdown"><a href="javascript:void(0)">Formal</a></li>
-                            <li class="dropdown"><a href="javascript:void(0)">Casual Wear</a></li>
+                            <li class="dropdown"><a href="{{ route('products.index')  }}">New Arrival</a></li>
+                            <li class="dropdown"><a href="{{ route('products.index')  }}">Ready To Wear</a></li>
+                            <li class="dropdown"><a href="{{ route('products.index')  }}">Party Wear</a></li>
+                            <li class="dropdown"><a href="{{ route('products.index')  }}">Formal</a></li>
+                            <li class="dropdown"><a href="{{ route('products.index')  }}">Casual Wear</a></li>
                             <li class="dropdown">
-                                <a href="javascript:void(0)" class="d-flex align-items-center gap-2">
+                                <a href="{{ route('products.index')  }}" class="d-flex align-items-center gap-2">
                                     <img src="website/assets/images/icon/sale.svg" style="height: 20px;" alt="">
                                     Collection
                                 </a>
@@ -158,13 +158,13 @@
         <div class="ec-menu-inner">
             <div class="ec-menu-content">
                 <ul>
-                    <li class="dropdown"><a href="javascript:void(0)">New Arrival</a></li>
-                    <li class="dropdown"><a href="javascript:void(0)">Ready To Wear</a></li>
-                    <li class="dropdown"><a href="javascript:void(0)">Party Wear</a></li>
-                    <li class="dropdown"><a href="javascript:void(0)">Formal</a></li>
-                    <li class="dropdown"><a href="javascript:void(0)">Casual Wear</a></li>
+                    <li class="dropdown"><a href="{{ route('products.index')  }}">New Arrival</a></li>
+                    <li class="dropdown"><a href="{{ route('products.index')  }}">Ready To Wear</a></li>
+                    <li class="dropdown"><a href="{{ route('products.index')  }}">Party Wear</a></li>
+                    <li class="dropdown"><a href="{{ route('products.index')  }}">Formal</a></li>
+                    <li class="dropdown"><a href="{{ route('products.index')  }}">Casual Wear</a></li>
                     <li class="dropdown">
-                        <a href="javascript:void(0)" class="d-flex align-items-center gap-2">
+                        <a href="{{ route('products.index')  }}" class="d-flex align-items-center gap-2">
                             <img src="website/assets/images/icon/sale.svg" style="height: 20px;" alt="">
                             Collection
                         </a>
