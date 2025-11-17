@@ -158,6 +158,59 @@
                 margin-bottom: 10px;
             }
         }
+
+
+        .custom-sizes-table {
+    font-size: 16px;
+}
+
+.custom-sizes-table th,
+.custom-sizes-table td {
+    border: none !important;
+}
+
+.custom-status {
+    position: relative;
+}
+
+.custom-status .status-icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 16px;
+    pointer-events: none;
+    /* Example icon, can be replaced with your preferred icon */
+    content: '\2714'; /* checkmark */
+    color: green;
+}
+
+.form-check-input.toggle-status:checked + .status-icon {
+    content: '\2716'; /* cross icon when unchecked/checked */
+    color: red;
+}
+
+/* Mobile-specific adjustments */
+@media (max-width: 767px) {
+    /* Increase row height for mobile */
+    .custom-sizes-table tbody tr {
+        height: 60px; /* taller rows */
+    }
+
+    /* Increase width and padding for each column */
+    .custom-sizes-table th,
+    .custom-sizes-table td {
+        min-width: 150px; /* wider columns */
+        padding: 16px 12px; /* more spacing inside cells */
+        font-size: 16px; /* readable font */
+    }
+
+    /* Optional: make table scrollable horizontally */
+    .table-responsive {
+        overflow-x: auto;
+    }
+}
+
     </style>
     <!-- main-content -->
     <div class="main-content">
@@ -197,72 +250,72 @@
                     </button>
                 </div>
 
-                <!-- Sizes List -->
-                <div class="wg-box mt-5">
-                    <div class="wg-table table-all-sizes">
-                        <ul class="table-title flex gap20 mb-14">
-                            <li><div class="body-title">Size Name</div></li>
-                            <li><div class="body-title">Short Code</div></li>
-                            <li><div class="body-title">Status</div></li>
-                            <li><div class="body-title">Created</div></li>
-                            <li><div class="body-title">Actions</div></li>
-                        </ul>
+<!-- Sizes List -->
+<div class="wg-box mt-5">
+    <div class="table-responsive">
+        <table class="table table-sm border-0 custom-sizes-table">
+            <thead class=" border-0">
+                <tr>
+                    <th>Size Name</th>
+                    <th>Short Code</th>
+                    <th>Status</th>
+                    <th>Created</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse($sizes as $size)
+                    <tr id="size-{{ $size->id }}">
+                        <td>
+                            <a href="#" class="body-text fw-bold">{{ $size->name }}</a>
+                        </td>
+                        <td>
+                            <span class="size-badge text-white">{{ $size->short_code }}</span>
+                        </td>
+                        <td>
+                            <div class="form-check form-switch custom-status">
+                                <input class="form-check-input toggle-status"
+                                       type="checkbox"
+                                       data-id="{{ $size->id }}"
+                                       {{ $size->is_active ? 'checked' : '' }}>
+                                <i class="status-icon"></i>
+                            </div>
+                        </td>
+                        <td class="text-main-dark">{{ $size->created_at->format('M d, Y') }}</td>
+                        <td>
+                            <!-- Edit -->
+                            <a href="javascript:void(0)" class="edit-size me-2"
+                               data-id="{{ $size->id }}"
+                               data-bs-toggle="modal"
+                               data-bs-target="#editSizeModal"
+                               title="Edit Size">
+                                <i class="icon-edit"></i>
+                            </a>
 
-                        <div class="flex flex-column" id="sizesList">
-                            @foreach($sizes as $size)
-                                <div class="wg-product item-row gap20" id="size-{{ $size->id }}">
-                                    <div class="name">
-                                        <div class="title line-clamp-2 mb-0">
-                                            <a href="#" class="body-text  fw-bold">{{ $size->name }}</a>
-                                        </div>
-                                    </div>
+                            <!-- Delete -->
+                            <a href="javascript:void(0)" class="delete-size"
+                               data-id="{{ $size->id }}"
+                               data-name="{{ $size->name }}"
+                               title="Delete Size">
+                                <i class="icon-trash-2"></i>
+                            </a>
+                        </td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="5" class="text-center py-5">
+                            <div class="body-text text-muted mb-3">No sizes found</div>
+                            <button class="tf-button style-1 w208" data-bs-toggle="modal" data-bs-target="#addSizeModal">
+                                <i class="icon-plus"></i> Add First Size
+                            </button>
+                        </td>
+                    </tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
+</div>
 
-                                    <div class="body-text">
-                                        <span class="size-badge text-white">{{ $size->short_code }}</span>
-                                    </div>
-
-                                    <div class="form-check form-switch">
-                                        <input class="form-check-input toggle-status"
-                                               type="checkbox"
-                                               data-id="{{ $size->id }}"
-                                            {{ $size->is_active ? 'checked' : '' }}>
-                                    </div>
-
-
-                                    <div class="body-text text-main-dark">{{ $size->created_at->format('M d, Y') }}</div>
-
-                                    <div class="item-actions">
-                                        <!-- Edit -->
-                                        <a href="javascript:void(0)" class="edit-size"
-                                           data-id="{{ $size->id }}"
-                                           data-bs-toggle="modal"
-                                           data-bs-target="#editSizeModal"
-                                           title="Edit Size">
-                                            <i class="icon-edit"></i>
-                                        </a>
-
-                                        <!-- Delete -->
-                                        <a href="javascript:void(0)" class="delete-size"
-                                           data-id="{{ $size->id }}"
-                                           data-name="{{ $size->name }}"
-                                           title="Delete Size">
-                                            <i class="icon-trash-2"></i>
-                                        </a>
-                                    </div>
-                                </div>
-                            @endforeach
-
-                            @if($sizes->isEmpty())
-                                <div class="text-center py-5">
-                                    <div class="body-text text-muted mb-3">No sizes found</div>
-                                    <button class="tf-button style-1 w208" data-bs-toggle="modal" data-bs-target="#addSizeModal">
-                                        <i class="icon-plus"></i> Add First Size
-                                    </button>
-                                </div>
-                            @endif
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
 
