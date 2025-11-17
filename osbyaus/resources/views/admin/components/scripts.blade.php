@@ -1,11 +1,11 @@
 <!-- Javascript -->
-<script src="{{ asset('admin/admin-ecomus/js/jquery.min.js') }}"></script>
-<script src="{{ asset('admin/admin-ecomus/js/bootstrap.min.js') }}"></script>
-<script src="{{ asset('admin/admin-ecomus/js/bootstrap-select.min.js') }}"></script>
-<script src="{{ asset('admin/admin-ecomus/js/zoom.js') }}"></script>
-<script src="{{ asset('admin/admin-ecomus/js/switcher.js') }}"></script>
-<script defer src="{{ asset('admin/admin-ecomus/js/theme-settings.js') }}"></script>
-<script defer src="{{ asset('admin/admin-ecomus/js/main.js') }}"></script>
+<script src="{{ asset('admin/js/jquery.min.js') }}"></script>
+<script src="{{ asset('admin/js/bootstrap.min.js') }}"></script>
+<script src="{{ asset('admin/js/bootstrap-select.min.js') }}"></script>
+<script src="{{ asset('admin/js/zoom.js') }}"></script>
+<script src="{{ asset('admin/js/switcher.js') }}"></script>
+<script defer src="{{ asset('admin/js/theme-settings.js') }}"></script>
+<script defer src="{{ asset('admin/js/main.js') }}"></script>
 
 <script defer src="{{ asset('js/sweet-alert-helper.js') }}"></script>
 
