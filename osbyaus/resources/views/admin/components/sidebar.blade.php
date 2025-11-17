@@ -1,9 +1,9 @@
 <!-- section-menu-left -->
 <div class="section-menu-left">
     <div class="box-logo">
-        <a href="index.html" id="site-logo-inner">
-            <img class="" id="logo_header" alt="" src="{{asset('admin/admin-ecomus/logo/logo.png')}}"
-                 data-light="../images/logo/logo.svg" data-dark="../images/logo/logo-white.svg">
+        <a href="{{ route('admin.dashboard') }}" id="site-logo-inner">
+            <img class="" id="logo_header" alt="" src="{{asset('admin/logo/logo.png')}}"
+                 data-light="/admin/logo/logo.svg" data-dark="/admin/logo/logo-white.svg">
         </a>
         <div class="button-show-hide">
             <i class="icon-chevron-left"></i>

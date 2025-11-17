@@ -3,7 +3,7 @@
                     <div class="wrap">
                         <div class="header-left">
                             <a href="index.html">
-                                <img class="" id="logo_header_mobile" alt="" src="{{asset('admin/admin-ecomus/logo/logo.png')}}" data-light="../images/logo/logo.svg" data-dark="../images/logo/logo-white.svg">
+                                <img class="" id="logo_header_mobile" alt="" src="{{asset('admin/admin-ecomus/logo/logo.png')}}" data-light="..//admin/images/logo/logo.svg" data-dark="..//admin/images/logo/logo-white.svg">
                             </a>
                             <div class="button-show-hide">
                                 <i class="icon-chevron-left"></i>
@@ -21,7 +21,7 @@
                                             <ul>
                                                 <li class="product-item gap14 mb-10">
                                                     <div class="image no-bg">
-                                                        <img src="images/products/product-1.jpg" alt="">
+                                                        <img src="/admin/images/products/product-1.jpg" alt="">
                                                     </div>
                                                     <div class="flex items-center justify-between gap20 flex-grow">
                                                         <div class="name">
@@ -34,7 +34,7 @@
                                                 </li>
                                                 <li class="product-item gap14 mb-10">
                                                     <div class="image no-bg">
-                                                        <img src="images/products/product-2.jpg" alt="">
+                                                        <img src="/admin/images/products/product-2.jpg" alt="">
                                                     </div>
                                                     <div class="flex items-center justify-between gap20 flex-grow">
                                                         <div class="name">
@@ -47,7 +47,7 @@
                                                 </li>
                                                 <li class="product-item gap14">
                                                     <div class="image no-bg">
-                                                        <img src="images/products/product-3.jpg" alt="">
+                                                        <img src="/admin/images/products/product-3.jpg" alt="">
                                                     </div>
                                                     <div class="flex items-center justify-between gap20 flex-grow">
                                                         <div class="name">
@@ -69,7 +69,7 @@
                                             <ul>
                                                 <li class="product-item gap14 mb-10">
                                                     <div class="image no-bg">
-                                                        <img src="images/products/product-4.jpg" alt="">
+                                                        <img src="/admin/images/products/product-4.jpg" alt="">
                                                     </div>
                                                     <div class="flex items-center justify-between gap20 flex-grow">
                                                         <div class="name">
@@ -82,7 +82,7 @@
                                                 </li>
                                                 <li class="product-item gap14 mb-10">
                                                     <div class="image no-bg">
-                                                        <img src="images/products/product-5.jpg" alt="">
+                                                        <img src="/admin/images/products/product-5.jpg" alt="">
                                                     </div>
                                                     <div class="flex items-center justify-between gap20 flex-grow">
                                                         <div class="name">
@@ -95,7 +95,7 @@
                                                 </li>
                                                 <li class="product-item gap14 mb-10">
                                                     <div class="image no-bg">
-                                                        <img src="images/products/product-6.jpg" alt="">
+                                                        <img src="/admin/images/products/product-6.jpg" alt="">
                                                     </div>
                                                     <div class="flex items-center justify-between gap20 flex-grow">
                                                         <div class="name">
@@ -108,7 +108,7 @@
                                                 </li>
                                                 <li class="product-item gap14">
                                                     <div class="image no-bg">
-                                                        <img src="images/products/product-7.jpg" alt="">
+                                                        <img src="/admin/images/products/product-7.jpg" alt="">
                                                     </div>
                                                     <div class="flex items-center justify-between gap20 flex-grow">
                                                         <div class="name">
@@ -141,7 +141,7 @@
                                         <li>
                                             <div class="noti-item w-full wg-user active">
                                                 <div class="image">
-                                                    <img src="images/customers/customer-1.jpg" alt="">
+                                                    <img src="/admin/images/customers/customer-1.jpg" alt="">
                                                 </div>
                                                 <div class="flex-grow">
                                                     <div class="flex items-center justify-between">
@@ -155,7 +155,7 @@
                                         <li>
                                             <div class="noti-item w-full wg-user active">
                                                 <div class="image">
-                                                    <img src="images/customers/customer-2.jpg" alt="">
+                                                    <img src="/admin/images/customers/customer-2.jpg" alt="">
                                                 </div>
                                                 <div class="flex-grow">
                                                     <div class="flex items-center justify-between">
@@ -169,7 +169,7 @@
                                         <li>
                                             <div class="noti-item w-full wg-user active">
                                                 <div class="image">
-                                                    <img src="images/customers/customer-3.jpg" alt="">
+                                                    <img src="/admin/images/customers/customer-3.jpg" alt="">
                                                 </div>
                                                 <div class="flex-grow">
                                                     <div class="flex items-center justify-between">
@@ -183,7 +183,7 @@
                                         <li>
                                             <div class="noti-item w-full wg-user active">
                                                 <div class="image">
-                                                    <img src="images/customers/customer-1.jpg" alt="">
+                                                    <img src="/admin/images/customers/customer-1.jpg" alt="">
                                                 </div>
                                                 <div class="flex-grow">
                                                     <div class="flex items-center justify-between">
@@ -208,7 +208,7 @@
                                     <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton3" data-bs-toggle="dropdown" aria-expanded="false">
                                         <span class="header-user wg-user">
                                             <span class="image">
-                                                <img src="{{ asset('admin/admin-ecomus/images/avatar/user-1.png') }}" alt="">                                            </span>
+                                                <img src="{{ asset('admin/admin-ecomus//admin/images/avatar/user-1.png') }}" alt="">                                            </span>
                                         </span>
                                     </button>
                                     <ul class="dropdown-menu dropdown-menu-end has-content" aria-labelledby="dropdownMenuButton3">

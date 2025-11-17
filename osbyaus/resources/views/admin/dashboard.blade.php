@@ -1,6 +1,6 @@
 @extends("admin.layout.main")
 @section('content')
-  
+
     <!-- main-content -->
                     <div class="main-content">
                         <!-- main-content-wrap -->
@@ -38,10 +38,10 @@
                                                     <span class="view-all">Weekly<i class="icon-chevron-down"></i></span>
                                                 </button>
                                                 <ul class="dropdown-menu dropdown-menu-end">
-                                                    <li>  
+                                                    <li>
                                                         <a href="javascript:void(0);">Monthly</a>
                                                     </li>
-                                                    <li>  
+                                                    <li>
                                                         <a href="javascript:void(0);">Yearly</a>
                                                     </li>
                                                 </ul>
@@ -82,10 +82,10 @@
                                                     <span class="view-all">Monthly<i class="icon-chevron-down"></i></span>
                                                 </button>
                                                 <ul class="dropdown-menu dropdown-menu-end">
-                                                    <li>  
+                                                    <li>
                                                         <a href="javascript:void(0);">Weekly</a>
                                                     </li>
-                                                    <li>  
+                                                    <li>
                                                         <a href="javascript:void(0);">Yearly</a>
                                                     </li>
                                                 </ul>
@@ -127,10 +127,10 @@
                                                     <span class="view-all">Yearly<i class="icon-chevron-down"></i></span>
                                                 </button>
                                                 <ul class="dropdown-menu dropdown-menu-end">
-                                                    <li>  
+                                                    <li>
                                                         <a href="javascript:void(0);">Monthly</a>
                                                     </li>
-                                                    <li>  
+                                                    <li>
                                                         <a href="javascript:void(0);">Weekly</a>
                                                     </li>
                                                 </ul>
@@ -171,10 +171,10 @@
                                                     <span class="view-all">Yearly<i class="icon-chevron-down"></i></span>
                                                 </button>
                                                 <ul class="dropdown-menu dropdown-menu-end">
-                                                    <li>  
+                                                    <li>
                                                         <a href="javascript:void(0);">Monthly</a>
                                                     </li>
-                                                    <li>  
+                                                    <li>
                                                         <a href="javascript:void(0);">Weekly</a>
                                                     </li>
                                                 </ul>
@@ -196,10 +196,10 @@
                                                     <a href="product-list.html" class="view-all">Yearly<i class="icon-chevron-down"></i></a>
                                                 </button>
                                                 <ul class="dropdown-menu">
-                                                    <li>  
+                                                    <li>
                                                         <a href="javascript:void(0);">Weekly</a>
                                                     </li>
-                                                    <li>  
+                                                    <li>
                                                         <a href="javascript:void(0);">Monthly</a>
                                                     </li>
                                                 </ul>
@@ -250,10 +250,10 @@
                                                         <a href="product-list.html" class="view-all">Weekly<i class="icon-chevron-down"></i></a>
                                                     </button>
                                                     <ul class="dropdown-menu">
-                                                        <li>  
+                                                        <li>
                                                             <a href="javascript:void(0);">Yearly</a>
                                                         </li>
-                                                        <li>  
+                                                        <li>
                                                             <a href="javascript:void(0);">Monthly</a>
                                                         </li>
                                                     </ul>
@@ -301,10 +301,10 @@
                                                         <a href="product-list.html" class="view-all">Weekly<i class="icon-chevron-down"></i></a>
                                                     </button>
                                                     <ul class="dropdown-menu">
-                                                        <li>  
+                                                        <li>
                                                             <a href="javascript:void(0);">Yearly</a>
                                                         </li>
-                                                        <li>  
+                                                        <li>
                                                             <a href="javascript:void(0);">Monthly</a>
                                                         </li>
                                                     </ul>
@@ -314,7 +314,7 @@
                                                 <li class="wg-product">
                                                     <div class="name flex-grow">
                                                         <div class="image">
-                                                            <img src="images/products/product-1.jpg" alt="">
+                                                            <img src="/admin/images/products/product-1.jpg" alt="">
                                                         </div>
                                                         <div>
                                                             <div class="title">
@@ -328,7 +328,7 @@
                                                 <li class="wg-product">
                                                     <div class="name flex-grow">
                                                         <div class="image">
-                                                            <img src="images/products/product-2.jpg" alt="">
+                                                            <img src="/admin/images/products/product-2.jpg" alt="">
                                                         </div>
                                                         <div>
                                                             <div class="title">
@@ -342,7 +342,7 @@
                                                 <li class="wg-product">
                                                     <div class="name flex-grow">
                                                         <div class="image">
-                                                            <img src="images/products/product-3.jpg" alt="">
+                                                            <img src="/admin/images/products/product-3.jpg" alt="">
                                                         </div>
                                                         <div>
                                                             <div class="title">
@@ -356,7 +356,7 @@
                                                 <li class="wg-product">
                                                     <div class="name flex-grow">
                                                         <div class="image">
-                                                            <img src="images/products/product-4.jpg" alt="">
+                                                            <img src="/admin/images/products/product-4.jpg" alt="">
                                                         </div>
                                                         <div>
                                                             <div class="title">
@@ -370,7 +370,7 @@
                                                 <li class="wg-product">
                                                     <div class="name flex-grow">
                                                         <div class="image">
-                                                            <img src="images/products/product-5.jpg" alt="">
+                                                            <img src="/admin/images/products/product-5.jpg" alt="">
                                                         </div>
                                                         <div>
                                                             <div class="title">
@@ -384,7 +384,7 @@
                                                 <li class="wg-product">
                                                     <div class="name flex-grow">
                                                         <div class="image">
-                                                            <img src="images/products/product-6.jpg" alt="">
+                                                            <img src="/admin/images/products/product-6.jpg" alt="">
                                                         </div>
                                                         <div>
                                                             <div class="title">
@@ -409,7 +409,7 @@
                                             <ul class="table-title flex gap20 mb-14">
                                                 <li>
                                                     <div class="body-title text-main-dark">Product</div>
-                                                </li>    
+                                                </li>
                                                 <li>
                                                     <div class="body-title text-main-dark">Customer</div>
                                                 </li>
@@ -431,7 +431,7 @@
                                                 <li class="item wg-product gap20">
                                                     <div class="name">
                                                         <div class="image">
-                                                            <img src="images/products/product-1.jpg" alt="">
+                                                            <img src="/admin/images/products/product-1.jpg" alt="">
                                                         </div>
                                                         <div class="title mb-0">
                                                             <a href="#" class="body-text">Oversized Motif T-shirt</a>
@@ -448,7 +448,7 @@
                                                 <li class="item wg-product gap20">
                                                     <div class="name">
                                                         <div class="image">
-                                                            <img src="images/products/product-2.jpg" alt="">
+                                                            <img src="/admin/images/products/product-2.jpg" alt="">
                                                         </div>
                                                         <div class="title mb-0">
                                                             <a href="#" class="body-text">Oversized Motif T-shirt</a>
@@ -465,7 +465,7 @@
                                                 <li class="item wg-product gap20">
                                                     <div class="name">
                                                         <div class="image">
-                                                            <img src="images/products/product-3.jpg" alt="">
+                                                            <img src="/admin/images/products/product-3.jpg" alt="">
                                                         </div>
                                                         <div class="title mb-0">
                                                             <a href="#" class="body-text">Oversized Motif T-shirt</a>
@@ -482,7 +482,7 @@
                                                 <li class="item wg-product gap20">
                                                     <div class="name">
                                                         <div class="image">
-                                                            <img src="images/products/product-7.jpg" alt="">
+                                                            <img src="/admin/images/products/product-7.jpg" alt="">
                                                         </div>
                                                         <div class="title mb-0">
                                                             <a href="#" class="body-text">Oversized Motif T-shirt</a>
@@ -499,7 +499,7 @@
                                                 <li class="item wg-product gap20">
                                                     <div class="name">
                                                         <div class="image">
-                                                            <img src="images/products/product-4.jpg" alt="">
+                                                            <img src="/admin/images/products/product-4.jpg" alt="">
                                                         </div>
                                                         <div class="title mb-0">
                                                             <a href="#" class="body-text">Oversized Motif T-shirt</a>
