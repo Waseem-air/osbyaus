@@ -185,7 +185,7 @@
                                     <tr class="item-row" id="category-{{ $category->id }}">
                                         <td>
                                             <div class="category-info">
-                                                @isset($category->image)
+                                                <!-- @isset($category->image)
                                                     <img src="{{ asset($category->image ?? 'assets/images/default-category.jpg') }}" 
                                                          alt="{{ $category->name }}" 
                                                          class="category-image">
@@ -193,7 +193,7 @@
                                                     <img src="assets/images/default-category.jpg" 
                                                          alt="{{ $category->name }}" 
                                                          class="category-image">
-                                                @endisset
+                                                @endisset -->
                                                 <div>
                                                     <div class="category-name">
                                                         <a href="#" class="body-text fw-bold">{{ $category->name }}</a>

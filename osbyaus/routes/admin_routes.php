@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('admin')->name('admin.')->group(function () {
 
     // 🧾 Admin Dashboard Routes
+    Route::get('/dashboard', [AdminController::class, 'Dashboard'])->name('Dashboard');
     Route::get('/transaction', [AdminController::class, 'transaction'])->name('transaction');
     Route::get('/store-menu', [AdminController::class, 'store_menu'])->name('store.menu');
 

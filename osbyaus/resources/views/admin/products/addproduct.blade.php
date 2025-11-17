@@ -385,6 +385,22 @@
             background: var(--Palette-Green-500);
             color: var(--White);
         }
+        /* Mobile screen par button ko neeche move karo */
+/* Mobile screen par Add Product button form ke bilkul last aa jay */
+@media (max-width: 768px) {
+    .form-add-product {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .mobile-submit-btn {
+        margin-top: 20px;
+        order: 999; /* sab se last */
+        width: 100%;
+    }
+}
+
+
     </style>
     <!-- main-content -->
     <div class="main-content">
@@ -423,6 +439,12 @@
                                     <div class="preview-container flex gap20 flex-wrap mt-3" id="previewContainer"></div>
                                 </div>
                             </fieldset>
+                              <div class="d-block d-md-none">
+                                <button type="submit" class="tf-button w-full" id="submitBtn">
+                                    <i class="icon-save"></i> Add Product
+                                </button>
+                            </div>
+
                         </div>
                     </div>
 
@@ -569,11 +591,12 @@
                             </div>
 
                             <!-- Submit Button -->
-                            <div class="wg-box">
-                                <button type="submit" class="tf-button w-full" id="submitBtn">
-                                    <i class="icon-save"></i> Add Product
-                                </button>
-                            </div>
+                            <div class="wg-box d-none d-md-block">
+    <button type="submit" class="tf-button w-full" id="submitBtn">
+        <i class="icon-save"></i> Add Product
+    </button>
+</div>
+
                         </form>
                     </div>
                 </div>

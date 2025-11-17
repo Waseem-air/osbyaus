@@ -34,7 +34,7 @@
                     </div>
 
                     <!-- Image Upload -->
-                    <div class="mb-3">
+                    <!-- <div class="mb-3">
                         <label class="form-label">Category Image</label>
                         <div class="border rounded p-3 d-flex flex-column align-items-center justify-content-center upload-image" style="min-height:150px; cursor:pointer;">
                             <label class="d-flex flex-column align-items-center justify-content-center w-100 h-100 mb-0" for="editCategoryImage">
@@ -46,7 +46,7 @@
                             </label>
                         </div>
                         <div class="text-danger small mt-1" id="editImageError"></div>
-                    </div>
+                    </div> -->
 
                 </div>
 
