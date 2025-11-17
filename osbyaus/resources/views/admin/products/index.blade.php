@@ -5,56 +5,117 @@
         <div class="main-content-inner">
             <div class="main-content-wrap">
 
-                <!-- Search and Filter Bar -->
-                <div class="search-bar-container mb-2">
-                    <!-- Search Form -->
-                    <form class="form-search" id="searchForm">
-                        <fieldset class="name">
-                            <input type="text" placeholder="Search products..." id="productSearch" name="search">
-                            <button type="submit" class="search-icon">
-                                <i class="icon-search"></i>
-                            </button>
-                        </fieldset>
-                    </form>
+                <!-- Search and Filter Bar (desktop only) -->
+<div class="search-bar-container mb-2 d-none d-md-flex">
+    <!-- Search Form -->
+    <form class="form-search" id="searchForm">
+        <fieldset class="name">
+            <input type="text" placeholder="Search products..." id="productSearch" name="search">
+            <button type="submit" class="search-icon">
+                <i class="icon-search"></i>
+            </button>
+        </fieldset>
+    </form>
 
-                    <!-- Status Filter -->
-                    <div class="dropdown">
-                        <button class="tf-button style-2 w150" id="statusFilterBtn">
-                            Status <i class="icon-chevron-down"></i>
-                        </button>
-                        <div class="dropdown-content">
-                            <a href="#" data-status="all">All</a>
-                            <a href="#" data-status="active">Active</a>
-                            <a href="#" data-status="inactive">Inactive</a>
-                            <a href="#" data-status="in_stock">In Stock</a>
-                            <a href="#" data-status="out_of_stock">Out of Stock</a>
-                        </div>
-                    </div>
+    <!-- Status Filter -->
+    <div class="dropdown">
+        <button class="tf-button style-2 w150" id="statusFilterBtn">
+            Status <i class="icon-chevron-down"></i>
+        </button>
+        <div class="dropdown-content">
+            <a href="#" data-status="all">All</a>
+            <a href="#" data-status="active">Active</a>
+            <a href="#" data-status="inactive">Inactive</a>
+            <a href="#" data-status="in_stock">In Stock</a>
+            <a href="#" data-status="out_of_stock">Out of Stock</a>
+        </div>
+    </div>
 
-                    <!-- Sort Filter -->
-                    <div class="dropdown">
-                        <button class="tf-button style-2 w150" id="sortFilterBtn">
-                            Sort By <i class="icon-chevron-down"></i>
-                        </button>
-                        <div class="dropdown-content">
-                            <a href="#" data-sort="newest">Newest First</a>
-                            <a href="#" data-sort="oldest">Oldest First</a>
-                            <a href="#" data-sort="name_asc">A-Z</a>
-                            <a href="#" data-sort="name_desc">Z-A</a>
-                            <a href="#" data-sort="price_asc">Price: Low to High</a>
-                            <a href="#" data-sort="price_desc">Price: High to Low</a>
-                        </div>
-                    </div>
+    <!-- Sort Filter -->
+    <div class="dropdown">
+        <button class="tf-button style-2 w150" id="sortFilterBtn">
+            Sort By <i class="icon-chevron-down"></i>
+        </button>
+        <div class="dropdown-content">
+            <a href="#" data-sort="newest">Newest First</a>
+            <a href="#" data-sort="oldest">Oldest First</a>
+            <a href="#" data-sort="name_asc">A-Z</a>
+            <a href="#" data-sort="name_desc">Z-A</a>
+            <a href="#" data-sort="price_asc">Price: Low to High</a>
+            <a href="#" data-sort="price_desc">Price: High to Low</a>
+        </div>
+    </div>
 
-                    <!-- Clear Filters -->
-                    <a href="{{ route('admin.product.index') }}" class="tf-button style-2">
-                        <i class="icon-refresh-cw"></i> Clear
-                    </a>
+    <!-- Clear Filters -->
+    <a href="{{ route('admin.product.index') }}" class="tf-button style-2">
+        <i class="icon-refresh-cw"></i> Clear
+    </a>
 
-                    <a class="tf-button style-1 w208" href="{{ route('admin.product.add') }}">
-                        <i class="icon-plus"></i> Add
-                    </a>
+    <!-- Add Button -->
+    <a class="tf-button style-1 w208" href="{{ route('admin.product.add') }}">
+        <i class="icon-plus"></i> Add
+    </a>
+</div>
+
+   <!-- Mobile Search and Filter Bar (only visible on small screens) -->
+<div class="d-block d-md-none mb-2">
+    <div class="row g-2">
+        <!-- Row 1: Status & Sort -->
+          <!-- Row 3: Search Bar -->
+        <div class="col-12">
+            <form class="form-search" id="searchFormMobile">
+                <fieldset class="name d-flex">
+                    <input type="text" placeholder="Search customers..." id="customerSearchMobile" name="search" value="{{ request('search') }}" class="flex-grow-1">
+                    <button type="submit" class="search-icon">
+                        <i class="icon-search"></i>
+                    </button>
+                </fieldset>
+            </form>
+        </div>
+        <div class="col-6 mt-4">
+            <div class="dropdown w-100">
+                <button class="tf-button style-2 w-100" id="statusFilterBtnMobile" data-bs-toggle="dropdown">
+                    Status <i class="icon-chevron-down"></i>
+                </button>
+                <div class="dropdown-content">
+                    <a href="#" data-status="all">All</a>
+                    <a href="#" data-status="active">Active</a>
+                    <a href="#" data-status="inactive">Inactive</a>
+                    <a href="#" data-status="verified">Verified</a>
+                    <a href="#" data-status="unverified">Unverified</a>
                 </div>
+            </div>
+        </div>
+        <div class="col-6 mt-4">
+            <div class="dropdown w-100">
+                <button class="tf-button style-2 w-100" id="sortFilterBtnMobile" data-bs-toggle="dropdown">
+                    Sort By <i class="icon-chevron-down"></i>
+                </button>
+                <div class="dropdown-content">
+                    <a href="#" data-sort="newest">Newest First</a>
+                    <a href="#" data-sort="oldest">Oldest First</a>
+                    <a href="#" data-sort="name_asc">Name A-Z</a>
+                    <a href="#" data-sort="name_desc">Name Z-A</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Row 2: Clear & Add -->
+        <div class="col-6">
+            <a href="{{ route('admin.product.index') }}" class="tf-button style-2 w-100">
+                <i class="icon-refresh-cw"></i> Clear
+            </a>
+        </div>
+        <div class="col-6">
+            <button class="tf-button style-1 w-100" data-bs-toggle="modal" data-bs-target="#addCustomerModal">
+                <i class="icon-plus"></i> Add New
+            </button>
+        </div>
+
+       
+    </div>
+</div>
+
 
                 <!-- Loading Spinner -->
                 <div id="loadingSpinner" class="text-center py-5" style="display: none;">
