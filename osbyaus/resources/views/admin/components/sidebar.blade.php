@@ -185,8 +185,12 @@
                             <div class="text">FAQ</div>
                         </a>
                     </li>
+
+
+
                     <li class="menu-item">
-                        <a href="login.html" class="">
+                        <a href="#"
+                           onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                             <div class="icon">
                                 <svg width="24" height="22" viewBox="0 0 20 20" fill="none"
                                      xmlns="http://www.w3.org/2000/svg">
@@ -197,7 +201,14 @@
                             </div>
                             <div class="text">Log out</div>
                         </a>
+
+                        <!-- Hidden Logout Form -->
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                            @csrf
+                        </form>
                     </li>
+
+
                 </ul>
             </div>
         </div>
