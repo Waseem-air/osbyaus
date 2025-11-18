@@ -39,11 +39,10 @@ class CartController extends Controller
         return view('website.cart.index', compact('cart'));
     }
 
-
     /**
-     * Get cart page items (AJAX)
+     * Get cart page items (AJAX) - For cart page only
      */
-    public function getCartItems()
+    public function getCartPageItems()
     {
         $cart = $this->getOrCreateCart();
         $cart->load([
@@ -65,6 +64,165 @@ class CartController extends Controller
             'cartTotal' => number_format($cart->total ?? 0, 2),
         ]);
     }
+
+    /**
+     * Update cart item quantity (AJAX) - For cart page only
+     */
+    public function updateQuantityPage(Request $request, $cartItemId)
+    {
+        $request->validate([
+            'quantity' => 'required|integer|min:1',
+        ]);
+
+        try {
+            $cart = $this->getOrCreateCart();
+            $cartItem = $cart->items()->where('id', $cartItemId)->first();
+
+            if (!$cartItem) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Cart item not found'
+                ], 404);
+            }
+
+            // Check stock for regular products
+            if (!$cartItem->custom_size_id) {
+                if ($cartItem->variant) {
+                    if ($cartItem->variant->stock_quantity < $request->quantity) {
+                        throw new \Exception('Insufficient stock for selected variant');
+                    }
+                } else {
+                    if ($cartItem->product->stock_quantity < $request->quantity) {
+                        throw new \Exception('Insufficient stock available');
+                    }
+                }
+            }
+
+            $cartItem->update(['quantity' => $request->quantity]);
+            $cartItem->updateTotal();
+            $cart->updateTotals();
+
+            return $this->getCartPageResponse('Quantity updated successfully!');
+
+        } catch (\Exception $e) {
+            \Log::error('Error updating cart quantity: ' . $e->getMessage(), [
+                'cartItemId' => $cartItemId,
+                'quantity' => $request->quantity
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ], 422);
+        }
+    }
+
+    /**
+     * Remove item from cart (AJAX) - For cart page only
+     */
+    public function removeItemPage($cartItemId)
+    {
+        try {
+            // Check if cart item exists and belongs to current user's cart
+            $cart = $this->getOrCreateCart();
+            $cartItem = $cart->items()->where('id', $cartItemId)->first();
+
+            if (!$cartItem) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Cart item not found or already removed'
+                ], 404);
+            }
+
+            DB::transaction(function () use ($cartItem, $cart) {
+                // Delete custom size record if exists
+                if ($cartItem->customSize) {
+                    $cartItem->customSize->delete();
+                }
+
+                $cartItem->delete();
+
+                // Check if cart has any items left
+                if ($cart->items()->count() === 0) {
+                    $cart->delete();
+                    Cookie::queue(Cookie::forget(self::CART_COOKIE_NAME));
+                } else {
+                    $cart->updateTotals();
+                }
+            });
+
+            return $this->getCartPageResponse('Item removed from cart!');
+
+        } catch (\Exception $e) {
+            \Log::error('Error removing cart item: ' . $e->getMessage(), [
+                'cartItemId' => $cartItemId,
+                'session_id' => $this->getCartSessionId()
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Error removing item: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Clear entire cart (AJAX) - For cart page only
+     */
+    public function clearCartPage()
+    {
+        try {
+            $cart = $this->getOrCreateCart();
+
+            DB::transaction(function () use ($cart) {
+                // Delete all custom size records
+                $customSizeIds = $cart->items()->whereNotNull('custom_size_id')->pluck('custom_size_id');
+                if ($customSizeIds->count() > 0) {
+                    CustomSize::whereIn('id', $customSizeIds)->delete();
+                }
+
+                $cart->items()->delete();
+                $cart->delete();
+                Cookie::queue(Cookie::forget(self::CART_COOKIE_NAME));
+            });
+
+            return $this->getCartPageResponse('Cart cleared successfully!');
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error clearing cart: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Get cart page response for AJAX requests - For cart page only
+     */
+    protected function getCartPageResponse($message = '')
+    {
+        $cart = $this->getOrCreateCart();
+        $cart->load([
+            'items.product.images',
+            'items.variant.color.color',
+            'items.variant.size.size',
+            'items.customSize'
+        ]);
+
+        if ($cart->exists) {
+            $cart->updateTotals();
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => $message,
+            'cartCount' => $cart->items_count ?? 0,
+            'cartSubtotal' => number_format($cart->subtotal ?? 0, 2),
+            'cartTotal' => number_format($cart->total ?? 0, 2),
+            'html' => view('website.cart.partials.cart-items', compact('cart'))->render(),
+        ]);
+    }
+
     /**
      * Display cart sidebar (AJAX)
      */
