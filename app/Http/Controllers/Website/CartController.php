@@ -352,12 +352,17 @@ class CartController extends Controller
     /**
      * Remove item from cart (AJAX)
      */
+
+    /**
+     * Remove item from cart (AJAX)
+     */
     public function removeItem($cartItemId)
     {
         try {
             // Check if cart item exists and belongs to current user's cart
             $cart = $this->getOrCreateCart();
             $cartItem = $cart->items()->where('id', $cartItemId)->first();
+
             if (!$cartItem) {
                 return response()->json([
                     'success' => false,
@@ -366,11 +371,14 @@ class CartController extends Controller
             }
 
             DB::transaction(function () use ($cartItem, $cart) {
+                // Delete custom size record if exists
                 if ($cartItem->customSize) {
                     $cartItem->customSize->delete();
                 }
 
                 $cartItem->delete();
+
+                // Check if cart has any items left
                 if ($cart->items()->count() === 0) {
                     $cart->delete();
                     Cookie::queue(Cookie::forget(self::CART_COOKIE_NAME));
@@ -384,8 +392,7 @@ class CartController extends Controller
         } catch (\Exception $e) {
             \Log::error('Error removing cart item: ' . $e->getMessage(), [
                 'cartItemId' => $cartItemId,
-                'session_id' => $this->getCartSessionId(),
-                'message' =>  $e->getMessage().$e->getLine()
+                'session_id' => $this->getCartSessionId()
             ]);
 
             return response()->json([
@@ -394,7 +401,6 @@ class CartController extends Controller
             ], 500);
         }
     }
-
 
     /**
      * Clear entire cart (AJAX)
