@@ -98,10 +98,16 @@
     /* ========================== */
     @media (max-width: 768px) {
         .table-customers {
+           
             display: block !important;
             overflow-x: auto !important;
         }
-        
+        .table-customers thead th,
+            .table-customers tbody td {
+                min-width:156px;
+                padding: 10px 8px;
+                font-size: 14px;
+            }
         .customer-avatar {
             width: 40px !important;
             height: 40px !important;
@@ -141,7 +147,7 @@
 @if($customers->count() > 0)
     <div class="wg-box mt-5">
         <div class="table-responsive">
-            <table class="table table-customers">
+            <table class="table table-customers table-responsive">
                 <thead>
                     <tr>
                         <th>Customer</th>

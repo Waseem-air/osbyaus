@@ -1,0 +1,651 @@
+<?php $__env->startSection('styles'); ?>
+    <style>
+        .wg-table.table-all-category .wg-product > *:nth-child(1), .wg-table.table-all-category ul.table-title > *:nth-child(1) {
+            width: 281px;
+            flex-shrink: 0;
+        }
+
+        @media (min-width: 768px) and (max-width: 1199px) {
+            .wg-table.table-all-category > ul,
+            .wg-table.table-all-category > div {
+                min-width: 100% !important;
+                width: 100% !important;
+            }
+        }
+
+        /* Alert Styles */
+        .alert-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            min-width: 300px;
+        }
+
+        .alert {
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: between;
+            align-items: center;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+
+        .alert-error {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+
+        .alert-warning {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            color: #856404;
+        }
+
+        .d-none {
+            display: none !important;
+        }
+
+        /* Loading States */
+        .btn-loading {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        .btn-loading .spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid transparent;
+            border-top: 2px solid currentColor;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 8px;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .flex {
+            display: flex;
+        }
+
+        .justify-between {
+            justify-content: space-between;
+        }
+
+        .justify-end {
+            justify-content: flex-end;
+        }
+
+        .items-center {
+            align-items: center;
+        }
+
+        .gap20 {
+            gap: 20px;
+        }
+
+        .mb-20 {
+            margin-bottom: 20px;
+        }
+
+        .mb-30 {
+            margin-bottom: 30px;
+        }
+
+        .mt-30 {
+            margin-top: 30px;
+        }
+
+        /* Custom modal styling */
+        .modal-header {
+            border-bottom: 1px solid #e9ecef;
+            padding: 1.5rem;
+        }
+
+        .modal-footer {
+            border-top: 1px solid #e9ecef;
+            padding: 1.5rem;
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+        }
+    </style>
+
+<?php $__env->stopSection(); ?>
+
+<?php $__env->startSection('content'); ?>
+    <!-- main-content -->
+    <div class="main-content">
+        <!-- Alert Container -->
+        <!-- Add Category Modal -->
+        <?php echo $__env->make('admin.categories.addCategoryModal', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+        <!-- Edit Category Modal -->
+        <?php echo $__env->make('admin.categories.editCategoryModal', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+
+        <!-- main-content-wrap -->
+        <div class="main-content-inner">
+            <!-- main-content-wrap -->
+            <div class="main-content-wrap">
+                <div class="flex items-center flex-wrap justify-between gap20 mb-30">
+                    <h3>Category Management</h3>
+                    <div class="flex items-center gap20">
+                        <span class="body-text">Total Categories: <?php echo e($categories->count()); ?></span>
+                    </div>
+                </div>
+
+                <!-- Search and Filter Bar -->
+                <div class="search-bar-container mb-2">
+                    <!-- Search Form -->
+                    <form class="form-search">
+                        <fieldset class="name">
+                            <input type="text" id="searchCategory" placeholder="Search categories..." name="search">
+                        </fieldset>
+                    </form>
+
+                    <!-- Add New Button -->
+                    <button class="tf-button style-1 w208" data-bs-toggle="modal" data-bs-target="#addCategoryModal">
+                        <i class="icon-plus"></i> Add New Category
+                    </button>
+                </div>
+
+                 <!-- Categories Table -->
+                <div class="wg-box mt-5">
+                    <div class="table-container">
+                        <table class="category-table">
+                            <thead>
+                                <tr>
+                                    <th>Category</th>
+                                    <th>Slug</th>
+                                    <th>Status</th>
+                                    <th>Created</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="categoriesList">
+                                <!-- PHP Backend Code - Same as original -->
+                                <?php $__currentLoopData = $categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $category): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <tr class="item-row" id="category-<?php echo e($category->id); ?>">
+                                        <td>
+                                            <div class="category-info">
+                                                <!-- <?php if(isset($category->image)): ?>
+                                                    <img src="<?php echo e(asset($category->image ?? 'assets/images/default-category.jpg')); ?>" 
+                                                         alt="<?php echo e($category->name); ?>" 
+                                                         class="category-image">
+                                                <?php else: ?>
+                                                    <img src="assets/images/default-category.jpg" 
+                                                         alt="<?php echo e($category->name); ?>" 
+                                                         class="category-image">
+                                                <?php endif; ?> -->
+                                                <div>
+                                                    <div class="category-name">
+                                                        <a href="#" class="body-text fw-bold"><?php echo e($category->name); ?></a>
+                                                    </div>
+                                                    <?php if($category->description): ?>
+                                                        <div class="category-description line-clamp-1">
+                                                            <?php echo e(Str::limit($category->description, 50)); ?>
+
+                                                        </div>
+                                                    <?php endif; ?>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="body-text text-main-dark"><?php echo e($category->slug); ?></td>
+                                        <td>
+                                            <span class="block-stock <?php echo e($category->is_active ? 'bg-1' : 'bg-2'); ?> fw-7">
+                                                <?php echo e($category->is_active ? 'Active' : 'Inactive'); ?>
+
+                                            </span>
+                                        </td>
+                                        <td class="body-text text-main-dark"><?php echo e($category->created_at->format('M d, Y')); ?></td>
+                                        <td>
+                                            <div class="item-actions">
+                                                <!-- Edit -->
+                                                <a href="javascript:void(0)" class="edit-category"
+                                                   data-id="<?php echo e($category->id); ?>"
+                                                   data-bs-toggle="modal"
+                                                   data-bs-target="#editCategoryModal"
+                                                   title="Edit Category">
+                                                    <i class="icon-edit"></i>
+                                                </a>
+
+                                                <!-- Delete -->
+                                                <a href="javascript:void(0)" class="delete-category"
+                                                   data-id="<?php echo e($category->id); ?>"
+                                                   data-name="<?php echo e($category->name); ?>"
+                                                   title="Delete Category">
+                                                    <i class="icon-trash-2"></i>
+                                                </a>
+
+                                                <!-- View -->
+                                                <a href="<?php echo e(route('admin.category.show', $category->id)); ?>"
+                                                   title="View Category">
+                                                    <i class="icon-eye"></i>
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+
+                                <?php if($categories->isEmpty()): ?>
+                                    <tr>
+                                        <td colspan="5">
+                                            <div class="text-center py-5">
+                                                <div class="body-text text-muted mb-3">No categories found</div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                <?php endif; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <!-- /Categories Table -->
+            </div>
+        </div>
+
+        <?php echo $__env->make('admin.components.footer', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+    </div>
+<?php $__env->stopSection(); ?>
+
+<?php $__env->startPush('scripts'); ?>
+    <script>
+        $(document).ready(function () {
+            const csrfToken = $('meta[name="csrf-token"]').attr('content') || '';
+
+            // Clear errors function
+            function clearAllErrors() {
+                $('.error-message').text('');
+                $('.form-group').removeClass('has-error');
+                $('.tf-field-input').removeClass('error');
+            }
+
+            // Clear field error on input
+            function clearFieldError(field) {
+                const fieldName = field.attr('name');
+                field.closest('.form-group').removeClass('has-error');
+                field.removeClass('error');
+
+                // Add success state if value is valid
+                if (field.val().trim() !== '') {
+                    field.addClass('success');
+                } else {
+                    field.removeClass('success');
+                }
+            }
+
+            // Set loading state
+            function setLoadingState(button, isLoading) {
+                const spinner = button.find('.spinner');
+                if (isLoading) {
+                    button.addClass('btn-loading loading').prop('disabled', true);
+                    spinner.removeClass('d-none');
+                } else {
+                    button.removeClass('btn-loading loading').prop('disabled', false);
+                    spinner.addClass('d-none');
+                }
+            }
+
+            // Show form errors
+            function showFormErrors(errors, prefix = '') {
+                $.each(errors, function (key, errorArray) {
+                    const errorElement = $(`#${prefix}${key.charAt(0).toUpperCase() + key.slice(1)}Error`);
+                    const formGroup = errorElement.closest('.form-group');
+                    const inputField = $(`[name="${key}"]`);
+
+                    if (errorElement.length && errorArray.length > 0) {
+                        errorElement.text(errorArray[0]);
+                        formGroup.addClass('has-error');
+                        inputField.addClass('error');
+                        inputField.removeClass('success');
+                    }
+
+                    // Auto-hide errors after 3 seconds
+                    setTimeout(() => {
+                        errorElement.text('');
+                        formGroup.removeClass('has-error');
+                        inputField.removeClass('error');
+                    }, 3000);
+                });
+            }
+
+            // ========================
+            // Add Category Form Submit
+            // ========================
+            $('#addCategoryForm').on('submit', function (e) {
+                e.preventDefault();
+                const form = $(this);
+                const formData = new FormData(this);
+                const submitBtn = $('#addCategoryBtn');
+
+                clearAllErrors();
+                setLoadingState(submitBtn, true);
+
+                $.ajax({
+                    url: '<?php echo e(route("admin.category.store")); ?>',
+                    method: 'POST',
+                    headers: {'X-CSRF-TOKEN': csrfToken},
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (response) {
+                        setLoadingState(submitBtn, false);
+
+                        if (response.status === 'success') {
+                            $('#addCategoryModal').modal('hide');
+
+                            SweetAlertHelper.successAutoClose(
+                                response.message || 'Category added successfully!',
+                                'Success!'
+                            ).then(() => {
+                                setTimeout(() => location.reload(), 1200);
+                            });
+                        } else if (response.status === 'error') {
+                            showFormErrors(response.errors);
+                            if (response.message) {
+                                SweetAlertHelper.error(
+                                    response.message,
+                                    'Validation Error!'
+                                );
+                            }
+                        }
+                    },
+                    error: function (xhr) {
+                        setLoadingState(submitBtn, false);
+
+                        const errors = xhr.responseJSON?.errors;
+                        if (errors) {
+                            showFormErrors(errors);
+                        } else {
+                            SweetAlertHelper.error(
+                                'An error occurred while adding the category.',
+                                'Operation Failed!'
+                            );
+                        }
+                    }
+                });
+            });
+
+            // ========================
+            // Edit Category - Load Data
+            // ========================
+            $('#editCategoryModal').on('show.bs.modal', function (event) {
+                const btn = $(event.relatedTarget);
+                if (btn.hasClass('edit-category')) {
+                    const categoryId = btn.data('id');
+
+                    // Show loading state
+                    const loadingAlert = SweetAlertHelper.loading('Loading category data...');
+
+                    $.ajax({
+                        url: `/admin/categories/${categoryId}/get`,
+                        headers: {
+                            'X-CSRF-TOKEN': csrfToken,
+                            'Accept': 'application/json'
+                        },
+                        success: function (response) {
+                            SweetAlertHelper.close(); // Close loading alert
+
+                            if (response.status === 'success') {
+                                const cat = response.category;
+                                $('#editCategoryId').val(cat.id);
+                                $('#editCategoryName').val(cat.name);
+                                $('#editCategoryDescription').val(cat.description || '');
+                            } else {
+                                SweetAlertHelper.error(
+                                    response.message || 'Failed to load category data.',
+                                    'Load Failed!'
+                                );
+                            }
+                        },
+                        error: function (xhr) {
+                            SweetAlertHelper.close(); // Close loading alert
+                            SweetAlertHelper.error(
+                                'Failed to load category data. Please try again.',
+                                'Load Failed!'
+                            );
+                        }
+                    });
+                }
+            });
+
+            // ========================
+            // Edit Category Form Submit
+            // ========================
+            $('#editCategoryForm').on('submit', function (e) {
+                e.preventDefault();
+                const categoryId = $('#editCategoryId').val();
+                const formData = new FormData(this);
+                const submitBtn = $('#editCategoryBtn');
+
+                clearAllErrors();
+                setLoadingState(submitBtn, true);
+
+                $.ajax({
+                    url: `/admin/categories/${categoryId}/update`,
+                    method: 'POST',
+                    headers: {'X-CSRF-TOKEN': csrfToken},
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (response) {
+                        setLoadingState(submitBtn, false);
+
+                        if (response.status === 'success') {
+                            $('#editCategoryModal').modal('hide');
+
+                            SweetAlertHelper.successAutoClose(
+                                response.message || 'Category updated successfully!',
+                                'Success!'
+                            ).then(() => {
+                                setTimeout(() => location.reload(), 1200);
+                            });
+                        } else if (response.status === 'error') {
+                            showFormErrors(response.errors, 'edit');
+                            if (response.message) {
+                                SweetAlertHelper.error(
+                                    response.message,
+                                    'Validation Error!'
+                                );
+                            }
+                        }
+                    },
+                    error: function (xhr) {
+                        setLoadingState(submitBtn, false);
+
+                        const errors = xhr.responseJSON?.errors;
+                        if (errors) {
+                            showFormErrors(errors, 'edit');
+                        } else {
+                            SweetAlertHelper.error(
+                                'An error occurred while updating the category.',
+                                'Operation Failed!'
+                            );
+                        }
+                    }
+                });
+            });
+
+            // ========================
+            // Delete Category
+            // ========================
+            $(document).on('click', '.delete-category', function () {
+                const categoryId = $(this).data('id');
+                const categoryName = $(this).data('name');
+
+                SweetAlertHelper.confirm(
+                    `Are you sure you want to delete "${categoryName}"? This action cannot be undone.`,
+                    'Delete Category?',
+                    () => {
+                        // This callback runs when user confirms
+                        const loadingAlert = SweetAlertHelper.loading('Deleting category...');
+
+                        $.ajax({
+                            url: `/admin/categories/${categoryId}/delete`,
+                            method: 'DELETE',
+                            headers: {'X-CSRF-TOKEN': csrfToken},
+                            success: function (response) {
+                                SweetAlertHelper.close(); // Close loading alert
+
+                                if (response.status === 'success') {
+                                    SweetAlertHelper.successAutoClose(
+                                        response.message || 'Category deleted successfully!',
+                                        'Deleted!'
+                                    );
+
+                                    $('#category-' + categoryId).fadeOut(300, function () {
+                                        $(this).remove();
+                                        if ($('#categoriesList .wg-product').length === 0) {
+                                            $('#categoriesList').html(`
+                                            <div class="text-center py-5">
+                                                <div class="body-text text-muted mb-3">No categories found</div>
+                                                <button class="tf-button style-1 w208" data-bs-toggle="modal" data-bs-target="#addCategoryModal">
+                                                    <i class="icon-plus"></i> Add First Category
+                                                </button>
+                                            </div>
+                                        `);
+                                        }
+                                    });
+                                } else {
+                                    SweetAlertHelper.error(
+                                        response.message || 'Failed to delete category.',
+                                        'Delete Failed!'
+                                    );
+                                }
+                            },
+                            error: function (xhr) {
+                                SweetAlertHelper.close(); // Close loading alert
+                                SweetAlertHelper.error(
+                                    'Failed to delete category. Please try again.',
+                                    'Delete Failed!'
+                                );
+                            }
+                        });
+                    },
+                    {
+                        confirmButtonText: 'Yes, delete it!',
+                        cancelButtonText: 'Cancel',
+                        icon: 'warning'
+                    }
+                );
+            });
+
+            // ========================
+            // Bulk Actions with SweetAlertHelper
+            // ========================
+            $('#bulkActionBtn').on('click', function () {
+                const selectedIds = $('input[name="selected_categories[]"]:checked').map(function () {
+                    return $(this).val();
+                }).get();
+
+                if (selectedIds.length === 0) {
+                    SweetAlertHelper.warning(
+                        'Please select at least one category to perform bulk actions.',
+                        'No Selection!'
+                    );
+                    return;
+                }
+
+                SweetAlertHelper.html(
+                    `
+                <div class="text-left">
+                    <p>You have selected <strong>${selectedIds.length}</strong> categories.</p>
+                    <div class="form-group mt-3">
+                        <label for="bulkAction" class="form-label">Choose Action:</label>
+                        <select class="form-select" id="bulkAction">
+                            <option value="delete">Delete Selected</option>
+                            <option value="activate">Activate Selected</option>
+                            <option value="deactivate">Deactivate Selected</option>
+                        </select>
+                    </div>
+                </div>
+                `,
+                    'Bulk Actions',
+                    'info'
+                ).then((result) => {
+                    if (result.isConfirmed) {
+                        const action = $('#bulkAction').val();
+                        // Handle bulk action here
+                    }
+                });
+            });
+
+            // ========================
+            // Form Event Handlers
+            // ========================
+
+            // Clear errors on input
+            $('.tf-field-input').on('input', function () {
+                clearFieldError($(this));
+            });
+
+            // Reset forms when modals close
+            $('#addCategoryModal').on('hidden.bs.modal', function () {
+                $('#addCategoryForm')[0].reset();
+                $('#addCategoryImagePreview').removeClass('show');
+                clearAllErrors();
+            });
+
+            $('#editCategoryModal').on('hidden.bs.modal', function () {
+                $('#editCategoryForm')[0].reset();
+                clearAllErrors();
+            });
+
+            // Show info when no image is selected
+            $('#addCategoryImage').on('change', function () {
+                if (!this.files.length) {
+                    SweetAlertHelper.info(
+                        'No image selected. A default image will be used.',
+                        'Image Info'
+                    );
+                }
+            });
+
+        });
+    </script>
+
+    <script>
+        // ===============================
+        // Search Categories Without AJAX
+        // ===============================
+        $('#searchCategory').on('keyup', function () {
+            const value = $(this).val().toLowerCase();
+
+            $('#categoriesList .wg-product').filter(function () {
+                const text = $(this).text().toLowerCase();
+                $(this).toggle(text.indexOf(value) > -1);
+            });
+
+            // Show empty message if no result
+            if ($('#categoriesList .wg-product:visible').length === 0) {
+                if (!$('#noResults').length) {
+                    $('#categoriesList').append(`
+                <div id="noResults" class="text-center py-5">
+                    <div class="body-text text-muted mb-3">No categories found</div>
+                </div>
+            `);
+                }
+            } else {
+                $('#noResults').remove();
+            }
+        });
+    </script>
+<?php $__env->stopPush(); ?>
+
+<?php echo $__env->make("admin.layout.main", array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\xampp\htdocs\2025_projects\osbyaus\osbyaus\resources\views\admin\categories\index.blade.php ENDPATH**/ ?>

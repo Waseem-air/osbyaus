@@ -112,6 +112,7 @@
         @media (max-width: 768px) {
             .admin-table th,
             .admin-table td {
+                width:144px;
                 padding: 10px 8px;
                 font-size: 14px;
             }

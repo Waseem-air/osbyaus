@@ -1,0 +1,125 @@
+<?php $__env->startSection('title', 'Confirm Password'); ?>
+<?php $__env->startSection('content'); ?>
+
+<!-- Ec breadcrumb start -->
+<div class="sticky-header-next-sec ec-breadcrumb section-space-mb">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <ul class="ec-breadcrumb-list text-left">
+                    <li class="ec-breadcrumb-item">
+                        <a href="<?php echo e(url('/')); ?>"><i class="fi-rr-home"></i></a>
+                    </li>
+                    <li class="ec-breadcrumb-item active">Confirm Password</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Ec breadcrumb end -->
+
+<!-- Auth section Start -->
+<section class="ec-page-content section-space-p">
+    <div class="container">
+        <div class="row">
+            <div class="col-xxl-8 col-xl-10 col-md-12 mx-auto">
+                <div class="auth-card cover">
+                    <div class="row">
+
+                        <!-- Left Image -->
+                        <div class="col-lg-6 d-none d-lg-block">
+                            <div class="img-wrapper">
+                                <img src="<?php echo e(asset('website/assets/images/auth-image/01.png')); ?>"
+                                     class="auth-img" alt="">
+                            </div>
+                        </div>
+
+                        <!-- Right Content -->
+                        <div class="col-lg-6">
+                            <div class="ec-auth-content">
+
+                                <div class="auth-head">
+                                    <div class="mb-4">
+                                        <img src="<?php echo e(asset('website/assets/images/logo/logo.svg')); ?>" alt="Logo">
+                                    </div>
+
+                                    <h2>Confirm Your Password</h2>
+                                    <p class="text-muted">
+                                        This is a secure area of the application. Please confirm your password before continuing.
+                                    </p>
+                                </div>
+
+                                <!-- FORM START -->
+                                <form method="POST" action="<?php echo e(route('password.confirm')); ?>" class="auth-form">
+                                    <?php echo csrf_field(); ?>
+
+                                    <div class="auth-form-content">
+
+                                        <!-- Password -->
+                                        <div class="col-12 mb-3">
+                                            <label>Password</label>
+                                            <div class="position-relative">
+                                                <input type="password"
+                                                       class="form-control auth-input <?php $__errorArgs = ['password'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> is-invalid <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>"
+                                                       name="password"
+                                                       id="password"
+                                                       required
+                                                       placeholder="Enter your password"
+                                                       autocomplete="current-password">
+
+                                                <span class="password-show" onclick="togglePassword('password', this)">
+                                                    <i class="fi-rr-eye"></i>
+                                                </span>
+
+                                                <?php $__errorArgs = ['password'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                <div class="invalid-feedback d-block"><?php echo e($message); ?></div>
+                                                <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                                            </div>
+                                        </div>
+
+                                        <!-- Submit -->
+                                        <div class="col-12 mt-3">
+                                            <button type="submit" class="btn btn-dark w-100">
+                                                Confirm
+                                            </button>
+                                        </div>
+
+                                        <div class="divider"></div>
+
+                                        <p class="auth-bottom text-center">
+                                            Want to login instead?
+                                            <a href="<?php echo e(route('login')); ?>">Sign In</a>
+                                        </p>
+
+                                    </div>
+                                </form>
+                                <!-- FORM END -->
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Auth section End -->
+
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('website.layouts.main', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\xampp\htdocs\2025_projects\osbyaus\osbyaus\resources\views\auth\confirm-password.blade.php ENDPATH**/ ?>

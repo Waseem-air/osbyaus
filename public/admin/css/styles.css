@@ -782,38 +782,6 @@ h6, .h6 {
   margin-left: 6px !important;
 }
 
-.mt-2 {
-  margin-top: 2px !important;
-}
-
-.mt-3 {
-  margin-top: 3px !important;
-}
-
-.mt-4 {
-  margin-top: 4px !important;
-}
-
-.mb-1 {
-  margin-bottom: 1px !important;
-}
-
-.mb-2 {
-  margin-bottom: 2px !important;
-}
-
-.mb-3 {
-  margin-bottom: 3px !important;
-}
-
-.mb-4 {
-  margin-bottom: 4px !important;
-}
-
-.mb-5 {
-  margin-bottom: 5px !important;
-}
-
 .mb-6 {
   margin-bottom: 6px !important;
 }
@@ -893,6 +861,15 @@ h6, .h6 {
 .w-max {
   width: max-content !important;
 }
+
+/* Only mobile screens */
+@media (max-width: 767px) {
+    .mobile-mt-2 {
+        margin-top: 1.5rem !important; /* same as mt-2 */
+    }
+}
+
+
 
 .h-full {
   height: 100%;
@@ -3250,19 +3227,14 @@ form input[type=color]::placeholder {
   width: 18px;
   left: 3px;
   bottom: 3px;
-  background-color: white;
+  /* background-color: white; */
   transition: 0.4s;
   border-radius: 50%;
 }
 
-/* Checked (ON) State */
-.switch input:checked + .slider {
-  background-color: #16a34a; /* green when ON */
-}
-
-.switch input:checked + .slider::before {
+/* .switch input:checked + .slider::before {
   transform: translateX(22px);
-}
+} */
 
 form button,
 form input[type=button],

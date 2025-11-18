@@ -9,7 +9,6 @@
             padding: 12px;
             min-height: 52px;
             cursor: pointer;
-            background: var(--White);
             transition: all 0.3s ease;
         }
 
@@ -208,7 +207,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background-color: var(--Surface);
+            /* background-color: var(--Surface); */
             transition: .4s;
             border-radius: 34px;
             border: 1px solid var(--Stroke);
@@ -540,13 +539,13 @@
                                     </div>
                                     <div class="col-md-4">
                                         <fieldset class="category">
-                                            <div class="body-title mb-2">Embellishment <span class="tf-color-1">*</span></div>
+                                            <div class="body-title mb-2 mobile-mt-2">Embellishment <span class="tf-color-1">*</span></div>
                                             <input type="text" placeholder="Enter Embellishment" name="embellishment" class="form-control" required>
                                         </fieldset>
                                     </div>
                                     <div class="col-md-4">
                                         <fieldset class="category">
-                                            <div class="body-title mb-2">Cut <span class="tf-color-1">*</span></div>
+                                            <div class="body-title mb-2 mobile-mt-2">Cut <span class="tf-color-1">*</span></div>
                                             <input type="text" placeholder="Enter Cut" name="cut" class="form-control" required>
                                         </fieldset>
                                     </div>
@@ -562,7 +561,7 @@
                                     </div>
                                     <div class="col-md-6">
                                         <fieldset class="category">
-                                            <div class="body-title mb-2">Sale Price</div>
+                                            <div class="body-title mb-2 mobile-mt-2">Sale Price</div>
                                             <input type="number" step="0.01" placeholder="Enter Price" name="sale_price" class="form-control">
                                         </fieldset>
                                     </div>

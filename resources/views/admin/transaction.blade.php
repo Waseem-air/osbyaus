@@ -9,7 +9,7 @@
 
                 <!-- Table version -->
                 <div class="wg-box mt-5">
-                    <div class="table-container">
+                    <div class="table-container table-responsive">
                         <table class="admin-table">
                             <thead>
                                 <tr>
