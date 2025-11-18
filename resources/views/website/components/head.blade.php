@@ -169,7 +169,10 @@
             padding: 8px 20px !important;
         }
 
-
+        .ec-size-from input {
+            width: 100% !important;
+        }
+        
     </style>
 
     {{-- ================================ --}}

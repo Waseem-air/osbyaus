@@ -17,21 +17,6 @@
                                 {{ $item->product->name }}
                             </a>
 
-                            @if($item->customSize)
-                                <small class="text-muted d-block">
-                                    <i class="fi-rr-ruler"></i> Custom Size
-                                </small>
-                            @elseif($item->variant)
-                                <small class="text-muted d-block">
-                                    @if($item->variant->color)
-                                        Color: {{ $item->variant->color->name }}
-                                    @endif
-                                    @if($item->variant->size)
-                                        {{ $item->variant->color ? ' | ' : '' }}Size: {{ $item->variant->size->name }}
-                                    @endif
-                                </small>
-                            @endif
-
                             <span class="cart-price text-left">
                                 {{ $item->quantity }} x <span>{{ App\Helpers\AppHelper::currency_symbol() }}{{ number_format($item->price, 2) }}</span>
                             </span>

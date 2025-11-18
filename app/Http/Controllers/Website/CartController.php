@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Cart;
 use App\Models\CartItem;
 use App\Models\Product;
+use App\Models\ProductColor;
+use App\Models\ProductSize;
 use App\Models\ProductVariant;
 use App\Models\CustomSize;
 use Illuminate\Http\Request;
@@ -28,11 +30,6 @@ class CartController extends Controller
 
         return view('website.cart.index', compact('cart'));
     }
-
-    /**
-     * Display cart sidebar (AJAX)
-     */
-
     /**
      * Display cart sidebar (AJAX)
      */
@@ -57,8 +54,6 @@ class CartController extends Controller
                 'cartTotal' => number_format($cart->total ?? 0, 2),
             ]);
         } catch (\Exception $e) {
-            \Log::error('Cart sidebar error: ' . $e->getMessage());
-
             return response()->json([
                 'success' => false,
                 'message' => 'Error loading cart',
@@ -74,6 +69,10 @@ class CartController extends Controller
             ], 500);
         }
     }
+    /**
+     * Add regular product to cart (AJAX)
+     */
+
     /**
      * Add regular product to cart (AJAX)
      */
@@ -99,14 +98,42 @@ class CartController extends Controller
                 // Find variant
                 $variant = null;
                 $selectedOptions = [];
-
                 if ($request->color_id || $request->size_id) {
+                    // Get the intermediate IDs from product_colors and product_sizes tables
+                    $productColorId = null;
+                    $productSizeId = null;
+
+                    if ($request->color_id) {
+                        $productColor = ProductColor::where('product_id', $product->id)
+                            ->where('color_id', $request->color_id)
+                            ->first();
+
+                        if (!$productColor) {
+                            throw new \Exception('Selected color not available for this product');
+                        }
+                        $productColorId = $productColor->id;
+                        $selectedOptions['color_id'] = $request->color_id;
+                    }
+
+                    if ($request->size_id) {
+                        $productSize = ProductSize::where('product_id', $product->id)
+                            ->where('size_id', $request->size_id)
+                            ->first();
+
+                        if (!$productSize) {
+                            throw new \Exception('Selected size not available for this product');
+                        }
+                        $productSizeId = $productSize->id;
+                        $selectedOptions['size_id'] = $request->size_id;
+                    }
+
+                    // Find variant using the correct column names
                     $variant = ProductVariant::where('product_id', $product->id)
-                        ->when($request->color_id, function ($query) use ($request) {
-                            $query->where('color_id', $request->color_id);
+                        ->when($productColorId, function ($query) use ($productColorId) {
+                            $query->where('product_color_id', $productColorId);
                         })
-                        ->when($request->size_id, function ($query) use ($request) {
-                            $query->where('size_id', $request->size_id);
+                        ->when($productSizeId, function ($query) use ($productSizeId) {
+                            $query->where('product_size_id', $productSizeId);
                         })
                         ->first();
 
@@ -118,10 +145,6 @@ class CartController extends Controller
                     if ($variant->stock_quantity < $request->quantity) {
                         throw new \Exception('Insufficient stock for selected variant');
                     }
-
-                    // Build selected options
-                    if ($request->color_id) $selectedOptions['color_id'] = $request->color_id;
-                    if ($request->size_id) $selectedOptions['size_id'] = $request->size_id;
                 } else {
                     // Check main product stock
                     if ($product->stock_quantity < $request->quantity) {
@@ -181,7 +204,6 @@ class CartController extends Controller
             ], 422);
         }
     }
-
     /**
      * Add custom size product to cart (AJAX)
      */
