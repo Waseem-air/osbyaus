@@ -665,24 +665,42 @@
         });
     </script>
 
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const searchInput = document.querySelector(".form-search input");
-            const rows = document.querySelectorAll(".wg-product");
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.querySelector('.form-search input[name="search"]');
+    const tableBody = document.querySelector('.custom-sizes-table tbody');
+    const rows = tableBody.querySelectorAll('tr');
 
-            searchInput.addEventListener("keyup", function () {
-                const value = this.value.toLowerCase().trim();
+    const filterSizes = (searchText) => {
+        const text = searchText.toLowerCase();
 
-                rows.forEach(row => {
-                    const text = row.innerText.toLowerCase();
+        rows.forEach(row => {
+            // skip "No sizes found" row
+            if(row.querySelector('td') === null) return;
 
-                    if (text.includes(value)) {
-                        row.style.display = "flex";
-                    } else {
-                        row.style.display = "none";
-                    }
-                });
-            });
+            const name = row.querySelector('td:nth-child(1)').textContent.toLowerCase();
+            const code = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
+
+            if (name.includes(text) || code.includes(text)) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
         });
-    </script>
+    };
+
+    // live search as user types
+    searchInput.addEventListener('input', function(e) {
+        filterSizes(e.target.value);
+    });
+
+    // prevent form submission
+    const form = document.querySelector('.form-search');
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        filterSizes(searchInput.value);
+    });
+});
+</script>
+
 @endpush

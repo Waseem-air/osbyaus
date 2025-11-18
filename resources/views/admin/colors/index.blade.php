@@ -537,34 +537,37 @@
 
         });
     </script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const searchInput = document.querySelector('.form-search input[name="search"]');
-            const colorsList = document.getElementById('colorsList');
-            const colorItems = colorsList.querySelectorAll('.wg-product');
+   <script>
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.querySelector('.form-search input[name="search"]');
+    const colorsList = document.getElementById('colorsList');
+    const colorRows = colorsList.querySelectorAll('tr');
 
-            const filterColors = (searchText) => {
-                const text = searchText.toLowerCase();
-                colorItems.forEach(item => {
-                    const name = item.querySelector('.name .title a').textContent.toLowerCase();
-                    const hex = item.querySelector('.body-text').textContent.toLowerCase();
-                    if(name.includes(text) || hex.includes(text)) {
-                        item.style.display = '';
-                    } else {
-                        item.style.display = 'none';
-                    }
-                });
-            };
+    const filterColors = (searchText) => {
+        const text = searchText.toLowerCase();
 
-            searchInput.addEventListener('input', function(e) {
-                filterColors(e.target.value);
-            });
+        colorRows.forEach(row => {
+            const name = row.querySelector('td:nth-child(1)').textContent.toLowerCase();
+            const hex = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
 
-            const form = document.querySelector('.form-search');
-            form.addEventListener('submit', function(e) {
-                e.preventDefault();
-                filterColors(searchInput.value);
-            });
+            if (name.includes(text) || hex.includes(text)) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
         });
-    </script>
+    };
+
+    searchInput.addEventListener('input', function(e) {
+        filterColors(e.target.value);
+    });
+
+    const form = document.querySelector('.form-search');
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        filterColors(searchInput.value);
+    });
+});
+</script>
+
 @endpush
