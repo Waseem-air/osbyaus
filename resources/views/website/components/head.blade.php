@@ -18,26 +18,26 @@
     <meta name="author" content="YourBrandName">
 
     {{-- Favicon --}}
-    <link rel="icon" href="{{ asset('website/assets/images/logo/favicon.png') }}" sizes="32x32">
-    <link rel="apple-touch-icon" href="{{ asset('website/assets/images/logo/favicon.png') }}">
-    <meta name="msapplication-TileImage" content="{{ asset('website/assets/images/logo/favicon.png') }}" />
+    <link rel="icon" href="{{ asset('/website/assets/images/logo/favicon.png') }}" sizes="32x32">
+    <link rel="apple-touch-icon" href="{{ asset('/website/assets/images/logo/favicon.png') }}">
+    <meta name="msapplication-TileImage" content="{{ asset('/website/assets/images/logo/favicon.png') }}" />
 
     {{-- ================================ --}}
     {{-- CSS Plugins --}}
     {{-- ================================ --}}
-    <link rel="stylesheet" href="{{ asset('website/assets/css/vendor/ecicons.min.css') }}" />
-    <link rel="stylesheet" href="{{ asset('website/assets/css/plugins/animate.css') }}" />
-    <link rel="stylesheet" href="{{ asset('website/assets/css/plugins/swiper-bundle.min.css') }}" />
-    <link rel="stylesheet" href="{{ asset('website/assets/css/plugins/jquery-ui.min.css') }}" />
-    <link rel="stylesheet" href="{{ asset('website/assets/css/plugins/countdownTimer.css') }}" />
-    <link rel="stylesheet" href="{{ asset('website/assets/css/plugins/slick.min.css') }}" />
-    <link rel="stylesheet" href="{{ asset('website/assets/css/plugins/bootstrap.css') }}" />
-    <link rel="stylesheet" href="{{ asset('website/assets/css/plugins/nouislider.css') }}" />
+    <link rel="stylesheet" href="{{ asset('/website/assets/css/vendor/ecicons.min.css') }}" />
+    <link rel="stylesheet" href="{{ asset('/website/assets/css/plugins/animate.css') }}" />
+    <link rel="stylesheet" href="{{ asset('/website/assets/css/plugins/swiper-bundle.min.css') }}" />
+    <link rel="stylesheet" href="{{ asset('/website/assets/css/plugins/jquery-ui.min.css') }}" />
+    <link rel="stylesheet" href="{{ asset('/website/assets/css/plugins/countdownTimer.css') }}" />
+    <link rel="stylesheet" href="{{ asset('/website/assets/css/plugins/slick.min.css') }}" />
+    <link rel="stylesheet" href="{{ asset('/website/assets/css/plugins/bootstrap.css') }}" />
+    <link rel="stylesheet" href="{{ asset('/website/assets/css/plugins/nouislider.css') }}" />
 
     {{-- ================================ --}}
     {{-- Main Style --}}
     {{-- ================================ --}}
-    <link rel="stylesheet" href="{{ asset('website/assets/css/style.css') }}" />
+    <link rel="stylesheet" href="{{ asset('/website/assets/css/style.css') }}" />
 
     <style>/* ERROR TEXT — light red */
 .invalid-feedback {

@@ -7,7 +7,7 @@
 <!-- Main Slider Start -->
 <div class="ec-main-slider section">
     <div class="position-relative">
-        <img src="website/assets/images/banner/01.png" class="ec-slide-bg" alt="">
+        <img src="{{ asset('website/assets/images/banner/01.png') }}" class="ec-slide-bg" alt="">
         <div class="container align-self-center">
             <div class="row">
                 <div class="col-12">
@@ -36,7 +36,7 @@
 <!-- Main Slider Start -->
 <div class="ec-main-slider slider-2 mt-1 section">
     <div class="position-relative">
-        <img src="website/assets/images/banner/02.png" class="ec-slide-bg" alt="">
+        <img src="{{ asset('website/assets/images/banner/02.png') }}" class="ec-slide-bg" alt="">
         <div class="container align-self-center">
             <div class="row">
                 <div class="col-12">
