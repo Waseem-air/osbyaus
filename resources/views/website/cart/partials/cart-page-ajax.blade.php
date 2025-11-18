@@ -14,22 +14,27 @@
 
             // Plus/minus button handlers
             $(document).on('click', '.ec_qtybtn', (e) => {
+                e.preventDefault();
                 const button = $(e.target);
                 const input = button.siblings('.cart-page-quantity-input');
                 let currentValue = parseInt(input.val()) || 0;
+                let newValue = currentValue;
 
                 if (button.hasClass('inc')) {
                     // Plus button clicked
-                    input.val(currentValue + 1);
+                    newValue = currentValue + 1;
                 } else if (button.hasClass('dec')) {
                     // Minus button clicked
                     if (currentValue > 1) {
-                        input.val(currentValue - 1);
+                        newValue = currentValue - 1;
                     }
                 }
 
-                // Trigger the change event to update the cart
-                input.trigger('change');
+                // Update the input value
+                input.val(newValue);
+
+                // Call updateQuantity directly
+                this.updateQuantity({ target: input[0] });
             });
 
             // Remove item handler

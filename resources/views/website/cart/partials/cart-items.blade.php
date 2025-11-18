@@ -34,12 +34,14 @@
                 </td>
                 <td data-label="Quantity" class="ec-cart-pro-qty" style="text-align: center;">
                     <div class="cart-qty-plus-minus">
+                        <div class="dec ec_qtybtn">-</div>
                         <input class="cart-plus-minus cart-quantity-input cart-page-quantity-input" type="number"
                                name="quantity"
                                value="{{ $item->quantity }}"
                                min="1"
                                data-item-id="{{ $item->id }}"
-                               style="text-align: center;" />
+                               style="text-align: center; width: 60px;" />
+                        <div class="inc ec_qtybtn">+</div>
                     </div>
                 </td>
                 <td data-label="Total" class="ec-cart-pro-subtotal">
@@ -59,7 +61,7 @@
         <div class="col-lg-12">
             <div class="ec-cart-update-bottom">
                 <a href="{{ route('products.index') }}" class="btn-return">Return to shop</a>
-                <a class="btn btn-dark clear-cart-page-btn">Clear Cart</a>
+                <a href="javascript:void(0);" class="btn btn-dark clear-cart-page-btn">Clear Cart</a>
             </div>
         </div>
     </div>
@@ -73,3 +75,4 @@
         </a>
     </div>
 @endif
+
