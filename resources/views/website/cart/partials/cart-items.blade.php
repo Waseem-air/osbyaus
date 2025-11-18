@@ -34,7 +34,7 @@
                 </td>
                 <td data-label="Quantity" class="ec-cart-pro-qty" style="text-align: center;">
                     <div class="cart-qty-plus-minus">
-                        <input class="cart-plus-minus cart-quantity-input" type="number"
+                        <input class="cart-plus-minus cart-quantity-input cart-page-quantity-input" type="number"
                                name="quantity"
                                value="{{ $item->quantity }}"
                                min="1"
@@ -46,7 +46,7 @@
                     {{ App\Helpers\AppHelper::currency_symbol() }}{{ number_format($item->price * $item->quantity, 2) }}
                 </td>
                 <td data-label="Remove" class="ec-cart-pro-remove">
-                    <a href="javascript:void(0);" class="remove-cart-item" data-item-id="{{ $item->id }}">
+                    <a href="javascript:void(0);" class="remove-cart-page-item" data-item-id="{{ $item->id }}">
                         <i class="fi-rr-cross"></i>
                     </a>
                 </td>
@@ -64,7 +64,7 @@
             </div>
         </div>
         <div class="col-lg-6 text-end">
-            <button class="btn btn-outline-danger clear-cart-btn">
+            <button class="btn btn-outline-danger clear-cart-page-btn">
                 <i class="fi-rr-trash me-2"></i>Clear Entire Cart
             </button>
         </div>

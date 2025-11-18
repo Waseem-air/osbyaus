@@ -86,17 +86,13 @@
                                                         onclick="showLoginModal()">
                                                     Login to Checkout <i class="ecicon eci-angle-right ms-2"></i>
                                                 </button>
-                                            </div>
-
-                                            <div>
-                                                <p class="text-center mt-2 small text-muted">
-                                                    Please login to proceed with checkout
-                                                </p>
-                                            </div>
+                                     </div>
                                         @endauth
                                     </div>
                                 </div>
                             </div>
+
+
                         </div>
                     </div>
                 </div>
@@ -104,6 +100,104 @@
         </div>
     </section>
     <!-- Ec Cart Section End -->
+
+
+    <!-- Related Products Section Start -->
+    @if($relatedPopular->count() > 0)
+        <section class="section ec-exe-spe-section section-space-mt section-space-mb-100" style="margin-bottom: 220px !important;">
+            <div class="container">
+                <div class="row">
+                    <div class="ec-exe-section col-lg-12 col-md-12 col-sm-12">
+                        <div class="col-md-12 text-left">
+                            <div class="section-title mb-6 d-flex justify-content-between">
+                                <h2 class="ec-title">Related Products</h2>
+                                <a href="{{ route('products.index') }}" class="ec-stitle">View All
+                                    <img src="{{ asset('website/assets/images/icon/arrow_right.svg') }}" alt="">
+                                </a>
+                            </div>
+                        </div>
+                        <div class="row">
+                            @foreach($relatedPopular as $relatedProduct)
+                                <div class="col-xl-3 col-lg-4 col-md-6 mb-4">
+                                    <div class="ec-product-content p-0">
+                                        <div class="ec-product-inner hot-sale-card">
+                                            <div class="ec-pro-image-outer">
+                                                <div class="ec-pro-image hot-sale-img">
+                                                    <a href="{{ route('product.detail', $relatedProduct->slug) }}"
+                                                       class="image sale-img">
+                                                        @if($relatedProduct->images->count() > 0)
+                                                            <img class="main-image"
+                                                                 src="{{ asset($relatedProduct->images->first()->image_path) }}"
+                                                                 alt="{{ $relatedProduct->name }}"/>
+                                                        @else
+                                                            <img class="main-image"
+                                                                 src="{{ asset('website/assets/images/product/default-product.jpg') }}"
+                                                                 alt="{{ $relatedProduct->name }}"/>
+                                                        @endif
+                                                    </a>
+                                                    <div class="ec-pro-actions">
+                                                        @if($relatedProduct->categories->count() > 0)
+                                                            <span
+                                                                class="badge bg-white">{{ $relatedProduct->categories->first()->name }}</span>
+                                                        @endif
+                                                    </div>
+                                                    @if($relatedProduct->discount_price && $relatedProduct->discount_price < $relatedProduct->price)
+                                                        <div class="ec-pro-actions-sale">
+                                                            @php
+                                                                $discountPercent = round((($relatedProduct->price - $relatedProduct->discount_price) / $relatedProduct->price) * 100);
+                                                            @endphp
+                                                            <span
+                                                                class="badge bg-white">{{ $discountPercent }}% OFF</span>
+                                                        </div>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                            <div class="ec-pro-content text-center">
+                                                <a href="{{ route('product.detail', $relatedProduct->slug) }}">
+                                                    <h6 class="ec-pro-stitle">{{ $relatedProduct->name }}</h6>
+                                                </a>
+                                                <p class="ec-pro-subtitle">
+                                                    {{ $relatedProduct->embellishment ? $relatedProduct->embellishment . ' | ' : '' }}
+                                                    {{ $relatedProduct->fabric ? $relatedProduct->fabric . ' | ' : '' }}
+                                                    {{ $relatedProduct->cut ? $relatedProduct->cut . ' Cut' : '' }}
+                                                </p>
+                                                <div class="ec-pro-rat-price align-items-center">
+                                            <span class="ec-price">
+                                                @if($relatedProduct->discount_price && $relatedProduct->discount_price < $relatedProduct->price)
+                                                    <span class="old-price">{{ App\Helpers\AppHelper::currency_symbol() }}.{{ number_format($relatedProduct->price, 2) }}</span>
+                                                    <span class="new-price">{{ App\Helpers\AppHelper::currency_symbol() }}.{{ number_format($relatedProduct->discount_price, 2) }}</span>
+                                                @else
+                                                    <span class="new-price">{{ App\Helpers\AppHelper::currency_symbol() }}.{{ number_format($relatedProduct->price, 2) }}</span>
+                                                @endif
+                                            </span>
+                                                </div>
+                                                <div class="ec-pro-size-wrapper">
+                                                    @foreach($relatedProduct->sizes->take(4) as $size)
+                                                        <div
+                                                            class="form-check ec-pro-size-btn {{ $size->is_active ? '' : 'empty' }}">
+                                                            <input class="form-check-input"
+                                                                   type="checkbox"
+                                                                   id="rel_size_{{ $relatedProduct->id }}_{{ $size->id }}"
+                                                                {{ !$size->is_active ? 'disabled' : '' }}>
+                                                            <label class="form-check-label"
+                                                                   for="rel_size_{{ $relatedProduct->id }}_{{ $size->id }}">
+                                                                {{ $size->short_code ?? $size->name }}
+                                                            </label>
+                                                        </div>
+                                                    @endforeach
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    @endif
+    <!-- Related Products Section End -->
 
     <!-- Login Modal -->
     <div class="modal fade" id="loginModal" tabindex="-1" aria-hidden="true">

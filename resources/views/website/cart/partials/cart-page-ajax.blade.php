@@ -6,18 +6,37 @@
 
         init() {
             this.bindEvents();
-            console.log('Cart page initialized');
         }
 
         bindEvents() {
             // Quantity update handler
-            $(document).on('change', '.cart-quantity-input', (e) => this.updateQuantity(e));
+            $(document).on('change', '.cart-page-quantity-input', (e) => this.updateQuantity(e));
+
+            // Plus/minus button handlers
+            $(document).on('click', '.ec_qtybtn', (e) => {
+                const button = $(e.target);
+                const input = button.siblings('.cart-page-quantity-input');
+                let currentValue = parseInt(input.val()) || 0;
+
+                if (button.hasClass('inc')) {
+                    // Plus button clicked
+                    input.val(currentValue + 1);
+                } else if (button.hasClass('dec')) {
+                    // Minus button clicked
+                    if (currentValue > 1) {
+                        input.val(currentValue - 1);
+                    }
+                }
+
+                // Trigger the change event to update the cart
+                input.trigger('change');
+            });
 
             // Remove item handler
-            $(document).on('click', '.remove-cart-item', (e) => this.removeItem(e));
+            $(document).on('click', '.remove-cart-page-item', (e) => this.removeItem(e));
 
             // Clear cart handler
-            $(document).on('click', '.clear-cart-btn', (e) => this.clearCart(e));
+            $(document).on('click', '.clear-cart-page-btn', (e) => this.clearCart(e));
 
             // Login form submission
             $('#loginForm').on('submit', (e) => this.handleLogin(e));
@@ -27,6 +46,7 @@
             const input = $(e.target);
             const quantity = parseInt(input.val());
             const itemId = input.data('item-id');
+            console.log('Updating quantity for item:', itemId, 'to:', quantity);
 
             if (quantity < 1) {
                 input.val(1);
@@ -39,7 +59,7 @@
 
             try {
                 const response = await $.ajax({
-                    url: `{{ route('cart.page.update-quantity', '') }}/${itemId}`,
+                    url: `/cart/page/update-quantity/${itemId}`,
                     method: 'PUT',
                     data: {
                         quantity: quantity,
@@ -54,7 +74,12 @@
             } catch (error) {
                 console.error('Update quantity error:', error);
                 input.val(originalValue); // Revert to original value
-                this.handleAjaxError(error, 'updating quantity');
+
+                if (error.responseJSON && error.responseJSON.message) {
+                    this.showErrorAlert('Error!', error.responseJSON.message);
+                } else {
+                    this.handleAjaxError(error, 'updating quantity');
+                }
             } finally {
                 input.prop('disabled', false);
             }
@@ -65,6 +90,8 @@
             const button = $(e.currentTarget);
             const itemId = button.data('item-id');
             const cartItem = button.closest('tr');
+
+            console.log('Removing item:', itemId);
 
             const result = await Swal.fire({
                 title: 'Remove Item',
@@ -85,7 +112,7 @@
 
                 try {
                     const response = await $.ajax({
-                        url: `{{ route('cart.page.remove', '') }}/${itemId}`,
+                        url: `/cart/page/remove/${itemId}`,
                         method: 'DELETE',
                         data: {
                             _token: '{{ csrf_token() }}'
@@ -161,6 +188,8 @@
         }
 
         async updateCartPage(response) {
+            console.log('Updating cart page with response:', response);
+
             // Update cart items
             if (response.html) {
                 $('#cart-items-container').html(response.html);
@@ -214,9 +243,11 @@
                     <button type="button" class="btn btn-dark py-2 mt-4 w-100 h-100" onclick="showLoginModal()">
                         Login to Checkout <i class="ecicon eci-angle-right ms-2"></i>
                     </button>
-                    <p class="text-center mt-2 small text-muted">
+                    <div>
+                      <p class="text-center mt-2 small text-muted">
                         Please login to proceed with checkout
                     </p>
+                   </div>
                 `);
             }
         }
@@ -333,7 +364,6 @@
         }
     }
 
-    // Global function to show login modal
     function showLoginModal() {
         $('#loginModal').modal('show');
     }

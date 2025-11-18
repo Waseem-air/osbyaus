@@ -22,9 +22,11 @@ class CartController extends Controller
     /**
      * Display main cart page
      */
+
     public function index()
     {
         $cart = $this->getOrCreateCart();
+
         $cart->load([
             'items.product.images',
             'items.variant.color.color',
@@ -36,8 +38,35 @@ class CartController extends Controller
             $cart->updateTotals();
         }
 
-        return view('website.cart.index', compact('cart'));
+        // -------------------------------------------
+        // ✅ Get first product from cart
+        // -------------------------------------------
+        $firstItem = $cart->items->first();
+
+        $relatedPopular = collect(); // default empty
+
+        if ($firstItem) {
+            $product = $firstItem->product;        // the main product
+            $slug = $product->slug;               // slug for excluding
+            $categoryIds = $product->categories->pluck('id'); // categories
+
+            // -------------------------------------------
+            // ✅ Fetch related + this week popular products
+            // -------------------------------------------
+            $relatedPopular = Product::with('images')
+                ->where('slug', '!=', $slug)
+                ->whereHas('categories', function ($q) use ($categoryIds) {
+                    $q->whereIn('categories.id', $categoryIds);
+                })
+                ->popularThisWeek()
+                ->inRandomOrder()
+                ->take(4)
+                ->get();
+        }
+
+        return view('website.cart.index', compact('cart', 'relatedPopular'));
     }
+
 
     /**
      * Get cart page items (AJAX) - For cart page only
