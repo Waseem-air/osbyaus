@@ -21,5 +21,7 @@
 <!-- ======================== -->
 <!-- Extra Page Scripts -->
 <!-- ======================== -->
+<!-- Include SweetAlert2 CSS -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 @stack('scripts')
 

@@ -14,6 +14,10 @@ require __DIR__ . '/all-clear.php';
 // ---------------------------------------------------------
 require __DIR__ . '/website.php';
 
+// ---------------------------------------------------------
+// 🧭 Cart Routes
+// ---------------------------------------------------------
+require __DIR__ . '/cart_routes.php';
 
 // Route::get('/dashboard', function () {
 //     return view('dashboard');

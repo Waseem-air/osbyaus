@@ -3,7 +3,6 @@
 @section('meta_description', Str::limit($product->description, 160))
 @section('meta_keywords', $product->fabric . ', ' . $product->cut . ', ' . $product->embellishment . ', fashion, clothing')
 @section('content')
-
     <!-- Ec breadcrumb start -->
     <div class="sticky-header-next-sec ec-breadcrumb section-space-mb">
         <div class="container">
@@ -110,6 +109,8 @@
                                                     @endif
                                                 </div>
                                             </div>
+
+                                            <!-- Size Selection -->
                                             <div class="ec-pro-size">
                                                 <div class="ec-pro-size-inner ec-pro-variation-size">
                                                     <div class="ec-pro-size-header">
@@ -139,12 +140,12 @@
                                                     <div class="ec-pro-size-content">
                                                         @foreach($product->sizes as $size)
                                                             <span>
-                                                            <input type="checkbox" name="size" id="size_{{ $size->id }}"
-                                                                   {{ $size->is_active ? '' : 'disabled' }}>
-                                                            <label for="size_{{ $size->id }}" class="size-badge">
-                                                                {{ $size->short_code ?? $size->name }}
-                                                            </label>
-                                                        </span>
+                                                                <input type="radio" name="size_id" value="{{ $size->id }}" id="size_{{ $size->id }}"
+                                                                       {{ $size->is_active ? '' : 'disabled' }}>
+                                                                <label for="size_{{ $size->id }}" class="size-badge">
+                                                                    {{ $size->short_code ?? $size->name }}
+                                                                </label>
+                                                            </span>
                                                         @endforeach
                                                         <span>
                                                             <a href="#ec-side-size-chart" class="ec-side-toggle">
@@ -156,26 +157,53 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="ec-single-qty">
-                                                <div class="qty-plus-minus">
-                                                    <input class="qty-input" type="text" name="ec_qtybtn" value="1" />
+
+                                            <!-- Color Selection -->
+                                            @if($product->colors->count() > 0)
+                                                <div class="ec-pro-color mt-3">
+                                                    <div class="ec-pro-color-inner">
+                                                        <div class="ec-pro-color-header">
+                                                            <span class="title">Color:</span>
+                                                            <span class="stitle">Select Color</span>
+                                                        </div>
+{{--                                                        <div class="ec-pro-color-content">--}}
+{{--                                                            @foreach($product->colors as $color)--}}
+{{--                                                                <span>--}}
+{{--                                                                    <input type="radio" name="color_id" value="{{ $color->id }}" id="color_{{ $color->id }}">--}}
+{{--                                                                    <label for="color_{{ $color->id }}" class="color-badge" style="background-color: {{ $color->hex_code }};" title="{{ $color->name }}"></label>--}}
+{{--                                                                </span>--}}
+{{--                                                            @endforeach--}}
+{{--                                                        </div>--}}
+                                                    </div>
                                                 </div>
-                                                <div class="ec-single-cart">
-                                                    <button class="btn btn-dark"
-                                                        {{ $product->stock_quantity <= 0 ? 'disabled' : '' }}>
-                                                        <i class="fi-rr-shopping-cart"></i>
-                                                        {{ $product->stock_quantity > 0 ? 'Add To Cart' : 'Out of Stock' }}
-                                                    </button>
+                                            @endif
+
+                                            <!-- Quantity and Add to Cart -->
+                                            <form id="add-to-cart-form">
+                                                @csrf
+                                                <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                                <div class="ec-single-qty mt-3">
+                                                    <div class="qty-plus-minus">
+                                                        <input class="qty-input" type="number" name="quantity" value="1" min="1" max="{{ $product->stock_quantity }}" />
+                                                    </div>
+                                                    <div class="ec-single-cart">
+                                                        <button type="button" class="btn btn-dark add-to-cart-btn"
+                                                                data-product-id="{{ $product->id }}"
+                                                            {{ $product->stock_quantity <= 0 ? 'disabled' : '' }}>
+                                                            <i class="fi-rr-shopping-cart"></i>
+                                                            {{ $product->stock_quantity > 0 ? 'Add To Cart' : 'Out of Stock' }}
+                                                        </button>
+                                                    </div>
+                                                    <div class="ec-single-wishlist">
+                                                        <a class="ec-btn-product-group product-wishlist" title="Wishlist">
+                                                            <i class="fi-rr-heart"></i>
+                                                        </a>
+                                                    </div>
                                                 </div>
-                                                <div class="ec-single-wishlist">
-                                                    <a class="ec-btn-product-group product-wishlist" title="Wishlist">
-                                                        <i class="fi-rr-heart"></i>
-                                                    </a>
-                                                </div>
-                                            </div>
+                                            </form>
+
                                             <div class="ec-single-tags">
-                                                <p class="tag-stitle fs-9 mb-1">ACTUAL COLOR MAY SLIGHTLY VARY DUE TO
-                                                    DIFFERENT LIGHTS</p>
+                                                <p class="tag-stitle fs-9 mb-1">ACTUAL COLOR MAY SLIGHTLY VARY DUE TO DIFFERENT LIGHTS</p>
                                                 <div class="d-flex flex-wrap gap-1">
                                                     <span class="d-flex gap-1">
                                                         <i class="fi-rr-clock"></i>
@@ -185,16 +213,6 @@
                                                         {{ now()->addDays(3)->format('l d F') }} - {{ now()->addDays(7)->format('l d F') }}
                                                     </span>
                                                 </div>
-                                                @if($product->colors->count() > 0)
-                                                    <div class="mt-2">
-                                                        <span class="tag-stitle">Available Colors: </span>
-                                                        @foreach($product->colors as $color)
-                                                            <span class="badge" style="background-color: {{ $color->hex_code }}; color: white;">
-                                                        {{ $color->name }}
-                                                    </span>
-                                                        @endforeach
-                                                    </div>
-                                                @endif
                                             </div>
                                         </div>
                                     </div>
@@ -288,10 +306,8 @@
                                             <ul>
                                                 <li>COD facility is not available for international customers.</li>
                                                 <li>No exchange/returns for international customers.</li>
-                                                <li>Payment (in advance) accepted through Credit/Debit Cards and bank
-                                                    transfer only.</li>
-                                                <li>Please note there could be delays to a certain extent due to
-                                                    external factors which may be beyond our control.</li>
+                                                <li>Payment (in advance) accepted through Credit/Debit Cards and bank transfer only.</li>
+                                                <li>Please note there could be delays to a certain extent due to external factors which may be beyond our control.</li>
                                             </ul>
                                             <div class="tab-moreinfo-item">
                                                 <h6>Care Instructions:</h6>
@@ -437,89 +453,119 @@
     @endif
     <!-- Related Products Section End -->
 
-    <!-- Ec Size Chart Start -->
-    <div class="ec-side-cart-overlay"></div>
+    <!-- Custom Size Modal -->
     <div id="ec-side-size-chart" class="ec-side-cart">
         <div class="ec-cart-inner">
             <div class="ec-cart-top">
                 <div class="ec-cart-title">
-                    <span class="cart_title">Custom Size</span>
-                    <button class="ec-close">×</button>
+                    <span class="cart_title">Custom Size - {{ $product->name }}</span>
+                    <button class="ec-close" type="button">×</button>
                 </div>
-                <div class="ec-size-from">
-                    <div class="row gy-4">
-                        <div class="col-12 mb-3">
-                            <h5 class="text-dark fw-semibold">Shirt</h5>
-                        </div>
-                        <div class="col-sm-6">
-                            <label for="">Shirt Length</label>
-                            <input type="text" class="form-control" placeholder="Enter Size">
-                        </div>
-                        <div class="col-sm-6">
-                            <label for="">Shoulder</label>
-                            <input type="text" class="form-control" placeholder="Enter Size">
-                        </div>
-                        <div class="col-sm-6">
-                            <label for="">Chest</label>
-                            <input type="text" class="form-control" placeholder="Enter Size">
-                        </div>
-                        <div class="col-sm-6">
-                            <label for="">Waist</label>
-                            <input type="text" class="form-control" placeholder="Enter Size">
-                        </div>
-                        <div class="col-sm-6">
-                            <label for="">Hips</label>
-                            <input type="text" class="form-control" placeholder="Enter Size">
-                        </div>
-                        <div class="col-sm-6">
-                            <label for="">Sleeves length</label>
-                            <input type="text" class="form-control" placeholder="Enter Size">
-                        </div>
-                        <div class="col-12">
-                            <div class="size-divider"></div>
-                        </div>
-                        <div class="col-12 mb-3">
-                            <h5 class="text-dark fw-semibold">Trouser</h5>
-                        </div>
-                        <div class="col-sm-6">
-                            <label for="">Waist stretch</label>
-                            <input type="text" class="form-control" placeholder="Enter Size">
-                        </div>
-                        <div class="col-sm-6">
-                            <label for="">Waist relax</label>
-                            <input type="text" class="form-control" placeholder="Enter Size">
-                        </div>
-                        <div class="col-sm-6">
-                            <label for="">Thigh</label>
-                            <input type="text" class="form-control" placeholder="Enter Size">
-                        </div>
-                        <div class="col-sm-6">
-                            <label for="">Calf</label>
-                            <input type="text" class="form-control" placeholder="Enter Size">
-                        </div>
-                        <div class="col-sm-6">
-                            <label for="">Trouser bottom (paincha)</label>
-                            <input type="text" class="form-control" placeholder="Enter Size">
-                        </div>
-                        <div class="col-sm-6">
-                            <label for="">Trouser length</label>
-                            <input type="text" class="form-control" placeholder="Enter Size">
-                        </div>
-                        <div class="col-12">
-                            <div class="d-flex flex-column gap-3">
-                                <a href="cart.html" class="btn btn-soft-dark p-2 h-auto">
-                                    <i class="fi-rr-shopping-cart me-2"></i> Go to cart
-                                </a>
-                                <a href="checkout.html" class="btn btn-dark p-2 h-auto">
-                                    Proceed to checkout
-                                    <i class="ecicon eci-angle-right ms-2"></i>
-                                </a>
+                <form id="custom-size-form" data-product-id="{{ $product->id }}">
+                    @csrf
+                    <div class="ec-size-from">
+                        <div class="row gy-4">
+                            <div class="col-12 mb-3">
+                                <h5 class="text-dark fw-semibold">Shirt Measurements (in inches)</h5>
+                            </div>
+                            <div class="col-sm-6">
+                                <label for="shirt_length">Shirt Length *</label>
+                                <input type="number" name="custom_size[shirt_length]" class="form-control" placeholder="Enter Size" step="0.1" min="0" required>
+                            </div>
+                            <div class="col-sm-6">
+                                <label for="shoulder">Shoulder *</label>
+                                <input type="number" name="custom_size[shoulder]" class="form-control" placeholder="Enter Size" step="0.1" min="0" required>
+                            </div>
+                            <div class="col-sm-6">
+                                <label for="chest">Chest *</label>
+                                <input type="number" name="custom_size[chest]" class="form-control" placeholder="Enter Size" step="0.1" min="0" required>
+                            </div>
+                            <div class="col-sm-6">
+                                <label for="waist">Waist *</label>
+                                <input type="number" name="custom_size[waist]" class="form-control" placeholder="Enter Size" step="0.1" min="0" required>
+                            </div>
+                            <div class="col-sm-6">
+                                <label for="hips">Hips</label>
+                                <input type="number" name="custom_size[hips]" class="form-control" placeholder="Enter Size" step="0.1" min="0">
+                            </div>
+                            <div class="col-sm-6">
+                                <label for="sleeves_length">Sleeves Length *</label>
+                                <input type="number" name="custom_size[sleeves_length]" class="form-control" placeholder="Enter Size" step="0.1" min="0" required>
+                            </div>
+
+                            <div class="col-12">
+                                <div class="size-divider"></div>
+                            </div>
+
+                            <div class="col-12 mb-3">
+                                <h5 class="text-dark fw-semibold">Trouser Measurements (in inches)</h5>
+                            </div>
+                            <div class="col-sm-6">
+                                <label for="waist_stretch">Waist Stretch</label>
+                                <input type="number" name="custom_size[waist_stretch]" class="form-control" placeholder="Enter Size" step="0.1" min="0">
+                            </div>
+                            <div class="col-sm-6">
+                                <label for="waist_relax">Waist Relax</label>
+                                <input type="number" name="custom_size[waist_relax]" class="form-control" placeholder="Enter Size" step="0.1" min="0">
+                            </div>
+                            <div class="col-sm-6">
+                                <label for="thigh">Thigh</label>
+                                <input type="number" name="custom_size[thigh]" class="form-control" placeholder="Enter Size" step="0.1" min="0">
+                            </div>
+                            <div class="col-sm-6">
+                                <label for="calf">Calf</label>
+                                <input type="number" name="custom_size[calf]" class="form-control" placeholder="Enter Size" step="0.1" min="0">
+                            </div>
+                            <div class="col-sm-6">
+                                <label for="trouser_bottom">Trouser Bottom (Paincha)</label>
+                                <input type="number" name="custom_size[trouser_bottom]" class="form-control" placeholder="Enter Size" step="0.1" min="0">
+                            </div>
+                            <div class="col-sm-6">
+                                <label for="trouser_length">Trouser Length</label>
+                                <input type="number" name="custom_size[trouser_length]" class="form-control" placeholder="Enter Size" step="0.1" min="0">
+                            </div>
+
+                            <div class="col-12">
+                                <div class="mb-3">
+                                    <label for="additional_notes">Additional Notes</label>
+                                    <textarea name="custom_size[additional_notes]" class="form-control" placeholder="Any special instructions or additional measurements..." rows="3"></textarea>
+                                </div>
+                            </div>
+
+                            <div class="col-12">
+                                <div class="custom-size-summary mb-3 p-3 bg-light rounded">
+                                    <h6 class="fw-semibold">Custom Size Summary</h6>
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <p class="mb-1"><strong>Extra Charge:</strong> <span class="text-success">Rs. 500</span></p>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <p class="mb-1"><strong>Delivery Time:</strong> <span class="text-warning">+5-7 days</span></p>
+                                        </div>
+                                    </div>
+                                    <small class="text-muted">* Required fields must be filled</small>
+                                </div>
+                            </div>
+
+                            <div class="col-12">
+                                <div class="d-flex flex-column gap-3">
+                                    <button type="submit" class="btn btn-dark p-2 h-auto add-custom-size-to-cart">
+                                        <i class="fi-rr-shopping-cart me-2"></i> Add Custom Size to Cart
+                                    </button>
+                                    <button type="button" class="btn btn-outline-secondary p-2 h-auto close-custom-size">
+                                        <i class="fi-rr-cross me-2"></i> Cancel
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                </form>
             </div>
         </div>
     </div>
-    <!-- Ec Size Chart End -->
+
+    <script>
+        window.currentProductId = {{ $product->id }};
+    </script>
 @endsection
+

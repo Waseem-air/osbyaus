@@ -23,7 +23,18 @@
 @include('website.components.footer')
 
 {{--Shopping Cart--}}
-@include('website.components.shopping-cart')
+<!-- Cart Sidebar Structure -->
+<div class="ec-side-cart-overlay"></div>
+<div id="ec-side-cart" class="ec-side-cart">
+    <!-- This will be populated dynamically via AJAX -->
+    <div class="ec-cart-inner">
+        <div class="text-center">
+            <i class="fi-rr-spinner spinner" style="font-size: 2rem;"></i>
+            <p class="mt-2 text-muted">Loading cart...</p>
+        </div>
+    </div>
+</div>
+
 <!-- Chat Btn Start -->
 <a href="" class="chat-btn">
     <i class="ecicon eci-whatsapp"></i>
@@ -32,5 +43,7 @@
 
 {{--Scripts Links--}}
 @include('website.components.script-links')
+@include('website.partials.cart-ajax-js')
+
 </body>
 </html>

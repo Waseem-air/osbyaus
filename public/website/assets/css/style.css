@@ -17852,7 +17852,7 @@ body.ec-open:before {
   font-size: 15px;
 }
 
-.eccart-pro-items li .ec-pro-content .remove {
+.eccart-pro-items li .ec-pro-content .remove-cart-item {
   line-height: 1.5;
   position: absolute;
   top: 0;
@@ -17869,7 +17869,7 @@ body.ec-open:before {
   font-size: 18px;
 }
 
-.eccart-pro-items li .ec-pro-content .remove:hover {
+.eccart-pro-items li .ec-pro-content .remove-cart-item:hover {
   color: #94010E;
 }
 

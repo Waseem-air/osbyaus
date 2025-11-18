@@ -106,9 +106,13 @@
                         <!-- Header Wishlist End -->
 
                         <!-- Header Cart Start -->
-                        <a href="#ec-side-cart" class="cart_submit ec-side-toggle">
-                            <i class="fi-rr-shopping-cart"></i>
-                        </a>
+                        <!-- In your header -->
+                        <div class="ec-header-cart">
+                            <a href="#ec-side-cart" class="cart_submit ec-side-toggle" style="position: relative;">
+                                <i class="fi-rr-shopping-cart"></i>
+                                <span class="cart-count-badge" style="display: none;">0</span>
+                            </a>
+                        </div>
                         <!-- Header Cart End -->
                     </div>
 
