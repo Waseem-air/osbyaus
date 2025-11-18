@@ -55,18 +55,12 @@
         </tbody>
     </table>
 
-    <div class="row mt-4">
-        <div class="col-lg-6">
+    <div class="row">
+        <div class="col-lg-12">
             <div class="ec-cart-update-bottom">
-                <a href="{{ route('products.index') }}" class="btn-return">
-                    <i class="fi-rr-arrow-left me-2"></i>Continue Shopping
-                </a>
+                <a href="{{ route('products.index') }}" class="btn-return">Return to shop</a>
+                <a class="btn btn-dark clear-cart-page-btn">Clear Cart</a>
             </div>
-        </div>
-        <div class="col-lg-6 text-end">
-            <button class="btn btn-outline-danger clear-cart-page-btn">
-                <i class="fi-rr-trash me-2"></i>Clear Entire Cart
-            </button>
         </div>
     </div>
 @else

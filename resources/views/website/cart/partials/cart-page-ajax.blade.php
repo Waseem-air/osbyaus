@@ -231,30 +231,22 @@
         updateCheckoutButton() {
             const checkoutSection = $('.ec-cart-summary').find('div').last();
             if ('{{ auth()->check() }}' === '1') {
-                // User is logged in - show checkout button
                 checkoutSection.html(`
                     <a href="{{ route('checkout') }}" class="btn btn-dark py-2 mt-4 w-100 h-100">
                         Proceed to checkout <i class="ecicon eci-angle-right ms-2"></i>
                     </a>
                 `);
             } else {
-                // User is not logged in - show login button
                 checkoutSection.html(`
                     <button type="button" class="btn btn-dark py-2 mt-4 w-100 h-100" onclick="showLoginModal()">
                         Login to Checkout <i class="ecicon eci-angle-right ms-2"></i>
                     </button>
-                    <div>
-                      <p class="text-center mt-2 small text-muted">
-                        Please login to proceed with checkout
-                    </p>
-                   </div>
                 `);
             }
         }
 
         async handleLogin(e) {
             e.preventDefault();
-
             const formData = $(e.target).serialize();
             const loginBtn = $('#loginBtn');
             const loginText = loginBtn.find('.login-text');
