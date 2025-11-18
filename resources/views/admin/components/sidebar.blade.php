@@ -134,6 +134,15 @@
 {{--                        </ul>--}}
 {{--                    </li>--}}
 
+                    <!-- Store Menu -->
+                   <li class="menu-item {{ request()->routeIs('admin.store.menu*') ? 'active' : '' }}">
+                        <a href="{{ route('admin.store.menu') }}" class="">
+                            <div class="icon"><i class="icon-store"></i></div>
+                            <div class="text">Store Menu</div>
+                        </a>
+                    </li>
+
+
                     <li class="menu-item has-children">
                         <a href="javascript:void(0);" class="menu-item-button">
                             <div class="icon">
