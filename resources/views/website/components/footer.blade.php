@@ -8,15 +8,15 @@
                         <div class="ec-footer-widget ec-footer-widget-wrapper">
                             <div class="ec-footer-widget-item">
                                 <h4 class="ec-footer-heading">Address:</h4>
-                                <p>4234, DHA Phase 5, Lahore</p>
+                                <p>138/27 yattenden crescent Baulkham hills</p>
                             </div>
                             <div class="ec-footer-widget-item">
                                 <h4 class="ec-footer-heading">Phone:</h4>
-                                <p>(021)37130277</p>
+                                <p>0432488558</p>
                             </div>
                             <div class="ec-footer-widget-item">
                                 <h4 class="ec-footer-heading">Email:</h4>
-                                <p>sale@osbyaus.com</p>
+                                <p>osbyaus@gmail.com</p>
                             </div>
                         </div>
                         <div class="ec-footer-widget ec-footer-social">
