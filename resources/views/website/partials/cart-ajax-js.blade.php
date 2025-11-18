@@ -99,6 +99,8 @@
 
         async removeItem(e) {
             e.preventDefault();
+            e.stopPropagation(); // Prevent event bubbling
+
             const button = $(e.currentTarget);
             const itemId = button.data('item-id');
             const cartItem = button.closest('.cart-item');
@@ -140,7 +142,17 @@
                     console.error('Remove item error:', error);
                     // Remove loading state on error (item stays in cart)
                     this.hideItemLoading(cartItem);
-                    this.handleAjaxError(error, 'removing item');
+
+                    // Handle 404 specifically (item not found)
+                    if (error.status === 404) {
+                        // Item already removed, remove from UI anyway
+                        this.removeItemFromUI(cartItem);
+                        this.showErrorAlert('Info', 'Item was already removed from your cart.');
+                        // Reload cart to sync state
+                        await this.loadCartSidebar();
+                    } else {
+                        this.handleAjaxError(error, 'removing item');
+                    }
                 }
             }
         }
@@ -155,42 +167,30 @@
             cartItem.find('.remove-cart-item').html('<i class="ecicon eci-trash"></i>');
         }
 
-        async removeItem(e) {
-            e.preventDefault();
-            e.stopPropagation(); // Prevent event bubbling
+        removeItemFromUI(cartItem) {
+            cartItem.fadeOut(300, function() {
+                $(this).remove();
 
-            const button = $(e.currentTarget);
-            const itemId = button.data('item-id');
-            const cartItem = button.closest('.cart-item');
-            const result = await this.showConfirmationAlert(
-                'Remove Item',
-                'Are you sure you want to remove this item from your cart?',
-                'Yes, remove it!'
-            );
+                // Check if cart is empty after removal
+                const remainingItems = $('.cart-item').length;
+                if (remainingItems === 0) {
+                    // Show empty cart state
+                    $('.eccart-pro-items').html(`
+                        <div class="text-center py-4">
+                            <i class="fi-rr-shopping-cart" style="font-size: 3rem; color: #ddd;"></i>
+                            <p class="mt-2 text-muted">Your cart is empty</p>
+                            <a href="{{ route('products.index') }}" class="btn btn-dark btn-sm mt-2">
+                                Start Shopping
+                            </a>
+                        </div>
+                    `);
 
-            if (result.isConfirmed) {
-                this.showItemLoading(cartItem);
-                try {
-                    const response = await $.ajax({
-                        url: `/cart/remove/${itemId}`,
-                        method: 'DELETE',
-                        data: {
-                            _token: '{{ csrf_token() }}'
-                        },
-                        timeout: 5000
-                    });
-
-                    if (response.success) {
-                        this.removeItemFromUI(cartItem);
-                        await this.updateCartUI(response);
-                        this.showSuccessAlert('Removed!', response.message);
-                    }
-                } catch (error) {
-                    this.hideItemLoading(cartItem);
-                    this.handleAjaxError(error, 'removing item');
+                    // Hide cart bottom section
+                    $('.ec-cart-bottom').hide();
                 }
-            }
+            });
         }
+
         async clearCart(e) {
             e.preventDefault();
 

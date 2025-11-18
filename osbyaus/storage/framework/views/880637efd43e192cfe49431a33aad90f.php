@@ -76,4 +76,4 @@
     </div>
 </div>
 <!-- Ec Cart End -->
-<?php /**PATH C:\xampp\htdocs\2025_projects\osbyaus\osbyaus\resources\views\website\components\shopping-cart.blade.php ENDPATH**/ ?>
+<?php /**PATH C:\xampp\htdocs\2025_projects\osbyaus\osbyaus\resources\views\website\components\shopping-index.blade.php ENDPATH**/ ?>

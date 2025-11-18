@@ -14,7 +14,9 @@ Route::prefix('cart')->group(function () {
     Route::put('/update/{cartItem}', [CartController::class, 'updateQuantity'])->name('cart.update');
     Route::delete('/remove/{cartItem}', [CartController::class, 'removeItem'])->name('cart.remove');
     Route::delete('/clear', [CartController::class, 'clearCart'])->name('cart.clear');
+    Route::get('/items', [CartController::class, 'getCartItems'])->name('cart.items');
 });
+
 
 Route::get('/checkout', [CheckoutController::class, 'index'])
     ->middleware(['auth', 'role:customer'])

@@ -19,16 +19,51 @@ class CartController extends Controller
 {
     const CART_COOKIE_NAME = 'cart_session_id';
     const COOKIE_EXPIRY = 525600; // 1 year
-
     /**
      * Display main cart page
      */
     public function index()
     {
         $cart = $this->getOrCreateCart();
-        $cart->load(['items.product.images', 'items.variant.size', 'items.variant.color', 'items.customSize']);
+        $cart->load([
+            'items.product.images',
+            'items.variant.color.color',
+            'items.variant.size.size',
+            'items.customSize'
+        ]);
+
+        if ($cart->exists) {
+            $cart->updateTotals();
+        }
 
         return view('website.cart.index', compact('cart'));
+    }
+
+
+    /**
+     * Get cart page items (AJAX)
+     */
+    public function getCartItems()
+    {
+        $cart = $this->getOrCreateCart();
+        $cart->load([
+            'items.product.images',
+            'items.variant.color.color',
+            'items.variant.size.size',
+            'items.customSize'
+        ]);
+
+        if ($cart->exists) {
+            $cart->updateTotals();
+        }
+
+        return response()->json([
+            'success' => true,
+            'html' => view('website.cart.partials.cart-items', compact('cart'))->render(),
+            'cartCount' => $cart->items_count ?? 0,
+            'cartSubtotal' => number_format($cart->subtotal ?? 0, 2),
+            'cartTotal' => number_format($cart->total ?? 0, 2),
+        ]);
     }
     /**
      * Display cart sidebar (AJAX)
@@ -39,7 +74,7 @@ class CartController extends Controller
             $cart = $this->getOrCreateCart();
             $cart->load(['items.product.images', 'items.variant.size', 'items.variant.color', 'items.customSize']);
             if ($cart->exists) {
-                $cart->updateTotals();
+                $cart->updreateTotals();
             }
 
             return response()->json([
@@ -60,7 +95,7 @@ class CartController extends Controller
                 'html' => '
                 <div class="text-center py-4">
                     <i class="fi-rr-exclamation" style="font-size: 3rem; color: #dc3545;"></i>
-                    <p class="mt-2 text-danger">Error loading cart</p>
+                    <p class="mt-2 text-danger">Error loading cart <strong><strong>' . e($e->getMessage()) . '</strong> </strong> </p>
                     <button class="btn btn-dark btn-sm mt-2" onclick="window.shoppingCart.loadCartSidebar()">
                         Retry
                     </button>
@@ -261,6 +296,10 @@ class CartController extends Controller
     /**
      * Update cart item quantity (AJAX)
      */
+
+    /**
+     * Update cart item quantity (AJAX)
+     */
     public function updateQuantity(Request $request, $cartItemId)
     {
         $request->validate([
@@ -268,11 +307,14 @@ class CartController extends Controller
         ]);
 
         try {
-            $cartItem = CartItem::with('product', 'variant')->findOrFail($cartItemId);
-            $cart = $cartItem->cart;
+            $cart = $this->getOrCreateCart();
+            $cartItem = $cart->items()->where('id', $cartItemId)->first();
 
-            if ($cart->session_id !== $this->getCartSessionId()) {
-                return response()->json(['error' => 'Unauthorized'], 403);
+            if (!$cartItem) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Cart item not found'
+                ], 404);
             }
 
             // Check stock for regular products
@@ -295,34 +337,40 @@ class CartController extends Controller
             return $this->getCartResponse('Quantity updated successfully!');
 
         } catch (\Exception $e) {
+            \Log::error('Error updating cart quantity: ' . $e->getMessage(), [
+                'cartItemId' => $cartItemId,
+                'quantity' => $request->quantity,
+                'message' =>  $e->getMessage().$e->getLine()
+            ]);
+
             return response()->json([
                 'success' => false,
                 'message' => $e->getMessage()
             ], 422);
         }
     }
-
     /**
      * Remove item from cart (AJAX)
      */
     public function removeItem($cartItemId)
     {
         try {
-            $cartItem = CartItem::findOrFail($cartItemId);
-            $cart = $cartItem->cart;
-
-            if ($cart->session_id !== $this->getCartSessionId()) {
-                return response()->json(['error' => 'Unauthorized'], 403);
+            // Check if cart item exists and belongs to current user's cart
+            $cart = $this->getOrCreateCart();
+            $cartItem = $cart->items()->where('id', $cartItemId)->first();
+            if (!$cartItem) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Cart item not found or already removed'
+                ], 404);
             }
 
             DB::transaction(function () use ($cartItem, $cart) {
-                // Delete custom size record if exists
                 if ($cartItem->customSize) {
                     $cartItem->customSize->delete();
                 }
 
                 $cartItem->delete();
-
                 if ($cart->items()->count() === 0) {
                     $cart->delete();
                     Cookie::queue(Cookie::forget(self::CART_COOKIE_NAME));
@@ -334,12 +382,19 @@ class CartController extends Controller
             return $this->getCartResponse('Item removed from cart!');
 
         } catch (\Exception $e) {
+            \Log::error('Error removing cart item: ' . $e->getMessage(), [
+                'cartItemId' => $cartItemId,
+                'session_id' => $this->getCartSessionId(),
+                'message' =>  $e->getMessage().$e->getLine()
+            ]);
+
             return response()->json([
                 'success' => false,
                 'message' => 'Error removing item: ' . $e->getMessage()
             ], 500);
         }
     }
+
 
     /**
      * Clear entire cart (AJAX)

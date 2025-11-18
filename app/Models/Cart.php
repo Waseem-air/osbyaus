@@ -44,4 +44,11 @@ class Cart extends Model
         $this->total = $this->subtotal;
         $this->save();
     }
+
+    public function updreateTotals()
+    {
+        $this->subtotal = $this->items->sum('total');
+        $this->total = $this->subtotal;
+        $this->save();
+    }
 }

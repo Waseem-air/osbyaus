@@ -31,6 +31,14 @@ class AuthenticatedSessionController extends Controller
         $request->authenticate();
         $request->session()->regenerate();
         $user = Auth::user();
+        if ($request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Login successful',
+                'redirect' => $this->redirectBasedOnRole($user->role)
+            ]);
+        }
+
         return redirect()->intended(
             $this->redirectBasedOnRole($user->role)
         );

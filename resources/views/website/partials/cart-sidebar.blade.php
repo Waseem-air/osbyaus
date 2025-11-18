@@ -57,11 +57,8 @@
                 <a href="{{ route('cart.index') }}" class="btn btn-soft-dark">
                     <i class="fi-rr-shopping-cart me-2"></i> Go to cart
                 </a>
-                <a href="{{ route('checkout') }}" class="btn btn-dark">Proceed to checkout
-                    <i class="ecicon eci-angle-right ms-2"></i>
-                </a>
 
-                <button class="btn btn-outline-danger btn-sm mt-2 clear-cart-btn w-100">
+                <button class="btn btn-soft-dark clear-cart-btn w-100 mt-2">
                     <i class="ecicon eci-trash me-1"></i> Clear Entire Cart
                 </button>
             </div>
