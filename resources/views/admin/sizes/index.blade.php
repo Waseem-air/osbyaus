@@ -200,7 +200,7 @@
     /* Increase width and padding for each column */
     .custom-sizes-table th,
     .custom-sizes-table td {
-        min-width: 150px; /* wider columns */
+        width: 130px; /* wider columns */
         padding: 16px 12px; /* more spacing inside cells */
         font-size: 16px; /* readable font */
     }

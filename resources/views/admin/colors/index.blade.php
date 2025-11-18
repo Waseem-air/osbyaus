@@ -2,109 +2,91 @@
 @section('content')
     <style>
 
-        /* ========================== */
-        /* Colors Table               */
-        /* ========================== */
-        .wg-table.table-all-colors {
-            display: flex;
-            flex-direction: column;
-            gap: 1px;
-            width: 100%;
-            padding: 2px;
-        }
 
-        /* Table Header */
-        .wg-table.table-all-colors ul.table-title {
-            display: flex;
-            justify-content: flex-start;
-            gap: 20px;
-            font-weight: 600;
-            color: var(--Heading);
-            padding-bottom: 2px;
-        }
+/* Remove all borders */
+.custom-colors-table,
+.custom-colors-table th,
+.custom-colors-table td {
+    border: none !important;
+}
 
-        .wg-table.table-all-colors ul.table-title li {
-            flex: 1;
-            min-width: 120px;
-        }
+/* Font size */
+.custom-colors-table td,
+.custom-colors-table th {
+    font-size: 16px;
+    vertical-align: middle;
+    padding: 12px 10px;
+    white-space: nowrap; /* Prevent wrapping */
+}
 
-        .wg-table.table-all-colors ul.table-title li:first-child {
-            flex: 2;
-        }
+/* Color preview box */
+.color-preview {
+    width: 25px;
+    height: 25px;
+    border-radius: 4px;
+    display: inline-block;
+    border: 1px solid #ddd;
+}
 
-        /* Table Rows */
-        .wg-table.table-all-colors .wg-product {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            padding: 12px 15px;
-        }
+/* Status badges */
+.status-badge {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 500;
+}
 
-        /* Columns */
-        .wg-table.table-all-colors .wg-product > div {
-            flex: 1;
-            min-width: 120px;
-            color: var(--Body-Text);
-        }
+.status-badge.active {
+    background-color: #d4edda;
+    color: #155724;
+}
 
-        /* Name column */
-        .wg-table.table-all-colors .wg-product .name {
-            flex: 2;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
+.status-badge.inactive {
+    background-color: #f8d7da;
+    color: #721c24;
+}
 
-        /* Color preview */
-        .color-preview {
-            width: 40px;
-            height: 40px;
-            border-radius: 8px;
-            border: 2px solid #e9ecef;
-            display: inline-block;
-            vertical-align: middle;
-            transition: transform 0.2s ease;
-        }
+/* Item actions */
+.item-actions a {
+    display: inline-block;
+    margin-right: 8px;
+    color: #6c757d;
+    text-decoration: none;
+}
 
-        .color-preview:hover {
-            transform: scale(1.1);
-        }
+.item-actions a:hover {
+    color: #495057;
+}
 
-        /* Status badges */
-        .status-badge {
-            padding: 4px 12px !important;
-            border-radius: 20px !important;
-            font-size: 12px !important;
-            font-weight: 600 !important;
-            justify-content: center !important;
-            cursor: pointer !important;
-            user-select: none !important;
-        }
+/* Box styling */
+.wg-box {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    padding: 20px;
+}
 
-        .status-badge.active {
-            background-color: var(--Palette-Green-500) !important;
-            color: var(--White) !important;
-            border: 1px solid var(--Palette-Green-500) !important;
-        }
+/* Responsive table */
+.table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
 
-        .status-badge.inactive {
-            background-color: var(--Palette-Red-400) !important;
-            color: var(--White) !important;
-            border: 1px solid var(--Palette-Red-400) !important;
-        }
+/* Mobile improvements */
+@media (max-width: 767px) {
+    .custom-colors-table tr th,
+    .custom-colors-table tr td {
+        padding: 14px 12px;
+        font-size: 15px;
+        width: 127px; /* wider for mobile */
+    }
 
-        /* Responsive */
-        @media (max-width: 768px) {
-            .wg-table.table-all-colors ul.table-title,
-            .wg-table.table-all-colors .wg-product {
-                flex-direction: column;
-                align-items: flex-start;
-            }
+    .wg-box {
+        padding: 15px 10px;
+    }
+}
 
-            .wg-product .name {
-                margin-bottom: 10px;
-            }
-        }
+
     </style>
 
     <div class="main-content">
@@ -135,61 +117,79 @@
                     </button>
                 </div>
 
-                <!-- Colors Table -->
-                <div class="wg-box mt-5">
-                    <div class="wg-table table-all-colors">
-                        <ul class="table-title flex gap20 mb-14">
-                            <li><div class="body-title">Color Name</div></li>
-                            <li><div class="body-title">Hex Code</div></li>
-                            <li><div class="body-title">Preview</div></li>
-                            <li><div class="body-title">Status</div></li>
-                            <li><div class="body-title">Created</div></li>
-                            <li><div class="body-title">Actions</div></li>
-                        </ul>
+                <!-- Colors Table (Bootstrap Responsive) -->
+ 
+   <div class="wg-box mt-5">
+    <div class="table-responsive">
+        <table class="table custom-colors-table mb-0">
+            <thead>
+                <tr>
+                    <th>Color Name</th>
+                    <th>Hex Code</th>
+                    <th>Preview</th>
+                    <th>Status</th>
+                    <th>Created</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
 
-                        <div class="flex flex-column" id="colorsList">
-                            @foreach($colors as $color)
-                                <div class="wg-product item-row gap20" id="color-{{ $color->id }}">
-                                    <div class="name">
-                                        <div class="title line-clamp-2 mb-0">
-                                            <a href="#" class="body-text fw-bold">{{ $color->name }}</a>
-                                        </div>
-                                    </div>
+            <tbody id="colorsList">
 
-                                    <div class="body-text text-main-dark">{{ $color->hex_code }}</div>
+                @foreach($colors as $color)
+                    <tr id="color-{{ $color->id }}">
+                        <td class="fw-bold">{{ $color->name }}</td>
 
-                                    <div class="body-text">
-                                        <span class="color-preview" style="background-color: {{ $color->hex_code }};"></span>
-                                    </div>
-                                    <div>
-                                        @if($color->is_active)
-                                            <span class="status-badge active">Active</span>
-                                        @else
-                                            <span class="status-badge inactive">Inactive</span>
-                                        @endif
-                                    </div>
+                        <td>{{ $color->hex_code }}</td>
 
-                                    <div class="body-text text-main-dark">{{ $color->created_at->format('M d, Y') }}</div>
+                        <td>
+                            <span class="color-preview" style="background-color: {{ $color->hex_code }};"></span>
+                        </td>
 
-                                    <div class="item-actions">
-                                        <a href="javascript:void(0)" class="edit-color" data-id="{{ $color->id }}" data-bs-toggle="modal" data-bs-target="#editColorModal" title="Edit Color">
-                                            <i class="icon-edit"></i>
-                                        </a>
-                                        <a href="javascript:void(0)" class="delete-color" data-id="{{ $color->id }}" data-name="{{ $color->name }}" title="Delete Color">
-                                            <i class="icon-trash-2"></i>
-                                        </a>
-                                    </div>
-                                </div>
-                            @endforeach
-
-                            @if($colors->isEmpty())
-                                <div class="text-center py-5">
-                                    <div class="body-text text-muted mb-3">No colors found</div>
-                                </div>
+                        <td>
+                            @if($color->is_active)
+                                <span class="status-badge active">Active</span>
+                            @else
+                                <span class="status-badge inactive">Inactive</span>
                             @endif
-                        </div>
-                    </div>
-                </div>
+                        </td>
+
+                        <td>{{ $color->created_at->format('M d, Y') }}</td>
+
+                        <td class="item-actions">
+                            <a href="javascript:void(0)" 
+                               class="edit-color" 
+                               data-id="{{ $color->id }}" 
+                               data-bs-toggle="modal" 
+                               data-bs-target="#editColorModal"
+                               title="Edit Color">
+                                <i class="icon-edit"></i>
+                            </a>
+
+                            <a href="javascript:void(0)" 
+                               class="delete-color"
+                               data-id="{{ $color->id }}"
+                               data-name="{{ $color->name }}"
+                               title="Delete Color">
+                                <i class="icon-trash-2"></i>
+                            </a>
+                        </td>
+                    </tr>
+                @endforeach
+
+                @if($colors->isEmpty())
+                    <tr>
+                        <td colspan="6" class="text-center py-4 text-muted">
+                            No Colors Found
+                        </td>
+                    </tr>
+                @endif
+
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
             </div>
         </div>
         @include('admin.components.footer')
