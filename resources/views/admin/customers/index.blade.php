@@ -65,7 +65,7 @@
                         </a>
 
                         <!-- Add New Button -->
-                        <button class="tf-button style-1 w208" data-bs-toggle="modal" data-bs-target="#addCustomerModal">
+                        <button class="tf-button style-1 w208 " data-bs-toggle="modal" data-bs-target="#addCustomerModal">
                             <i class="icon-plus"></i> Add New Customer
                         </button>
                 </div>

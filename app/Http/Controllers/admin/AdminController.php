@@ -13,7 +13,7 @@ class AdminController extends Controller
     }
      public function store_menu()
     {
-        return view('admin.transaction');
+        return view('admin.storemenu');
     }
      public function dashboard()
     {

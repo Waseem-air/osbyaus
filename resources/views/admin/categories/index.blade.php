@@ -620,29 +620,41 @@
     </script>
 
     <script>
-        // ===============================
-        // Search Categories Without AJAX
-        // ===============================
-        $('#searchCategory').on('keyup', function () {
-            const value = $(this).val().toLowerCase();
+$(document).ready(function() {
+    $('#searchCategory').on('keyup', function() {
+        const value = $(this).val().toLowerCase().trim();
 
-            $('#categoriesList .wg-product').filter(function () {
-                const text = $(this).text().toLowerCase();
-                $(this).toggle(text.indexOf(value) > -1);
-            });
+        const rows = $('#categoriesList tr');
 
-            // Show empty message if no result
-            if ($('#categoriesList .wg-product:visible').length === 0) {
-                if (!$('#noResults').length) {
-                    $('#categoriesList').append(`
-                <div id="noResults" class="text-center py-5">
-                    <div class="body-text text-muted mb-3">No categories found</div>
-                </div>
-            `);
-                }
+        let hasVisible = false;
+
+        rows.each(function() {
+            const rowText = $(this).text().toLowerCase();
+
+            if (rowText.includes(value)) {
+                $(this).show();
+                hasVisible = true;
             } else {
-                $('#noResults').remove();
+                $(this).hide();
             }
         });
-    </script>
+
+        // Show "No categories found" message if none visible
+        if (!hasVisible) {
+            if (!$('#noResults').length) {
+                $('#categoriesList').append(`
+                    <tr id="noResults">
+                        <td colspan="5" class="text-center py-5">
+                            <div class="body-text text-muted mb-3">No categories found</div>
+                        </td>
+                    </tr>
+                `);
+            }
+        } else {
+            $('#noResults').remove();
+        }
+    });
+});
+</script>
+
 @endpush

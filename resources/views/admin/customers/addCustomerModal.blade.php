@@ -129,12 +129,13 @@
 
                 <!-- Modal Footer -->
                 <div class="modal-footer">
-                    <button type="button" class="tf-button style-1 w208" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="tf-button style-1 w208 d-flex align-items-center" id="editCustomerBtn">
-                        <span class="spinner-border spinner-border-sm me-2 d-none"></span>
-                        Update Customer
-                    </button>
-                </div>
+    <button type="button" class="tf-button style-1 w208" data-bs-dismiss="modal">Cancel</button>
+    <button type="submit" class="tf-button style-1 w208 d-flex align-items-center" id="editCustomerBtn">
+        <span class="spinner-border spinner-border-sm me-2 d-none"></span>
+        Update Customer
+    </button>
+</div>
+
             </form>
         </div>
     </div>
