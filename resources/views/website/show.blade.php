@@ -436,4 +436,90 @@
         </section>
     @endif
     <!-- Related Products Section End -->
+
+    <!-- Ec Size Chart Start -->
+    <div class="ec-side-cart-overlay"></div>
+    <div id="ec-side-size-chart" class="ec-side-cart">
+        <div class="ec-cart-inner">
+            <div class="ec-cart-top">
+                <div class="ec-cart-title">
+                    <span class="cart_title">Custom Size</span>
+                    <button class="ec-close">×</button>
+                </div>
+                <div class="ec-size-from">
+                    <div class="row gy-4">
+                        <div class="col-12 mb-3">
+                            <h5 class="text-dark fw-semibold">Shirt</h5>
+                        </div>
+                        <div class="col-sm-6">
+                            <label for="">Shirt Length</label>
+                            <input type="text" class="form-control" placeholder="Enter Size">
+                        </div>
+                        <div class="col-sm-6">
+                            <label for="">Shoulder</label>
+                            <input type="text" class="form-control" placeholder="Enter Size">
+                        </div>
+                        <div class="col-sm-6">
+                            <label for="">Chest</label>
+                            <input type="text" class="form-control" placeholder="Enter Size">
+                        </div>
+                        <div class="col-sm-6">
+                            <label for="">Waist</label>
+                            <input type="text" class="form-control" placeholder="Enter Size">
+                        </div>
+                        <div class="col-sm-6">
+                            <label for="">Hips</label>
+                            <input type="text" class="form-control" placeholder="Enter Size">
+                        </div>
+                        <div class="col-sm-6">
+                            <label for="">Sleeves length</label>
+                            <input type="text" class="form-control" placeholder="Enter Size">
+                        </div>
+                        <div class="col-12">
+                            <div class="size-divider"></div>
+                        </div>
+                        <div class="col-12 mb-3">
+                            <h5 class="text-dark fw-semibold">Trouser</h5>
+                        </div>
+                        <div class="col-sm-6">
+                            <label for="">Waist stretch</label>
+                            <input type="text" class="form-control" placeholder="Enter Size">
+                        </div>
+                        <div class="col-sm-6">
+                            <label for="">Waist relax</label>
+                            <input type="text" class="form-control" placeholder="Enter Size">
+                        </div>
+                        <div class="col-sm-6">
+                            <label for="">Thigh</label>
+                            <input type="text" class="form-control" placeholder="Enter Size">
+                        </div>
+                        <div class="col-sm-6">
+                            <label for="">Calf</label>
+                            <input type="text" class="form-control" placeholder="Enter Size">
+                        </div>
+                        <div class="col-sm-6">
+                            <label for="">Trouser bottom (paincha)</label>
+                            <input type="text" class="form-control" placeholder="Enter Size">
+                        </div>
+                        <div class="col-sm-6">
+                            <label for="">Trouser length</label>
+                            <input type="text" class="form-control" placeholder="Enter Size">
+                        </div>
+                        <div class="col-12">
+                            <div class="d-flex flex-column gap-3">
+                                <a href="cart.html" class="btn btn-soft-dark p-2 h-auto">
+                                    <i class="fi-rr-shopping-cart me-2"></i> Go to cart
+                                </a>
+                                <a href="checkout.html" class="btn btn-dark p-2 h-auto">
+                                    Proceed to checkout
+                                    <i class="ecicon eci-angle-right ms-2"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Ec Size Chart End -->
 @endsection

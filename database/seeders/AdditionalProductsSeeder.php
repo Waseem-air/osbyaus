@@ -195,6 +195,172 @@ class AdditionalProductsSeeder extends Seeder
                 'sale_price' => 45.99,
                 'stock_quantity' => 38,
                 'sku' => 'PAL-PNT-115'
+            ],
+            // Additional 15 products
+            [
+                'name' => 'Tulle Ball Gown',
+                'description' => 'Dreamy tulle ball gown with layered skirt and sweetheart neckline. Perfect for proms and formal dances.',
+                'fabric' => 'Tulle',
+                'embellishment' => 'Sequins',
+                'cut' => 'Ball Gown',
+                'regular_price' => 189.99,
+                'sale_price' => 169.99,
+                'stock_quantity' => 20,
+                'sku' => 'TUL-GWN-116'
+            ],
+            [
+                'name' => 'Cashmere Turtleneck Sweater',
+                'description' => 'Luxurious cashmere turtleneck sweater with ribbed details. Ultra-soft and perfect for winter elegance.',
+                'fabric' => 'Cashmere',
+                'embellishment' => 'Ribbed',
+                'cut' => 'Regular',
+                'regular_price' => 156.99,
+                'sale_price' => 139.99,
+                'stock_quantity' => 25,
+                'sku' => 'CSH-SWT-117'
+            ],
+            [
+                'name' => 'Brocade Blazer Dress',
+                'description' => 'Sophisticated brocade blazer dress with gold thread details and structured silhouette. Office to evening wear.',
+                'fabric' => 'Brocade',
+                'embellishment' => 'Metallic Thread',
+                'cut' => 'Blazer',
+                'regular_price' => 178.99,
+                'sale_price' => 159.99,
+                'stock_quantity' => 18,
+                'sku' => 'BRC-DRS-118'
+            ],
+            [
+                'name' => 'Floral Print Sundress',
+                'description' => 'Charming floral print sundress with smocked bodice and tiered skirt. Perfect for summer brunches and dates.',
+                'fabric' => 'Cotton Blend',
+                'embellishment' => 'Floral Print',
+                'cut' => 'Fit and Flare',
+                'regular_price' => 67.99,
+                'sale_price' => 57.99,
+                'stock_quantity' => 42,
+                'sku' => 'FLR-SUN-119'
+            ],
+            [
+                'name' => 'Sequin Mini Dress',
+                'description' => 'Sparkling sequin mini dress with sleeveless design and crew neck. Perfect for New Year parties and club nights.',
+                'fabric' => 'Polyester',
+                'embellishment' => 'Sequins',
+                'cut' => 'Bodycon',
+                'regular_price' => 98.99,
+                'sale_price' => 84.99,
+                'stock_quantity' => 30,
+                'sku' => 'SEQ-MIN-120'
+            ],
+            [
+                'name' => 'Corduroy Overall Dress',
+                'description' => 'Trendy corduroy overall dress with button front and adjustable straps. Vintage inspired casual wear.',
+                'fabric' => 'Corduroy',
+                'embellishment' => 'None',
+                'cut' => 'A-Line',
+                'regular_price' => 72.99,
+                'sale_price' => 62.99,
+                'stock_quantity' => 35,
+                'sku' => 'CRD-OVR-121'
+            ],
+            [
+                'name' => 'Lace Trim Camisole Set',
+                'description' => 'Elegant lace trim camisole set with matching shorts. Perfect for layering or sleepwear.',
+                'fabric' => 'Satin',
+                'embellishment' => 'Lace Trim',
+                'cut' => 'Fitted',
+                'regular_price' => 45.99,
+                'sale_price' => 38.99,
+                'stock_quantity' => 50,
+                'sku' => 'LAC-CAM-122'
+            ],
+            [
+                'name' => 'Wool Blend Trench Coat',
+                'description' => 'Classic wool blend trench coat with double-breasted front and belt. Timeless outerwear piece.',
+                'fabric' => 'Wool Blend',
+                'embellishment' => 'None',
+                'cut' => 'Regular',
+                'regular_price' => 198.99,
+                'sale_price' => 179.99,
+                'stock_quantity' => 20,
+                'sku' => 'WOL-TRN-123'
+            ],
+            [
+                'name' => 'Embroidered Peplum Top',
+                'description' => 'Feminine embroidered peplum top with three-quarter sleeves and flared hem. Creates beautiful silhouette.',
+                'fabric' => 'Crepe',
+                'embellishment' => 'Embroidery',
+                'cut' => 'Peplum',
+                'regular_price' => 58.99,
+                'sale_price' => 49.99,
+                'stock_quantity' => 40,
+                'sku' => 'PEP-TOP-124'
+            ],
+            [
+                'name' => 'Velour Track Set',
+                'description' => 'Comfortable velour track set with zip-up hoodie and matching pants. Sporty luxury for casual days.',
+                'fabric' => 'Velour',
+                'embellishment' => 'None',
+                'cut' => 'Regular',
+                'regular_price' => 89.99,
+                'sale_price' => 76.99,
+                'stock_quantity' => 33,
+                'sku' => 'VEL-TRK-125'
+            ],
+            [
+                'name' => 'Chiffon Tiered Maxi Skirt',
+                'description' => 'Flowy chiffon tiered maxi skirt with elastic waist and multiple layers. Bohemian and romantic.',
+                'fabric' => 'Chiffon',
+                'embellishment' => 'Tiered',
+                'cut' => 'A-Line',
+                'regular_price' => 63.99,
+                'sale_price' => 54.99,
+                'stock_quantity' => 38,
+                'sku' => 'CHF-SKT-126'
+            ],
+            [
+                'name' => 'Faux Fur Coat',
+                'description' => 'Luxurious faux fur coat with shawl collar and full length. Makes a bold fashion statement in winter.',
+                'fabric' => 'Faux Fur',
+                'embellishment' => 'None',
+                'cut' => 'Oversized',
+                'regular_price' => 167.99,
+                'sale_price' => 149.99,
+                'stock_quantity' => 15,
+                'sku' => 'FUR-CT-127'
+            ],
+            [
+                'name' => 'Denim Shirt Dress',
+                'description' => 'Versatile denim shirt dress with button front and belt. Can be dressed up or down for various occasions.',
+                'fabric' => 'Denim',
+                'embellishment' => 'None',
+                'cut' => 'Shirt',
+                'regular_price' => 74.99,
+                'sale_price' => 64.99,
+                'stock_quantity' => 28,
+                'sku' => 'DNM-DRS-128'
+            ],
+            [
+                'name' => 'Metallic Knit Dress',
+                'description' => 'Eye-catching metallic knit dress with long sleeves and crew neck. Perfect for holiday parties and events.',
+                'fabric' => 'Metallic Knit',
+                'embellishment' => 'Metallic Thread',
+                'cut' => 'Bodycon',
+                'regular_price' => 112.99,
+                'sale_price' => 96.99,
+                'stock_quantity' => 22,
+                'sku' => 'MTL-KNT-129'
+            ],
+            [
+                'name' => 'Organza Blouse',
+                'description' => 'Delicate organza blouse with puff sleeves and ribbon tie neck. Feminine and elegant for special occasions.',
+                'fabric' => 'Organza',
+                'embellishment' => 'Ribbon Tie',
+                'cut' => 'Relaxed',
+                'regular_price' => 82.99,
+                'sale_price' => 69.99,
+                'stock_quantity' => 26,
+                'sku' => 'ORG-BLS-130'
             ]
         ];
 
@@ -280,6 +446,6 @@ class AdditionalProductsSeeder extends Seeder
             }
         }
 
-        $this->command->info('Successfully created 15 additional fashion products with existing images!');
+        $this->command->info('Successfully created 30 fashion products with existing images!');
     }
 }
