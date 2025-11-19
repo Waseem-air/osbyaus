@@ -97,7 +97,8 @@
 
                                         <!-- Password -->
                                         <div class="col-12 mb-1">
-                                            <label>Password</label>
+                                            <label>Password (<small class="text-muted mt-0 pt-0" style="font-size: 12px; color: #d9534f !important;">Password must be at least 8 characters.)
+                                                </small></label>
                                             <div class="position-relative">
                                                 <input type="password"
                                                        class="form-control auth-input"
@@ -110,11 +111,6 @@
             <i class="fi-rr-eye"></i>
         </span>
                                             </div>
-
-                                            <!-- Small note -->
-                                            <small class="text-muted mt-0 pt-0" style="font-size: 12px;">
-                                                Password must be at least 8 characters.
-                                            </small>
 
                                             @error('password')
                                             <div class="invalid-feedback d-block">{{ $message }}</div>
