@@ -47,12 +47,9 @@
     }
 
     .btn-return {
-        background: #f8f9fa;
-        color: #333;
         padding: 10px 20px;
         border-radius: 5px;
         text-decoration: none;
-        border: 1px solid #dee2e6;
         transition: all 0.3s ease;
     }
 
@@ -67,8 +64,6 @@
     }
 
     .clear-cart-page-btn {
-        background: #dc3545;
-        color: white;
         padding: 10px 20px;
         border-radius: 5px;
         text-decoration: none;
@@ -77,8 +72,6 @@
     }
 
     .clear-cart-page-btn:hover {
-        background: #c82333;
-        color: white;
         text-decoration: none;
     }
 
@@ -173,10 +166,8 @@
         }
 
         .ec-cart-pro-remove a {
-            background: #ff4444;
             color: white;
             width: 40px;
-            height: 40px;
             border-radius: 50%;
             display: flex;
             align-items: center;
