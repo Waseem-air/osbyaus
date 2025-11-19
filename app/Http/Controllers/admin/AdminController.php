@@ -23,4 +23,12 @@ class AdminController extends Controller
     {
         return view('admin.profile&setting');
     }
+     public function media_links()
+    {
+        return view('admin.medialinks');
+    }
+     public function orders_management()
+    {
+        return view('admin.orders');
+    }
 }

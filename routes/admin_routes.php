@@ -17,6 +17,10 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin'])->grou
     Route::get('/transaction', [AdminController::class, 'transaction'])->name('transaction');
     Route::get('/store-menu', [AdminController::class, 'store_menu'])->name('store.menu');
     Route::get('/profile', [AdminController::class, 'profile'])->name('profile');
+    Route::get('/media-links', [AdminController::class, 'media_links'])->name('media.links');
+    Route::get('/orders-management', [AdminController::class, 'orders_management'])->name('orders.management');
+
+
 
 
     // Color Routes

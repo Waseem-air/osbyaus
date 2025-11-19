@@ -24,6 +24,20 @@
                                             <div class="text">Dashboard</div>
                                         </a>
                                     </li>
+                                    <li class="menu-item">
+                       <a href="{{ url('/admin/orders-management') }}" class="">
+    <div class="icon">
+        <!-- Orders / Shopping Bag Icon -->
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+             xmlns="http://www.w3.org/2000/svg">
+            <path d="M6 7V6C6 3.79 7.79 2 10 2C12.21 2 14 3.79 14 6V7H17C17.55 7 18 7.45 18 8V20C18 21.1 17.1 22 16 22H4C2.9 22 2 21.1 2 20V8C2 7.45 2.45 7 3 7H6ZM8 6V7H12V6C12 4.9 11.1 4 10 4C8.9 4 8 4.9 8 6ZM4 8V20H16V8H4Z" fill="#111111"/>
+            <path d="M10 12C9.45 12 9 12.45 9 13C9 13.55 9.45 14 10 14C10.55 14 11 13.55 11 13C11 12.45 10.55 12 10 12Z" fill="#111111"/>
+        </svg>
+    </div>
+    <div class="text">Orders Management</div>
+</a>
+
+                    </li>
                     <li class="menu-item">
                         <a href="{{ url('/admin/transaction') }}" class="">
                             <div class="icon">
@@ -90,8 +104,8 @@
         </li>
 
         <!-- Social Media Links -->
-        <li class="sub-menu-item {{ request()->routeIs('admin.product.add') ? 'active' : '' }}">
-            <a href="{{ route('admin.product.add') }}" class="">
+        <li class="sub-menu-item {{ request()->routeIs('admin.media.links') ? 'active' : '' }}">
+            <a href="{{ route('admin.media.links') }}" class="">
                 <div class="icon"><i class="icon-share-2"></i></div>
                 <div class="text">Social Media Links</div>
             </a>
