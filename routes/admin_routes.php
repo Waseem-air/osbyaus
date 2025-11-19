@@ -16,6 +16,8 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin'])->grou
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
     Route::get('/transaction', [AdminController::class, 'transaction'])->name('transaction');
     Route::get('/store-menu', [AdminController::class, 'store_menu'])->name('store.menu');
+    Route::get('/profile', [AdminController::class, 'profile'])->name('profile');
+
 
     // Color Routes
     Route::prefix('colors')->name('color.')->group(function () {

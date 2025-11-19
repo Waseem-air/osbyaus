@@ -72,6 +72,35 @@
                         </a>
                     </li>
 
+
+                    <li class="menu-item has-children {{ request()->routeIs('admin.*') ? 'active' : '' }}">
+    <a href="javascript:void(0);" class="menu-item-button">
+        <div class="icon"><i class="icon-file-plus"></i></div>
+        <div class="text">Store Setting</div>
+    </a>
+
+    <ul class="sub-menu" style="display: {{ request()->routeIs('admin.product.*') ? 'block' : 'none' }};">
+        
+        <!-- Profile & Security -->
+        <li class="sub-menu-item {{ request()->routeIs('admin.profile') ? 'active' : '' }}">
+            <a href="{{ route('admin.profile') }}" class="">
+                <div class="icon"><i class="icon-user"></i></div>
+                <div class="text">Profile & Security</div>
+            </a>
+        </li>
+
+        <!-- Social Media Links -->
+        <li class="sub-menu-item {{ request()->routeIs('admin.product.add') ? 'active' : '' }}">
+            <a href="{{ route('admin.product.add') }}" class="">
+                <div class="icon"><i class="icon-share-2"></i></div>
+                <div class="text">Social Media Links</div>
+            </a>
+        </li>
+
+    </ul>
+</li>
+
+
                     <!-- Attributes Dropdown -->
                     <li class="menu-item has-children {{ request()->routeIs('admin.color.*') || request()->routeIs('admin.size.*') ? 'active' : '' }}">
                         <a href="javascript:void(0);" class="menu-item-button">
