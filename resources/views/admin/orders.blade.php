@@ -292,9 +292,9 @@
 <div class="main-content">
     <div class="main-content-inner">
         <div class="container mt-4">
-
+            <h1>Order Management</h1>
             <!-- ================= ORDER TABS ================= -->
-            <div class="row">
+            <div class="row mt-5">
                 <div class="col-12 wg-box-1">
                     <div class="custom-tab-btns mb-0">
                         <button class="tab-btn active" data-bs-toggle="tab" data-bs-target="#allOrders">All Orders (441)</button>
