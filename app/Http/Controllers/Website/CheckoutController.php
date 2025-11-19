@@ -77,17 +77,14 @@ class CheckoutController extends Controller
             // Validate stock before creating order
             $this->validateStock($cart);
 
-            // Create order
+            // Create order (but don't clear cart yet)
             $order = $this->createOrder($request, $user, $cart);
 
             // Create order items
             $this->createOrderItems($order, $cart);
 
-            // Update product quantities (reduce stock)
-            $this->updateProductQuantities($cart);
-
-            // Clear the cart
-            $this->clearSessionCart($cart);
+            // DON'T update product quantities yet - wait for payment
+            // DON'T clear the cart yet - wait for payment
 
             DB::commit();
 
@@ -140,6 +137,9 @@ class CheckoutController extends Controller
                     'stripe_payment_intent_id' => $session->payment_intent,
                 ]);
 
+                // NOW clear the cart and update stock quantities after successful payment
+                $this->finalizeOrder($order);
+
                 return view('website.checkout.success', compact('order'));
             } else {
                 return redirect()->route('checkout.stripe.cancel')->with('error', 'Payment was not successful.');
@@ -158,6 +158,7 @@ class CheckoutController extends Controller
     {
         $sessionId = $request->get('session_id');
         $message = 'Your payment was cancelled. You can try again.';
+
         if ($sessionId) {
             try {
                 Stripe::setApiKey(config('services.stripe.secret'));
@@ -168,7 +169,7 @@ class CheckoutController extends Controller
                         'payment_status' => 'cancelled',
                         'status' => 'cancelled',
                     ]);
-                    $message = 'Your order has been cancelled.';
+                    $message = 'Your order has been cancelled. You can try again with your existing cart items.';
                 }
             } catch (Exception $e) {
                 \Log::error('Stripe cancel error: ' . $e->getMessage());
@@ -234,6 +235,58 @@ class CheckoutController extends Controller
         } catch (Exception $e) {
             \Log::error('Webhook error: ' . $e->getMessage());
             return response()->json(['error' => 'Webhook handler failed'], 500);
+        }
+    }
+
+    /**
+     * Finalize order after successful payment - clear cart and update stock
+     */
+    private function finalizeOrder(Order $order)
+    {
+        try {
+            DB::beginTransaction();
+
+            // Get the user's current cart
+            $cart = $this->getUserCart();
+
+            if ($cart) {
+                // Update product quantities (reduce stock)
+                $this->updateProductQuantitiesFromOrder($order);
+
+                // Clear the cart
+                $this->clearSessionCart($cart);
+            }
+
+            DB::commit();
+
+        } catch (Exception $e) {
+            DB::rollBack();
+            \Log::error('Error finalizing order: ' . $e->getMessage());
+            throw $e;
+        }
+    }
+
+    /**
+     * Update product quantities from order items (after payment)
+     */
+    private function updateProductQuantitiesFromOrder(Order $order)
+    {
+        foreach ($order->items as $orderItem) {
+            if (!$orderItem->custom_size_id) {
+                if ($orderItem->product_variant_id) {
+                    // Update variant stock
+                    $variant = \App\Models\ProductVariant::find($orderItem->product_variant_id);
+                    if ($variant) {
+                        $variant->decrement('stock_quantity', $orderItem->quantity);
+                    }
+                } else {
+                    // Update product stock
+                    $product = \App\Models\Product::find($orderItem->product_id);
+                    if ($product) {
+                        $product->decrement('stock_quantity', $orderItem->quantity);
+                    }
+                }
+            }
         }
     }
 
@@ -341,6 +394,9 @@ class CheckoutController extends Controller
                 'stripe_payment_intent_id' => $session->payment_intent,
             ]);
 
+            // Finalize order (clear cart and update stock) via webhook too
+            $this->finalizeOrder($order);
+
             \Log::info("Order {$order->order_number} payment completed via webhook.");
         }
     }
@@ -354,6 +410,9 @@ class CheckoutController extends Controller
                 'payment_status' => 'paid',
                 'status' => 'processing',
             ]);
+
+            // Finalize order
+            $this->finalizeOrder($order);
         }
     }
 
@@ -366,6 +425,7 @@ class CheckoutController extends Controller
                 'payment_status' => 'failed',
                 'status' => 'cancelled',
             ]);
+            // Don't clear cart for failed payments - user can try again
         }
     }
 
@@ -519,20 +579,8 @@ class CheckoutController extends Controller
         }
     }
 
-    private function updateProductQuantities($cart)
-    {
-        foreach ($cart->items as $cartItem) {
-            if (!$cartItem->custom_size_id) {
-                if ($cartItem->variant) {
-                    // Update variant stock
-                    $cartItem->variant->decrement('stock_quantity', $cartItem->quantity);
-                } else {
-                    // Update product stock
-                    $cartItem->product->decrement('stock_quantity', $cartItem->quantity);
-                }
-            }
-        }
-    }
+    // REMOVED: updateProductQuantities - now handled in finalizeOrder
+    // REMOVED: clearSessionCart - now handled in finalizeOrder
 
     private function clearSessionCart($cart)
     {

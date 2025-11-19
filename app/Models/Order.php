@@ -12,7 +12,7 @@ class Order extends Model
     protected $fillable = [
         'order_number', 'user_id', 'subtotal', 'tax_amount', 'shipping_amount',
         'total_amount', 'status', 'payment_status', 'payment_method',
-        'stripe_payment_intent_id', 'stripe_customer_id',
+        'stripe_payment_intent_id','stripe_session_id','stripe_customer_id',
         'billing_first_name', 'billing_last_name', 'billing_email', 'billing_phone',
         'billing_address', 'billing_city', 'billing_state', 'billing_country', 'billing_postal_code',
         'shipping_first_name', 'shipping_last_name', 'shipping_email', 'shipping_phone',

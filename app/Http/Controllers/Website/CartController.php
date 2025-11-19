@@ -352,17 +352,21 @@ class CartController extends Controller
                 $cart = $this->getOrCreateCart();
                 $product = Product::with('images')->findOrFail($request->product_id);
 
-                // Check stock
-                if ($product->stock_quantity < $request->quantity) {
-                    throw new \Exception('Insufficient stock available');
-                }
-
                 // Find variant
                 $variant = null;
                 $selectedOptions = [];
+
                 if ($request->color_id || $request->size_id) {
                     $productColorId = null;
                     $productSizeId = null;
+
+                    // Debug: Log the incoming data
+                    \Log::info('Add to cart request:', [
+                        'product_id' => $request->product_id,
+                        'color_id' => $request->color_id,
+                        'size_id' => $request->size_id,
+                        'quantity' => $request->quantity
+                    ]);
 
                     if ($request->color_id) {
                         $productColor = ProductColor::where('product_id', $product->id)
@@ -374,6 +378,9 @@ class CartController extends Controller
                         }
                         $productColorId = $productColor->id;
                         $selectedOptions['color_id'] = $request->color_id;
+
+                        // Debug
+                        \Log::info('Product Color Found:', ['product_color_id' => $productColorId]);
                     }
 
                     if ($request->size_id) {
@@ -386,47 +393,76 @@ class CartController extends Controller
                         }
                         $productSizeId = $productSize->id;
                         $selectedOptions['size_id'] = $request->size_id;
+
+                        // Debug
+                        \Log::info('Product Size Found:', ['product_size_id' => $productSizeId]);
                     }
 
-                    $variant = ProductVariant::where('product_id', $product->id)
-                        ->when($productColorId, function ($query) use ($productColorId) {
-                            $query->where('product_color_id', $productColorId);
-                        })
-                        ->when($productSizeId, function ($query) use ($productSizeId) {
-                            $query->where('product_size_id', $productSizeId);
-                        })
-                        ->first();
+                    // Build variant query more carefully
+                    $variantQuery = ProductVariant::where('product_id', $product->id);
+
+                    if ($productColorId) {
+                        $variantQuery->where('product_color_id', $productColorId);
+                    } else {
+                        $variantQuery->whereNull('product_color_id');
+                    }
+
+                    if ($productSizeId) {
+                        $variantQuery->where('product_size_id', $productSizeId);
+                    } else {
+                        $variantQuery->whereNull('product_size_id');
+                    }
+
+                    $variant = $variantQuery->first();
+
+                    // Debug: Log the variant query and result
+                    \Log::info('Variant Query Result:', [
+                        'query' => $variantQuery->toSql(),
+                        'bindings' => $variantQuery->getBindings(),
+                        'variant_found' => $variant ? $variant->id : null
+                    ]);
 
                     if (!$variant) {
-                        throw new \Exception('Selected variant not available');
+                        // Check if we need to create the variant
+                        $variant = $this->findOrCreateVariant($product->id, $productColorId, $productSizeId);
+
+                        if (!$variant) {
+                            throw new \Exception('Selected variant not available and could not be created');
+                        }
                     }
 
+                    // Check variant stock
                     if ($variant->stock_quantity < $request->quantity) {
-                        throw new \Exception('Insufficient stock for selected variant');
+                        throw new \Exception('Insufficient stock for selected variant. Only ' . $variant->stock_quantity . ' available.');
                     }
                 } else {
+                    // No variant selected, check product stock
                     if ($product->stock_quantity < $request->quantity) {
-                        throw new \Exception('Insufficient stock available');
+                        throw new \Exception('Insufficient stock available. Only ' . $product->stock_quantity . ' available.');
                     }
                 }
 
                 $price = $variant ? $variant->price : $product->final_price;
 
+                // Find existing cart item
                 $existingItem = $cart->items()
                     ->where('product_id', $product->id)
                     ->where('product_variant_id', $variant?->id)
                     ->whereNull('custom_size_id')
-                    ->whereJsonContains('selected_options', $selectedOptions)
                     ->first();
 
                 if ($existingItem) {
                     $newQuantity = $existingItem->quantity + $request->quantity;
 
-                    if ($variant && $variant->stock_quantity < $newQuantity) {
-                        throw new \Exception('Insufficient stock for selected variant');
-                    }
-                    if (!$variant && $product->stock_quantity < $newQuantity) {
-                        throw new \Exception('Insufficient stock available');
+                    // Check stock for updated quantity
+                    if ($variant) {
+                        if ($variant->stock_quantity < $newQuantity) {
+                            throw new \Exception('Insufficient stock for selected variant. Only ' . $variant->stock_quantity . ' available.');
+                        }
+                    } else {
+                        if ($product->stock_quantity < $newQuantity) {
+                            throw new \Exception('Insufficient stock available. Only ' . $product->stock_quantity . ' available.');
+                        }
                     }
 
                     $existingItem->update([
@@ -453,11 +489,84 @@ class CartController extends Controller
             return $this->getCartResponse('Item added to cart successfully!');
 
         } catch (\Exception $e) {
+            \Log::error('Add to cart error:', [
+                'product_id' => $request->product_id,
+                'color_id' => $request->color_id,
+                'size_id' => $request->size_id,
+                'error' => $e->getMessage()
+            ]);
+
             return response()->json([
                 'success' => false,
                 'message' => $e->getMessage()
             ], 422);
         }
+    }
+
+    /**
+     * Find or create product variant
+     */
+    private function findOrCreateVariant($productId, $productColorId, $productSizeId)
+    {
+        // First, try to find existing variant
+        $variant = ProductVariant::where('product_id', $productId)
+            ->when($productColorId, function($q) use ($productColorId) {
+                $q->where('product_color_id', $productColorId);
+            }, function($q) {
+                $q->whereNull('product_color_id');
+            })
+            ->when($productSizeId, function($q) use ($productSizeId) {
+                $q->where('product_size_id', $productSizeId);
+            }, function($q) {
+                $q->whereNull('product_size_id');
+            })
+            ->first();
+
+        if ($variant) {
+            return $variant;
+        }
+
+        // If variant doesn't exist, create it
+        $product = Product::find($productId);
+        if (!$product) {
+            return null;
+        }
+
+        // Create new variant
+        $variant = ProductVariant::create([
+            'product_id' => $productId,
+            'product_color_id' => $productColorId,
+            'product_size_id' => $productSizeId,
+            'price' => $product->final_price, // Use product price as default
+            'stock_quantity' => $product->stock_quantity, // Use product stock as default
+            'sku' => $this->generateVariantSku($product, $productColorId, $productSizeId),
+        ]);
+
+        return $variant;
+    }
+
+    /**
+     * Generate SKU for variant
+     */
+    private function generateVariantSku($product, $productColorId, $productSizeId)
+    {
+        $sku = $product->sku;
+
+        if ($productColorId) {
+            $productColor = ProductColor::with('color')->find($productColorId);
+            if ($productColor && $productColor->color) {
+                $sku .= '-' . strtoupper(substr($productColor->color->name, 0, 3));
+            }
+        }
+
+        if ($productSizeId) {
+            $productSize = ProductSize::with('size')->find($productSizeId);
+            if ($productSize && $productSize->size) {
+                $sku .= '-' . strtoupper($productSize->size->short_code ?? $productSize->size->name);
+            }
+        }
+
+        return $sku;
     }
 
     /**
