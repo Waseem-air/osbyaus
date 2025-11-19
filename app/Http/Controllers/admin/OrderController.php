@@ -18,7 +18,7 @@ class OrderController extends Controller
     // ✅ Show Order List with AJAX support
     public function index(Request $request)
     {
-        $query = Order::with(['customer', 'items', 'statusHistories'])
+        $query = Order::with(['user', 'items', 'statusHistories'])
             ->latest();
 
         // Status filter
@@ -90,14 +90,9 @@ class OrderController extends Controller
 
         try {
             DB::beginTransaction();
-
-            $order = Order::with('customer')->findOrFail($id);
+            $order = Order::with('user')->findOrFail($id);
             $previousStatus = $order->status;
-
-            // Update order status
             $order->update(['status' => $request->status]);
-
-            // Create status history
             OrderStatusHistory::create([
                 'order_id' => $order->id,
                 'user_id' => auth()->id(),
@@ -120,9 +115,9 @@ class OrderController extends Controller
             $aiMessage = $request->notes ?: "Your order status has been updated to {$text}.";
 
             // Create customer notification
-            if ($order->customer) {
+            if ($order->user) {
                 NotificationHelper::create(
-                    $order->customer,
+                    $order->user,
                     'order_status_update',
                     'Order Status Updated',
                     $aiMessage,
@@ -136,9 +131,8 @@ class OrderController extends Controller
                 );
 
                 // Send email to customer
-                Mail::to($order->billing_email)->send(
-                    new OrderStatusUpdate($order, $text, $color, $aiMessage)
-                );
+                $order = Order::with(['user', 'items.product', 'items.variant'])->findOrFail($id);
+                Mail::to($order->billing_email)->send(new OrderStatusUpdate($order, $text, $color, $aiMessage));
             }
 
             DB::commit();
@@ -164,7 +158,7 @@ class OrderController extends Controller
     // ✅ View Order Details
     public function show($id)
     {
-        $order = Order::with(['customer', 'items.product', 'items.variant', 'statusHistories.user'])
+        $order = Order::with(['user', 'items.product', 'items.variant', 'statusHistories.user'])
             ->findOrFail($id);
 
         return view('admin.orders.show', compact('order'));

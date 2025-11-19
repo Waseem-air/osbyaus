@@ -13,7 +13,10 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Laravel'),
+    'name' => env('APP_NAME', 'OsByAus'),
+    'contact_address' => env('CONTACT_ADDRESS', '123 Fashion Street, New York, NY 10001'),
+    'contact_phone' => env('CONTACT_PHONE', '+1 (555) 123-4567'),
+    'contact_email' => env('CONTACT_EMAIL', 'support@fashionstore.com'),
 
     /*
     |--------------------------------------------------------------------------
