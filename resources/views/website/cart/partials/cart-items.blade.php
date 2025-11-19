@@ -1,3 +1,212 @@
+
+<style>
+    /* Cart Table Responsive Styles */
+    .ec-cart-pro-name {
+        display: flex;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .ec-cart-pro-img {
+        width: 80px;
+        height: 80px;
+        object-fit: cover;
+        flex-shrink: 0;
+    }
+
+    .ec-cart-pro-info {
+        flex: 1;
+    }
+
+    .ec-cart-pro-title {
+        font-weight: 600;
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    .ec-cart-pro-variant,
+    .ec-cart-pro-custom {
+        font-size: 12px;
+        color: #666;
+    }
+
+    .color-badge {
+        display: inline-block;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        margin-right: 5px;
+        vertical-align: middle;
+    }
+
+    /* Mobile Responsive Styles */
+    @media (max-width: 767px) {
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        /* Hide table headers on mobile */
+        thead {
+            display: none;
+        }
+
+        tbody tr {
+            display: block;
+            border: 1px solid #e5e5e5;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            padding: 15px;
+            background: #fff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        tbody td {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border: none;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        tbody td:last-child {
+            border-bottom: none;
+        }
+
+        /* Data label attributes for mobile */
+        tbody td::before {
+            content: attr(data-label);
+            font-weight: 600;
+            color: #333;
+            text-transform: uppercase;
+            font-size: 12px;
+            flex: 0 0 100px;
+        }
+
+        tbody td .ec-cart-pro-name::before {
+            content: none;
+        }
+
+        /* Specific column adjustments */
+        .ec-cart-pro-name {
+            display: block;
+            text-align: center;
+            padding-bottom: 15px;
+        }
+
+        .ec-cart-pro-name a {
+            display: block;
+            text-decoration: none;
+        }
+
+        .ec-cart-pro-img {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 10px;
+        }
+
+        .ec-cart-pro-info {
+            text-align: center;
+        }
+
+        .ec-cart-pro-price,
+        .ec-cart-pro-subtotal {
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .ec-cart-pro-qty {
+            justify-content: center;
+        }
+
+        .cart-qty-plus-minus {
+            margin: 0 auto;
+        }
+
+        .ec-cart-pro-remove {
+            justify-content: center;
+            padding-top: 10px;
+        }
+
+        .ec-cart-pro-remove a {
+            background: #ff4444;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+        }
+
+        /* Cart action buttons mobile */
+        .ec-cart-update-bottom {
+            text-align: center;
+        }
+
+        .ec-cart-update-bottom .btn-return,
+        .ec-cart-update-bottom .update-cart-btn,
+        .ec-cart-update-bottom .clear-cart-page-btn {
+            display: block;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+    }
+
+    /* Small mobile devices */
+    @media (max-width: 480px) {
+        tbody tr {
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        tbody td {
+            padding: 8px 0;
+        }
+
+        tbody td::before {
+            flex: 0 0 80px;
+            font-size: 11px;
+        }
+
+        .ec-cart-pro-img {
+            width: 80px;
+            height: 80px;
+        }
+
+        .ec-cart-pro-title {
+            font-size: 14px;
+        }
+
+        .ec-cart-pro-price,
+        .ec-cart-pro-subtotal {
+            font-size: 14px;
+        }
+    }
+
+    /* Tablet devices */
+    @media (min-width: 768px) and (max-width: 1024px) {
+        .ec-cart-pro-img {
+            width: 70px;
+            height: 70px;
+        }
+
+        .ec-cart-pro-title {
+            font-size: 14px;
+        }
+
+        table {
+            font-size: 14px;
+        }
+
+        .cart-qty-plus-minus input {
+            width: 60px;
+            padding: 5px;
+        }
+    }
+</style>
 @if($cart->items_count > 0)
     <table>
         <tbody>
