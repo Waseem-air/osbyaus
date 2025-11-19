@@ -140,7 +140,7 @@ class CheckoutController extends Controller
                 $this->finalizeOrder($order);
                 // Send order confirmation email
                 Mail::to($order->billing_email)->send(new OrderConfirmation($order));
-                
+
                 return view('website.checkout.success', compact('order'));
             } else {
                 return redirect()->route('checkout.stripe.cancel')->with('error', 'Payment was not successful.');

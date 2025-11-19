@@ -10,7 +10,7 @@
                     <div class="header-top-social">
                         <ul class="mb-0">
                             <li class="list-inline-item">
-                                <a href="#">Enjoy Free Shipping Over Rs. 5,000 All Over Pakistan</a>
+                                <a href="#">Enjoy Free Shipping Over {{ \App\Helpers\AppHelper::currency_symbol() }}{{ env('FREE_DELIVERY_FEE') ?? 500 }} All Over Pakistan</a>
                             </li>
                         </ul>
                     </div>
