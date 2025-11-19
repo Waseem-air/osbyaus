@@ -143,7 +143,7 @@ class AppHelper
 
     public static function currency_name(): string
     {
-        return Currency::where('is_default', true)->value('name') ?? 'Australian Dollar';
+        return Currency::where('is_default', true)->value('name') ?? 'AUD';
     }
 
     /**

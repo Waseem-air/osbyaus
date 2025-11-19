@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Website;
 
+use App\Helpers\AppHelper;
 use App\Http\Controllers\Controller;
 use App\Mail\OrderConfirmation;
 use App\Models\Cart;
@@ -294,7 +295,7 @@ class CheckoutController extends Controller
         foreach ($order->items as $item) {
             $lineItems[] = [
                 'price_data' => [
-                    'currency' => 'usd',
+                    'currency' => AppHelper::currency(),
                     'product_data' => [
                         'name' => $item->product_name,
                         'description' => $item->product_description,
@@ -313,7 +314,7 @@ class CheckoutController extends Controller
         if ($order->shipping_amount > 0) {
             $lineItems[] = [
                 'price_data' => [
-                    'currency' => 'usd',
+                    'currency' => AppHelper::currency(),
                     'product_data' => [
                         'name' => 'Shipping Fee',
                     ],
@@ -327,7 +328,7 @@ class CheckoutController extends Controller
         if ($order->tax_amount > 0) {
             $lineItems[] = [
                 'price_data' => [
-                    'currency' => 'usd',
+                    'currency' => AppHelper::currency(),
                     'product_data' => [
                         'name' => 'Tax',
                     ],
@@ -351,11 +352,11 @@ class CheckoutController extends Controller
                 'user_id' => $user->id,
             ],
             'shipping_address_collection' => [
-                'allowed_countries' => ['US', 'CA', 'GB'], // Add your allowed countries
+                'allowed_countries' => ['AUD', 'USD'], // Add your allowed countries
             ],
             'custom_text' => [
                 'shipping_address' => [
-                    'message' => 'Note: We currently only ship to the United States, Canada, and United Kingdom.',
+                    'message' => 'Note: We currently only ship to the'.env('COUNTRY'),
                 ],
                 'submit' => [
                     'message' => "You'll be redirected to complete your payment.",
