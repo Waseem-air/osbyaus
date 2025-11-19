@@ -1,4 +1,3 @@
-
 <style>
     /* Cart Table Responsive Styles */
     .ec-cart-pro-name {
@@ -37,6 +36,50 @@
         border-radius: 50%;
         margin-right: 5px;
         vertical-align: middle;
+    }
+
+    /* Cart Action Buttons - Desktop */
+    .ec-cart-update-bottom {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .btn-return {
+        background: #f8f9fa;
+        color: #333;
+        padding: 10px 20px;
+        border-radius: 5px;
+        text-decoration: none;
+        border: 1px solid #dee2e6;
+        transition: all 0.3s ease;
+    }
+
+    .btn-return:hover {
+        background: #e9ecef;
+        text-decoration: none;
+        color: #333;
+    }
+
+    .update-cart-btn {
+        margin-left: auto;
+    }
+
+    .clear-cart-page-btn {
+        background: #dc3545;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 5px;
+        text-decoration: none;
+        border: none;
+        transition: all 0.3s ease;
+    }
+
+    .clear-cart-page-btn:hover {
+        background: #c82333;
+        color: white;
+        text-decoration: none;
     }
 
     /* Mobile Responsive Styles */
@@ -143,6 +186,9 @@
 
         /* Cart action buttons mobile */
         .ec-cart-update-bottom {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
             text-align: center;
         }
 
@@ -151,7 +197,23 @@
         .ec-cart-update-bottom .clear-cart-page-btn {
             display: block;
             width: 100%;
-            margin-bottom: 10px;
+            margin-bottom: 0;
+            padding: 12px 20px;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        .update-cart-btn {
+            margin-left: 0;
+            order: 1;
+        }
+
+        .btn-return {
+            order: 2;
+        }
+
+        .clear-cart-page-btn {
+            order: 3;
         }
     }
 
@@ -184,6 +246,14 @@
         .ec-cart-pro-subtotal {
             font-size: 14px;
         }
+
+        /* Button adjustments for very small screens */
+        .ec-cart-update-bottom .btn-return,
+        .ec-cart-update-bottom .update-cart-btn,
+        .ec-cart-update-bottom .clear-cart-page-btn {
+            padding: 14px 20px;
+            font-size: 15px;
+        }
     }
 
     /* Tablet devices */
@@ -205,6 +275,32 @@
             width: 60px;
             padding: 5px;
         }
+
+        /* Tablet button adjustments */
+        .ec-cart-update-bottom {
+            gap: 10px;
+        }
+
+        .ec-cart-update-bottom .btn-return,
+        .ec-cart-update-bottom .update-cart-btn,
+        .ec-cart-update-bottom .clear-cart-page-btn {
+            padding: 8px 15px;
+            font-size: 13px;
+        }
+    }
+
+    /* Large desktop */
+    @media (min-width: 1200px) {
+        .ec-cart-update-bottom {
+            gap: 20px;
+        }
+
+        .ec-cart-update-bottom .btn-return,
+        .ec-cart-update-bottom .update-cart-btn,
+        .ec-cart-update-bottom .clear-cart-page-btn {
+            padding: 12px 25px;
+            font-size: 16px;
+        }
     }
 </style>
 @if($cart->items_count > 0)
@@ -212,7 +308,7 @@
         <tbody>
         @foreach($cart->items as $item)
             <tr>
-                <td data-label="Product" class="ec-cart-pro-name">
+                <td data-label="" class="ec-cart-pro-name">
                     <a href="{{ route('product.detail', $item->product->slug) }}">
                         <img class="ec-cart-pro-img mr-4"
                              src="{{ asset($item->product->main_image?->image_path ?? 'website/assets/images/product/default-product.jpg') }}"
