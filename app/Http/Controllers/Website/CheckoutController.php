@@ -146,7 +146,6 @@ class CheckoutController extends Controller
             }
 
         } catch (Exception $e) {
-            \Log::error('Stripe success error: ' . $e->getMessage());
             return redirect()->route('checkout.stripe.cancel')->with('error', 'Error processing payment: ' . $e->getMessage());
         }
     }
@@ -172,7 +171,7 @@ class CheckoutController extends Controller
                     $message = 'Your order has been cancelled. You can try again with your existing cart items.';
                 }
             } catch (Exception $e) {
-                \Log::error('Stripe cancel error: ' . $e->getMessage());
+                $message = 'Your order has been cancelled. You can try again with your existing cart items.'.$e->getMessage();
             }
         }
 
@@ -192,9 +191,6 @@ class CheckoutController extends Controller
             $event = \Stripe\Webhook::constructEvent(
                 $payload, $sig_header, $endpoint_secret
             );
-
-            \Log::info('Stripe Webhook Received: ' . $event->type);
-
             switch ($event->type) {
                 case 'checkout.session.completed':
                     $session = $event->data->object;
@@ -225,16 +221,11 @@ class CheckoutController extends Controller
             return response()->json(['status' => 'success']);
 
         } catch (\UnexpectedValueException $e) {
-            // Invalid payload
-            \Log::error('Webhook error: Invalid payload - ' . $e->getMessage());
             return response()->json(['error' => 'Invalid payload'], 400);
         } catch (\Stripe\Exception\SignatureVerificationException $e) {
-            // Invalid signature
-            \Log::error('Webhook error: Invalid signature - ' . $e->getMessage());
-            return response()->json(['error' => 'Invalid signature'], 400);
+            return response()->json(['error' => 'Invalid signature'. $e->getMessage()], 400);
         } catch (Exception $e) {
-            \Log::error('Webhook error: ' . $e->getMessage());
-            return response()->json(['error' => 'Webhook handler failed'], 500);
+            return response()->json(['error' => 'Webhook handler failed' . $e->getMessage()], 500);
         }
     }
 
@@ -261,7 +252,6 @@ class CheckoutController extends Controller
 
         } catch (Exception $e) {
             DB::rollBack();
-            \Log::error('Error finalizing order: ' . $e->getMessage());
             throw $e;
         }
     }
@@ -394,10 +384,7 @@ class CheckoutController extends Controller
                 'stripe_payment_intent_id' => $session->payment_intent,
             ]);
 
-            // Finalize order (clear cart and update stock) via webhook too
             $this->finalizeOrder($order);
-
-            \Log::info("Order {$order->order_number} payment completed via webhook.");
         }
     }
 
@@ -440,9 +427,6 @@ class CheckoutController extends Controller
         // Optional: Handle payment intent failures
         \Log::error("PaymentIntent failed: {$paymentIntent->id} - {$paymentIntent->last_payment_error->message}");
     }
-
-    // Keep all your existing helper methods (getUserCart, validateStock, createOrder, etc.)
-    // They remain the same as in your previous code...
 
     private function getUserCart()
     {
