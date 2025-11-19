@@ -297,8 +297,8 @@
             <h4 style="color: #000000; margin-bottom: 15px;">💁 Need Help?</h4>
             <p>If you have any questions about your order, please contact our customer support team:</p>
             <ul style="margin-left: 20px;">
-                <li>Email: {{ config('app.contact_email', 'support@example.com') }}</li>
-                <li>Phone: {{ config('app.contact_phone', '+1 (555) 123-4567') }}</li>
+                <li>Email: {{ config('app.contact_email', 'osbyaus@gmail.com') }}</li>
+                <li>Phone: {{ config('app.contact_phone', '0432488558') }}</li>
                 <li>Reference your order number: <strong>#{{ $order->order_number }}</strong></li>
             </ul>
         </div>
@@ -310,7 +310,7 @@
     <!-- Footer -->
     <div class="email-footer">
         <div style="margin-bottom: 20px;">
-            <strong>{{ config('app.name', 'Our Store') }}</strong>
+            <strong>{{ config('app.name', 'OsByAus') }}</strong>
         </div>
 
         <div class="footer-links">
@@ -320,15 +320,14 @@
 
         <div class="contact-info">
             <p>
-                {{ config('app.contact_address', '123 Store Street, City, State 12345') }}<br>
-                📞 {{ config('app.contact_phone', '+1 (555) 123-4567') }}<br>
-                ✉️ {{ config('app.contact_email', 'support@example.com') }}
+                📞 {{ config('app.contact_phone', '0432488558') }}<br>
+                ✉️ {{ config('app.contact_email', 'osbyaus@gmail.com') }}
             </p>
         </div>
 
         <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #333;">
             <p style="font-size: 12px; color: #999;">
-                &copy; {{ date('Y') }} {{ config('app.name', 'Our Store') }}. All rights reserved.<br>
+                &copy; {{ date('Y') }} {{ config('app.name', 'OsByAus') }}. All rights reserved.<br>
                 This email was sent to {{ $order->billing_email }} because you placed an order with us.
             </p>
         </div>

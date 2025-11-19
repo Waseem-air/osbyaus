@@ -2,23 +2,15 @@
     <meta charset="UTF-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
-
     {{-- ===================== --}}
     {{-- Dynamic Page Title --}}
     {{-- ===================== --}}
-    <title>@yield('title', 'Global Fashion Store - Trendy Clothing for Men & Women')</title>
-
+    <title>{{ config('app.name', 'OsByAus') }} | @yield('title')</title>
     {{-- ===================== --}}
     {{-- Dynamic SEO Tags --}}
     {{-- ===================== --}}
-    <meta name="description"
-          content="@yield('meta_description', 'Shop the latest fashion clothing, shoes, accessories, and new trends for men & women worldwide. Discover premium quality outfits at affordable prices.')"/>
-
-    <meta name="keywords"
-          content="@yield('meta_keywords', 'fashion, clothing, ecommerce, online shopping, mens wear, womens wear, trendy outfits, global fashion store, apparel, accessories')"/>
-
-    <meta name="author" content="YourBrandName">
-
+    <meta name="description" content="@yield('meta_description', 'Shop the latest fashion clothing, shoes, accessories, and new trends for men & women worldwide. Discover premium quality outfits at affordable prices.')"/>
+    <meta name="keywords" content="@yield('meta_keywords', 'fashion, clothing, ecommerce, online shopping, mens wear, womens wear, trendy outfits, global fashion store, apparel, accessories')"/>
     {{-- Favicon --}}
     <link rel="icon" href="{{ asset('/website/assets/images/logo/favicon.png') }}" sizes="32x32">
     <link rel="apple-touch-icon" href="{{ asset('/website/assets/images/logo/favicon.png') }}">

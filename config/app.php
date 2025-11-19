@@ -14,9 +14,9 @@ return [
     */
 
     'name' => env('APP_NAME', 'OsByAus'),
-    'contact_address' => env('CONTACT_ADDRESS', '123 Fashion Street, New York, NY 10001'),
-    'contact_phone' => env('CONTACT_PHONE', '+1 (555) 123-4567'),
-    'contact_email' => env('CONTACT_EMAIL', 'support@fashionstore.com'),
+    'contact_address' => env('CONTACT_ADDRESS', '138/27 yattenden crescent Baulkham hills'),
+    'contact_phone' => env('CONTACT_PHONE', '0432488558'),
+    'contact_email' => env('CONTACT_EMAIL', 'osbyaus@gmail.com'),
 
     /*
     |--------------------------------------------------------------------------

@@ -8,15 +8,15 @@
                         <div class="ec-footer-widget ec-footer-widget-wrapper">
                             <div class="ec-footer-widget-item">
                                 <h4 class="ec-footer-heading">Address:</h4>
-                                <p>138/27 yattenden crescent Baulkham hills</p>
+                                <p>{{ env('CONTACT_ADDRESS')  ?? '138/27 yattenden crescent Baulkham hills'}}</p>
                             </div>
                             <div class="ec-footer-widget-item">
                                 <h4 class="ec-footer-heading">Phone:</h4>
-                                <p>0432488558</p>
+                                <p>{{ env('CONTACT_PHONE') ?? '0432488558' }}</p>
                             </div>
                             <div class="ec-footer-widget-item">
                                 <h4 class="ec-footer-heading">Email:</h4>
-                                <p>osbyaus@gmail.com</p>
+                                <p>{{ env('CONTACT_EMAIL') ?? 'osbyaus@gmail.com' }}</p>
                             </div>
                         </div>
                         <div class="ec-footer-widget ec-footer-social">
