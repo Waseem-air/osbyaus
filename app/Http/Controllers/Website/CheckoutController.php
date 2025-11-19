@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Website;
 
 use App\Http\Controllers\Controller;
+use App\Mail\OrderConfirmation;
 use App\Models\Cart;
 use App\Models\Order;
 use App\Models\OrderItem;
@@ -11,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Mail;
 use Stripe\Stripe;
 use Stripe\Checkout\Session;
 use Stripe\Exception\ApiErrorException;
@@ -120,10 +122,8 @@ class CheckoutController extends Controller
 
             Stripe::setApiKey(config('services.stripe.secret'));
             $session = Session::retrieve($sessionId);
-
             // Find order by session ID
-            $order = Order::where('stripe_session_id', $sessionId)->first();
-
+            $order = Order::with(['items.product', 'items.variant'])->where('stripe_session_id', $sessionId)->first();
             if (!$order) {
                 return redirect()->route('checkout.stripe.cancel')->with('error', 'Order not found.');
             }
@@ -137,9 +137,10 @@ class CheckoutController extends Controller
                     'stripe_payment_intent_id' => $session->payment_intent,
                 ]);
 
-                // NOW clear the cart and update stock quantities after successful payment
                 $this->finalizeOrder($order);
-
+                // Send order confirmation email
+                Mail::to($order->billing_email)->send(new OrderConfirmation($order));
+                
                 return view('website.checkout.success', compact('order'));
             } else {
                 return redirect()->route('checkout.stripe.cancel')->with('error', 'Payment was not successful.');
