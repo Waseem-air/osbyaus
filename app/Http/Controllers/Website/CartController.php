@@ -19,10 +19,10 @@ class CartController extends Controller
 {
     const CART_COOKIE_NAME = 'cart_session_id';
     const COOKIE_EXPIRY = 525600; // 1 year
+
     /**
      * Display main cart page
      */
-
     public function index()
     {
         $cart = $this->getOrCreateCart();
@@ -38,21 +38,15 @@ class CartController extends Controller
             $cart->updateTotals();
         }
 
-        // -------------------------------------------
-        // ✅ Get first product from cart
-        // -------------------------------------------
+        // Get first product from cart for related products
         $firstItem = $cart->items->first();
-
-        $relatedPopular = collect(); // default empty
+        $relatedPopular = collect();
 
         if ($firstItem) {
-            $product = $firstItem->product;        // the main product
-            $slug = $product->slug;               // slug for excluding
-            $categoryIds = $product->categories->pluck('id'); // categories
+            $product = $firstItem->product;
+            $slug = $product->slug;
+            $categoryIds = $product->categories->pluck('id');
 
-            // -------------------------------------------
-            // ✅ Fetch related + this week popular products
-            // -------------------------------------------
             $relatedPopular = Product::with('images')
                 ->where('slug', '!=', $slug)
                 ->whereHas('categories', function ($q) use ($categoryIds) {
@@ -67,6 +61,56 @@ class CartController extends Controller
         return view('website.cart.index', compact('cart', 'relatedPopular'));
     }
 
+    /**
+     * Bulk update cart quantities (AJAX) - For cart page only
+     */
+    public function updateCart(Request $request)
+    {
+        try {
+            $quantities = $request->input('quantities', []);
+            $cart = $this->getOrCreateCart();
+
+            DB::transaction(function () use ($quantities, $cart) {
+                foreach ($quantities as $itemId => $quantity) {
+                    $cartItem = $cart->items()->where('id', $itemId)->first();
+
+                    if ($cartItem) {
+                        // Validate quantity
+                        if ($quantity < 1) {
+                            continue; // Skip invalid quantities
+                        }
+
+                        // Check stock for regular products
+                        if (!$cartItem->custom_size_id) {
+                            if ($cartItem->variant) {
+                                if ($cartItem->variant->stock_quantity < $quantity) {
+                                    throw new \Exception("Insufficient stock for {$cartItem->product->name} variant");
+                                }
+                            } else {
+                                if ($cartItem->product->stock_quantity < $quantity) {
+                                    throw new \Exception("Insufficient stock for {$cartItem->product->name}");
+                                }
+                            }
+                        }
+
+                        // Update quantity
+                        $cartItem->update(['quantity' => $quantity]);
+                        $cartItem->updateTotal();
+                    }
+                }
+
+                $cart->updateTotals();
+            });
+
+            return $this->getCartPageResponse('Cart updated successfully!');
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ], 422);
+        }
+    }
 
     /**
      * Get cart page items (AJAX) - For cart page only
@@ -152,7 +196,6 @@ class CartController extends Controller
     public function removeItemPage($cartItemId)
     {
         try {
-            // Check if cart item exists and belongs to current user's cart
             $cart = $this->getOrCreateCart();
             $cartItem = $cart->items()->where('id', $cartItemId)->first();
 
@@ -164,14 +207,12 @@ class CartController extends Controller
             }
 
             DB::transaction(function () use ($cartItem, $cart) {
-                // Delete custom size record if exists
                 if ($cartItem->customSize) {
                     $cartItem->customSize->delete();
                 }
 
                 $cartItem->delete();
 
-                // Check if cart has any items left
                 if ($cart->items()->count() === 0) {
                     $cart->delete();
                     Cookie::queue(Cookie::forget(self::CART_COOKIE_NAME));
@@ -204,7 +245,6 @@ class CartController extends Controller
             $cart = $this->getOrCreateCart();
 
             DB::transaction(function () use ($cart) {
-                // Delete all custom size records
                 $customSizeIds = $cart->items()->whereNotNull('custom_size_id')->pluck('custom_size_id');
                 if ($customSizeIds->count() > 0) {
                     CustomSize::whereIn('id', $customSizeIds)->delete();
@@ -261,7 +301,7 @@ class CartController extends Controller
             $cart = $this->getOrCreateCart();
             $cart->load(['items.product.images', 'items.variant.size', 'items.variant.color', 'items.customSize']);
             if ($cart->exists) {
-                $cart->updreateTotals();
+                $cart->updateTotals();
             }
 
             return response()->json([
@@ -282,7 +322,7 @@ class CartController extends Controller
                 'html' => '
                 <div class="text-center py-4">
                     <i class="fi-rr-exclamation" style="font-size: 3rem; color: #dc3545;"></i>
-                    <p class="mt-2 text-danger">Error loading cart <strong><strong>' . e($e->getMessage()) . '</strong> </strong> </p>
+                    <p class="mt-2 text-danger">Error loading cart: ' . e($e->getMessage()) . '</p>
                     <button class="btn btn-dark btn-sm mt-2" onclick="window.shoppingCart.loadCartSidebar()">
                         Retry
                     </button>
@@ -291,9 +331,6 @@ class CartController extends Controller
             ], 500);
         }
     }
-    /**
-     * Add regular product to cart (AJAX)
-     */
 
     /**
      * Add regular product to cart (AJAX)
@@ -321,7 +358,6 @@ class CartController extends Controller
                 $variant = null;
                 $selectedOptions = [];
                 if ($request->color_id || $request->size_id) {
-                    // Get the intermediate IDs from product_colors and product_sizes tables
                     $productColorId = null;
                     $productSizeId = null;
 
@@ -349,7 +385,6 @@ class CartController extends Controller
                         $selectedOptions['size_id'] = $request->size_id;
                     }
 
-                    // Find variant using the correct column names
                     $variant = ProductVariant::where('product_id', $product->id)
                         ->when($productColorId, function ($query) use ($productColorId) {
                             $query->where('product_color_id', $productColorId);
@@ -363,21 +398,17 @@ class CartController extends Controller
                         throw new \Exception('Selected variant not available');
                     }
 
-                    // Check variant stock
                     if ($variant->stock_quantity < $request->quantity) {
                         throw new \Exception('Insufficient stock for selected variant');
                     }
                 } else {
-                    // Check main product stock
                     if ($product->stock_quantity < $request->quantity) {
                         throw new \Exception('Insufficient stock available');
                     }
                 }
 
-                // Calculate price
                 $price = $variant ? $variant->price : $product->final_price;
 
-                // Check if identical item exists
                 $existingItem = $cart->items()
                     ->where('product_id', $product->id)
                     ->where('product_variant_id', $variant?->id)
@@ -388,7 +419,6 @@ class CartController extends Controller
                 if ($existingItem) {
                     $newQuantity = $existingItem->quantity + $request->quantity;
 
-                    // Check stock for updated quantity
                     if ($variant && $variant->stock_quantity < $newQuantity) {
                         throw new \Exception('Insufficient stock for selected variant');
                     }
@@ -426,6 +456,7 @@ class CartController extends Controller
             ], 422);
         }
     }
+
     /**
      * Add custom size product to cart (AJAX)
      */
@@ -446,21 +477,18 @@ class CartController extends Controller
                 $cart = $this->getOrCreateCart();
                 $product = Product::with('images')->findOrFail($request->product_id);
 
-                // Create custom size record
                 $customSize = CustomSize::create([
                     'product_id' => $product->id,
                     ...$request->custom_size
                 ]);
 
-                // Calculate price (base price + custom size fee)
-                $price = $product->final_price + 500; // Custom size fee
+                $price = $product->final_price + 500;
 
-                // Create cart item with custom size
                 $cartItem = $cart->items()->create([
                     'product_id' => $product->id,
                     'product_variant_id' => null,
                     'custom_size_id' => $customSize->id,
-                    'quantity' => 1, // Custom size usually 1 quantity
+                    'quantity' => 1,
                     'price' => $price,
                     'selected_options' => ['is_custom_size' => true],
                 ]);
@@ -483,10 +511,6 @@ class CartController extends Controller
     /**
      * Update cart item quantity (AJAX)
      */
-
-    /**
-     * Update cart item quantity (AJAX)
-     */
     public function updateQuantity(Request $request, $cartItemId)
     {
         $request->validate([
@@ -504,7 +528,6 @@ class CartController extends Controller
                 ], 404);
             }
 
-            // Check stock for regular products
             if (!$cartItem->custom_size_id) {
                 if ($cartItem->variant) {
                     if ($cartItem->variant->stock_quantity < $request->quantity) {
@@ -527,7 +550,6 @@ class CartController extends Controller
             \Log::error('Error updating cart quantity: ' . $e->getMessage(), [
                 'cartItemId' => $cartItemId,
                 'quantity' => $request->quantity,
-                'message' =>  $e->getMessage().$e->getLine()
             ]);
 
             return response()->json([
@@ -536,9 +558,6 @@ class CartController extends Controller
             ], 422);
         }
     }
-    /**
-     * Remove item from cart (AJAX)
-     */
 
     /**
      * Remove item from cart (AJAX)
@@ -546,7 +565,6 @@ class CartController extends Controller
     public function removeItem($cartItemId)
     {
         try {
-            // Check if cart item exists and belongs to current user's cart
             $cart = $this->getOrCreateCart();
             $cartItem = $cart->items()->where('id', $cartItemId)->first();
 
@@ -558,14 +576,12 @@ class CartController extends Controller
             }
 
             DB::transaction(function () use ($cartItem, $cart) {
-                // Delete custom size record if exists
                 if ($cartItem->customSize) {
                     $cartItem->customSize->delete();
                 }
 
                 $cartItem->delete();
 
-                // Check if cart has any items left
                 if ($cart->items()->count() === 0) {
                     $cart->delete();
                     Cookie::queue(Cookie::forget(self::CART_COOKIE_NAME));
@@ -598,7 +614,6 @@ class CartController extends Controller
             $cart = $this->getOrCreateCart();
 
             DB::transaction(function () use ($cart) {
-                // Delete all custom size records
                 $customSizeIds = $cart->items()->whereNotNull('custom_size_id')->pluck('custom_size_id');
                 if ($customSizeIds->count() > 0) {
                     CustomSize::whereIn('id', $customSizeIds)->delete();

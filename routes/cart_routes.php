@@ -4,8 +4,6 @@ use App\Http\Controllers\Website\CartController;
 use Illuminate\Support\Facades\Route;
 
 // Cart Routes
-
-// Cart Routes
 Route::prefix('cart')->group(function () {
     // Existing routes
     Route::get('/', [CartController::class, 'index'])->name('cart.index');
@@ -14,8 +12,8 @@ Route::prefix('cart')->group(function () {
     Route::post('/add', [CartController::class, 'addToCart'])->name('cart.add');
     Route::post('/add-custom-size', [CartController::class, 'addCustomSizeToCart'])->name('cart.add-custom-size');
 
-    // Cart Page Specific Routes - Fix parameter names
-    Route::put('/page/update-quantity/{cartItemId}', [CartController::class, 'updateQuantityPage'])->name('cart.page.update-quantity');
+    // Cart Page Specific Routes
+    Route::put('/page/update', [CartController::class, 'updateCart'])->name('cart.page.update');
     Route::delete('/page/remove/{cartItemId}', [CartController::class, 'removeItemPage'])->name('cart.page.remove');
     Route::delete('/page/clear', [CartController::class, 'clearCartPage'])->name('cart.page.clear');
     Route::get('/page/items', [CartController::class, 'getCartPageItems'])->name('cart.page.items');
