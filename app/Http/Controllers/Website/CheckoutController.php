@@ -352,7 +352,7 @@ class CheckoutController extends Controller
                 'user_id' => $user->id,
             ],
             'shipping_address_collection' => [
-                'allowed_countries' => ['AUD', 'USD'], // Add your allowed countries
+                'allowed_countries' => ['AU', 'US'], // Add your allowed countries
             ],
             'custom_text' => [
                 'shipping_address' => [

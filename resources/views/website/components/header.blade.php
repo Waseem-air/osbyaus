@@ -31,7 +31,7 @@
                     <div class="align-self-center ec-header-logo d-lg-block d-none">
                         <div class="header-logo">
                             <a href="{{ route('home') }}">
-                                <img src="website/assets/images/logo/logo.svg" alt="Site Logo" />
+                                <img src="{{ asset('website/assets/images/logo/logo.svg') }}" alt="Site Logo" />
                             </a>
                         </div>
                     </div>
@@ -41,7 +41,7 @@
                     <div class="align-self-center me-auto ec-header-logo d-lg-none">
                         <div class="header-logo">
                             <a href="{{ route('home') }}">
-                                <img src="website/assets/images/logo/logo-sm.svg" class="w-100" alt="Site Logo" />
+                                <img src="{{ asset('website/assets/images/logo/logo-sm.svg') }}" class="w-100" alt="Site Logo" />
                             </a>
                         </div>
                     </div>
@@ -141,7 +141,7 @@
                             <li class="dropdown"><a href="{{ route('products.index')  }}">Casual Wear</a></li>
                             <li class="dropdown">
                                 <a href="{{ route('products.index')  }}" class="d-flex align-items-center gap-2">
-                                    <img src="website/assets/images/icon/sale.svg" style="height: 20px;" alt="">
+                                    <img src="{{ asset('website/assets/images/icon/sale.svg') }}" style="height: 20px;" alt="">
                                     Collection
                                 </a>
                             </li>
@@ -169,7 +169,7 @@
                     <li class="dropdown"><a href="{{ route('products.index')  }}">Casual Wear</a></li>
                     <li class="dropdown">
                         <a href="{{ route('products.index')  }}" class="d-flex align-items-center gap-2">
-                            <img src="website/assets/images/icon/sale.svg" style="height: 20px;" alt="">
+                            <img src="{{ asset('website/assets/images/icon/sale.svg') }}" style="height: 20px;" alt="">
                             Collection
                         </a>
                     </li>

@@ -18,7 +18,7 @@
                     </div>
 
                     <input type="hidden" name="remember" value="1">
-                    <button type="submit" class="btn btn-dark w-auto" id="loginBtn">
+                    <button type="submit" class="btn btn-dark w-auto d-flex justify-content-end" id="loginBtn">
                         <span class="login-text">Login</span>
                         <span class="loading-text d-none">
                             <i class="fi-rr-spinner spinner me-2"></i> Logging in...
