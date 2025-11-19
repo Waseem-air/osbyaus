@@ -128,11 +128,10 @@
         .swal2-container {
             z-index: 999999 !important; /* Highest priority above any overlay */
         }
-        /* Text */
-        .swal2-html-container {
-            font-size: 15px !important;
-            color: #fff !important;
-        }
+         .swal2-html-container {
+             font-size: 14px !important;
+             color: #000000 !important;
+         }
         /* Success / Error icons minimal black-white */
         .swal2-icon.swal2-success,
         .swal2-icon.swal2-error,
@@ -141,18 +140,6 @@
             color: #000 !important;
         }
 
-        /* Toast style */
-        .swal2-toast {
-            background: #000 !important;
-            color: #fff !important;
-            border-radius: 8px !important;
-            border: none !important;
-        }
-
-        /* Toast progress bar in white */
-        .swal2-timer-progress-bar {
-            background: #fff !important;
-        }
 
         /* Buttons */
         .swal2-confirm {
@@ -172,7 +159,7 @@
         .ec-size-from input {
             width: 100% !important;
         }
-        
+
     </style>
 
     {{-- ================================ --}}

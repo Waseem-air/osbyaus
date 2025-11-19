@@ -35,24 +35,25 @@ class RegisteredUserController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
-            'name'     => ['required', 'string', 'max:255'],
-            'email'    => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:users,email'],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'first_name' => ['required', 'string', 'max:255'],
+            'last_name'  => ['required', 'string', 'max:255'],
+            'email'      => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:users,email'],
+            'password'   => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
-        // Create user
         $user = User::create([
-            'name'     => $request->name,
-            'email'    => $request->email,
-            'password' => Hash::make($request->password),
-            'type'     => $request->type ?? 'customer',
+            'first_name' => $request->first_name,
+            'last_name'  => $request->last_name,
+            'username'       => trim($request->first_name . ' ' . $request->last_name),
+            'email'      => $request->email,
+            'password'   => Hash::make($request->password),
+            'role'       => 'customer',
         ]);
 
-        event(new Registered($user));
-
-        Auth::login($user);
-
-        return redirect($this->redirectBasedOnRole($user->type));
+//        event(new Registered($user));
+//        Auth::login($user);
+        return redirect()->route('login')->with('success', 'Your account has been created successfully! Please login to continue.');
+//        return redirect()->intended($this->redirectBasedOnRole($user->role));
     }
 
     /**

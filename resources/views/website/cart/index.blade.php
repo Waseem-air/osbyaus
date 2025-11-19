@@ -12,7 +12,8 @@
                     <div class="row ec_breadcrumb_inner">
                         <div class="col-md-12 col-sm-12">
                             <ul class="ec-breadcrumb-list text-left">
-                                <li class="ec-breadcrumb-item"><a href="{{ route('home') }}"><i class="fi-rr-home"></i> Home</a></li>
+                                <li class="ec-breadcrumb-item"><a href="{{ route('home') }}"><i class="fi-rr-home"></i>
+                                        Home</a></li>
                                 <li class="ec-breadcrumb-item active">Shopping Cart</li>
                             </ul>
                         </div>
@@ -75,18 +76,21 @@
                                         </div>
 
                                         @auth
-                                            <div>
-                                                <a href="{{ route('checkout') }}" class="btn btn-dark py-2 mt-4 w-100 h-100">
-                                                    Proceed to checkout <i class="ecicon eci-angle-right ms-2"></i>
-                                                </a>
-                                            </div>
+                                            @if($cart->items_count > 0)
+                                                <div>
+                                                    <a href="{{ route('checkout.index') }}"
+                                                       class="btn btn-dark py-2 mt-4 w-100 h-100">
+                                                        Proceed to checkout <i class="ecicon eci-angle-right ms-2"></i>
+                                                    </a>
+                                                </div>
+                                            @endif
                                         @else
                                             <div>
                                                 <button type="button" class="btn btn-dark py-2 mt-4 w-100 h-100"
                                                         onclick="showLoginModal()">
                                                     Login to Checkout <i class="ecicon eci-angle-right ms-2"></i>
                                                 </button>
-                                     </div>
+                                            </div>
                                         @endauth
                                     </div>
                                 </div>
@@ -104,7 +108,8 @@
 
     <!-- Related Products Section Start -->
     @if($relatedPopular->count() > 0)
-        <section class="section ec-exe-spe-section section-space-mt section-space-mb-100" style="margin-bottom: 220px !important;">
+        <section class="section ec-exe-spe-section section-space-mt section-space-mb-100"
+                 style="margin-bottom: 220px !important;">
             <div class="container">
                 <div class="row">
                     <div class="ec-exe-section col-lg-12 col-md-12 col-sm-12">

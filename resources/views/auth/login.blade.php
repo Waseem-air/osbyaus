@@ -38,7 +38,7 @@
                                     <div class="mb-4">
                                         <img src="{{ asset('website/assets/images/logo/logo.svg') }}" alt="Logo">
                                     </div>
-                                    <h2>Welcome Back to TechCart</h2>
+                                    <h2>Welcome Back to {{ config('app.name') }}</h2>
                                     <p class="text-muted">
                                         Log in to access exclusive deals, track orders, and enjoy a seamless experience.
                                     </p>
@@ -112,15 +112,15 @@
                                             <button type="submit" class="btn btn-dark w-100">Sign In</button>
                                         </div>
 
-                                        <div class="divider"></div>
+{{--                                        <div class="divider"></div>--}}
 
-                                        <!-- Google Login -->
-                                        <div class="col-12">
-                                            <button type="button" class="btn btn-dark btn-google w-100">
-                                                <img src="https://img.icons8.com/color/16/000000/google-logo.png" alt="">
-                                                Sign in with Google
-                                            </button>
-                                        </div>
+{{--                                        <!-- Google Login -->--}}
+{{--                                        <div class="col-12">--}}
+{{--                                            <button type="button" class="btn btn-dark btn-google w-100">--}}
+{{--                                                <img src="https://img.icons8.com/color/16/000000/google-logo.png" alt="">--}}
+{{--                                                Sign in with Google--}}
+{{--                                            </button>--}}
+{{--                                        </div>--}}
 
                                         <p class="auth-bottom">
                                             Don't have an account?

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Website\CartController;
+use App\Http\Controllers\Website\CheckoutController;
 use Illuminate\Support\Facades\Route;
 
 // Cart Routes
@@ -27,6 +28,12 @@ Route::prefix('cart')->group(function () {
     Route::post('/login', [CartController::class, 'login'])->name('cart.login');
 });
 
-Route::get('/checkout', [CheckoutController::class, 'index'])
-    ->middleware(['auth', 'role:customer'])
-    ->name('checkout');
+
+// Checkout Routes
+Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
+Route::post('/checkout/process', [CheckoutController::class, 'processCheckout'])->name('checkout.process');
+// Stripe Checkout Routes
+Route::get('/checkout/stripe/success', [CheckoutController::class, 'success'])->name('checkout.stripe.success');
+Route::get('/checkout/stripe/cancel', [CheckoutController::class, 'cancel'])->name('checkout.stripe.cancel');
+// Stripe Webhook
+Route::post('/stripe/webhook', [CheckoutController::class, 'handleWebhook'])->name('stripe.webhook');

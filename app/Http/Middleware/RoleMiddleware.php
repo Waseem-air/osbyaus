@@ -16,18 +16,18 @@ class RoleMiddleware
             return redirect('/')->with('error', 'You must be logged in.');
         }
 
-        // Additional checks for customers & sellers
-        if (in_array($user->role, ['customer', 'seller'])) {
-            if (!$user->is_active) {
-                Auth::logout();
-                return redirect('/')->with('error', 'Your account is inactive.');
-            }
-
-            if (!$user->hasVerifiedEmail()) {
-                return redirect()->route('verification.notice')
-                    ->with('error', 'Please verify your email.');
-            }
-        }
+//        // Additional checks for customers & sellers
+//        if (in_array($user->role, ['customer', 'seller'])) {
+//            if (!$user->is_active) {
+//                Auth::logout();
+//                return redirect('/')->with('error', 'Your account is inactive.');
+//            }
+//
+//            if (!$user->hasVerifiedEmail()) {
+//                return redirect()->route('verification.notice')
+//                    ->with('error', 'Please verify your email.');
+//            }
+//        }
 
         // Role validation
         if (!in_array($user->role, $roles)) {

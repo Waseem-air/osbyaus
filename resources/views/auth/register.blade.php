@@ -40,83 +40,97 @@
                                         <img src="{{ asset('website/assets/images/logo/logo.svg') }}" alt="Logo">
                                     </div>
                                     <h2>Create Your Account</h2>
-                                    <p class="text-muted">Join TechCart for a better shopping experience.</p>
+                                    <p class="text-muted">Join {{ config('app.name') }} for a better shopping experience.</p>
                                 </div>
 
                                 <!-- REGISTER FORM -->
                                 <form method="POST" action="{{ route('register') }}" class="auth-form">
                                     @csrf
-
                                     <div class="auth-form-content">
 
-                                        <!-- Name -->
-                                        <div class="col-12 mb-3">
-                                            <label>Name</label>
+                                        <!-- First Name -->
+                                        <div class="col-12 mb-1">
+                                            <label>First Name</label>
                                             <input type="text"
-                                                class="form-control auth-input @error('name') is-invalid @enderror"
-                                                name="name"
-                                                value="{{ old('name') }}"
-                                                placeholder="Your name"
-                                                required autocomplete="name">
+                                                   class="form-control auth-input @error('first_name') is-invalid @enderror"
+                                                   name="first_name"
+                                                   value="{{ old('first_name') }}"
+                                                   placeholder="Your first name"
+                                                   required autocomplete="given-name">
 
-                                            @error('name')
-                                                <div class="invalid-feedback d-block">{{ $message }}</div>
+                                            @error('first_name')
+                                            <div class="invalid-feedback d-block">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+
+                                        <!-- Last Name -->
+                                        <div class="col-12 mb-1">
+                                            <label>Last Name</label>
+                                            <input type="text"
+                                                   class="form-control auth-input @error('last_name') is-invalid @enderror"
+                                                   name="last_name"
+                                                   value="{{ old('last_name') }}"
+                                                   placeholder="Your last name"
+                                                   required autocomplete="family-name">
+
+                                            @error('last_name')
+                                            <div class="invalid-feedback d-block">{{ $message }}</div>
                                             @enderror
                                         </div>
 
                                         <!-- Email -->
-                                        <div class="col-12 mb-3">
+                                        <div class="col-12 mb-1">
                                             <label>Email</label>
                                             <input type="email"
-                                                class="form-control auth-input @error('email') is-invalid @enderror"
-                                                name="email"
-                                                value="{{ old('email') }}"
-                                                placeholder="Email address"
-                                                required autocomplete="username">
+                                                   class="form-control auth-input @error('email') is-invalid @enderror"
+                                                   name="email"
+                                                   value="{{ old('email') }}"
+                                                   placeholder="Email address"
+                                                   required autocomplete="email">
 
                                             @error('email')
-                                                <div class="invalid-feedback d-block">{{ $message }}</div>
+                                            <div class="invalid-feedback d-block">{{ $message }}</div>
                                             @enderror
                                         </div>
 
                                         <!-- Password -->
-                                        <div class="col-12 mb-3">
+                                        <div class="col-12 mb-1">
                                             <label>Password</label>
                                             <div class="position-relative">
                                                 <input type="password"
-                                                    class="form-control auth-input @error('password') is-invalid @enderror"
-                                                    name="password"
-                                                    placeholder="Enter password"
-                                                    id="password"
-                                                    required autocomplete="new-password">
+                                                       class="form-control auth-input @error('password') is-invalid @enderror"
+                                                       name="password"
+                                                       placeholder="Enter password"
+                                                       id="password"
+                                                       required autocomplete="new-password">
 
                                                 <span class="password-show" onclick="togglePassword('password', this)">
-                                                    <i class="fi-rr-eye"></i>
-                                                </span>
+                    <i class="fi-rr-eye"></i>
+                </span>
 
                                                 @error('password')
-                                                    <div class="invalid-feedback d-block">{{ $message }}</div>
+                                                <div class="invalid-feedback d-block">{{ $message }}</div>
                                                 @enderror
                                             </div>
                                         </div>
 
                                         <!-- Confirm Password -->
-                                        <div class="col-12 mb-3">
+                                        <div class="col-12 mb-1">
                                             <label>Confirm Password</label>
                                             <div class="position-relative">
                                                 <input type="password"
-                                                    class="form-control auth-input @error('password_confirmation') is-invalid @enderror"
-                                                    name="password_confirmation"
-                                                    placeholder="Re-enter password"
-                                                    id="password_confirmation"
-                                                    required autocomplete="new-password">
+                                                       class="form-control auth-input @error('password_confirmation') is-invalid @enderror"
+                                                       name="password_confirmation"
+                                                       placeholder="Re-enter password"
+                                                       id="password_confirmation"
+                                                       required autocomplete="new-password">
 
                                                 <span class="password-show" onclick="togglePassword('password_confirmation', this)">
-                                                    <i class="fi-rr-eye"></i>
-                                                </span>
+                    <i class="fi-rr-eye"></i>
+                </span>
 
                                                 @error('password_confirmation')
-                                                    <div class="invalid-feedback d-block">{{ $message }}</div>
+                                                <div class="invalid-feedback d-block">{{ $message }}</div>
                                                 @enderror
                                             </div>
                                         </div>
@@ -136,6 +150,7 @@
                                     </div>
                                 </form>
                                 <!-- END REGISTER FORM -->
+
 
                             </div>
                         </div>
