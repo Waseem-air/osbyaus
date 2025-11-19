@@ -25,7 +25,7 @@
                                         </a>
                                     </li>
                                     <li class="menu-item">
-                       <a href="{{ url('/admin/orders-management') }}" class="">
+                       <a href="{{ url('/admin/orders') }}" class="">
     <div class="icon">
         <!-- Orders / Shopping Bag Icon -->
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -94,7 +94,7 @@
     </a>
 
     <ul class="sub-menu" style="display: {{ request()->routeIs('admin.product.*') ? 'block' : 'none' }};">
-        
+
         <!-- Profile & Security -->
         <li class="sub-menu-item {{ request()->routeIs('admin.profile') ? 'active' : '' }}">
             <a href="{{ route('admin.profile') }}" class="">

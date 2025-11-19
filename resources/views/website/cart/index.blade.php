@@ -169,10 +169,10 @@
                                                 <div class="ec-pro-rat-price align-items-center">
                                             <span class="ec-price">
                                                 @if($relatedProduct->discount_price && $relatedProduct->discount_price < $relatedProduct->price)
-                                                    <span class="old-price">{{ App\Helpers\AppHelper::currency_symbol() }}.{{ number_format($relatedProduct->price, 2) }}</span>
-                                                    <span class="new-price">{{ App\Helpers\AppHelper::currency_symbol() }}.{{ number_format($relatedProduct->discount_price, 2) }}</span>
+                                                    <span class="old-price">{{ App\Helpers\AppHelper::currency_symbol() }}{{ number_format($relatedProduct->price, 2) }}</span>
+                                                    <span class="new-price">{{ App\Helpers\AppHelper::currency_symbol() }}{{ number_format($relatedProduct->discount_price, 2) }}</span>
                                                 @else
-                                                    <span class="new-price">{{ App\Helpers\AppHelper::currency_symbol() }}.{{ number_format($relatedProduct->price, 2) }}</span>
+                                                    <span class="new-price">{{ App\Helpers\AppHelper::currency_symbol() }}{{ number_format($relatedProduct->price, 2) }}</span>
                                                 @endif
                                             </span>
                                                 </div>

@@ -142,53 +142,6 @@ class CartController extends Controller
     }
 
     /**
-     * Update cart item quantity (AJAX) - For cart page only
-     */
-    public function updateQuantityPage(Request $request, $cartItemId)
-    {
-        $request->validate([
-            'quantity' => 'required|integer|min:1',
-        ]);
-
-        try {
-            $cart = $this->getOrCreateCart();
-            $cartItem = $cart->items()->where('id', $cartItemId)->first();
-
-            if (!$cartItem) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Cart item not found'
-                ], 404);
-            }
-
-            // Check stock for regular products
-            if (!$cartItem->custom_size_id) {
-                if ($cartItem->variant) {
-                    if ($cartItem->variant->stock_quantity < $request->quantity) {
-                        throw new \Exception('Insufficient stock for selected variant');
-                    }
-                } else {
-                    if ($cartItem->product->stock_quantity < $request->quantity) {
-                        throw new \Exception('Insufficient stock available');
-                    }
-                }
-            }
-
-            $cartItem->update(['quantity' => $request->quantity]);
-            $cartItem->updateTotal();
-            $cart->updateTotals();
-
-            return $this->getCartPageResponse('Quantity updated successfully!');
-
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => $e->getMessage()
-            ], 422);
-        }
-    }
-
-    /**
      * Remove item from cart (AJAX) - For cart page only
      */
     public function removeItemPage($cartItemId)
@@ -406,7 +359,8 @@ class CartController extends Controller
                     }
                 }
 
-                $price = $variant ? $variant->price : $product->final_price;
+                // Use product's discount_price if available, otherwise use regular price
+                $finalPrice = $product->discount_price ?? $product->price;
 
                 // Find existing cart item
                 $existingItem = $cart->items()
@@ -431,7 +385,7 @@ class CartController extends Controller
 
                     $existingItem->update([
                         'quantity' => $newQuantity,
-                        'price' => $price
+                        'price' => $finalPrice // Store the final price in price field
                     ]);
                     $existingItem->updateTotal();
                 } else {
@@ -440,7 +394,7 @@ class CartController extends Controller
                         'product_variant_id' => $variant?->id,
                         'custom_size_id' => null,
                         'quantity' => $request->quantity,
-                        'price' => $price,
+                        'price' => $finalPrice, // Store the final price in price field
                         'selected_options' => $selectedOptions,
                     ]);
                     $cartItem->updateTotal();
@@ -489,12 +443,14 @@ class CartController extends Controller
             return null;
         }
 
-        // Create new variant
+        // Use product's discount_price if available, otherwise use regular price
+        $finalPrice = $product->discount_price ?? $product->price;
+
         $variant = ProductVariant::create([
             'product_id' => $productId,
             'product_color_id' => $productColorId,
             'product_size_id' => $productSizeId,
-            'price' => $product->final_price, // Use product price as default
+            'price' => $finalPrice,
             'stock_quantity' => $product->stock_quantity, // Use product stock as default
             'sku' => $this->generateVariantSku($product, $productColorId, $productSizeId),
         ]);
@@ -551,14 +507,15 @@ class CartController extends Controller
                     ...$request->custom_size
                 ]);
 
-                $price = $product->final_price + 500;
+                // Use product's discount_price if available, otherwise use regular price
+                $finalPrice = $product->discount_price ?? $product->price;
 
                 $cartItem = $cart->items()->create([
                     'product_id' => $product->id,
                     'product_variant_id' => null,
                     'custom_size_id' => $customSize->id,
                     'quantity' => 1,
-                    'price' => $price,
+                    'price' => $finalPrice, // Store the final price in price field
                     'selected_options' => ['is_custom_size' => true],
                 ]);
 
@@ -772,13 +729,13 @@ class CartController extends Controller
         $request->authenticate();
         $request->session()->regenerate();
         $user = Auth::user();
-         return response()->json([
-                'success' => true,
-                'message' => 'Login successful',
-                'user' => [
-                    'name' => $user->username,
-                    'email' => $user->email
-                ]
-            ]);
-        }
+        return response()->json([
+            'success' => true,
+            'message' => 'Login successful',
+            'user' => [
+                'name' => $user->username,
+                'email' => $user->email
+            ]
+        ]);
+    }
 }

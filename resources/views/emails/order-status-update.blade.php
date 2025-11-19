@@ -262,7 +262,7 @@
                             </small>
                         @endif
                     </td>
-                    <td>{{ App\Helpers\AppHelper::currency_symbol() }}{{ number_format($item->price, 2) }}</td>
+                    <td>{{ App\Helpers\AppHelper::currency_symbol() }}{{ number_format($item->discount_price, 2) }}</td>
                     <td>{{ $item->quantity }}</td>
                     <td>{{ App\Helpers\AppHelper::currency_symbol() }}{{ number_format($item->total, 2) }}</td>
                 </tr>
