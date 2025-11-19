@@ -9,84 +9,59 @@
         }
 
         bindEvents() {
-            // Quantity update handler
-            $(document).on('change', '.cart-page-quantity-input', (e) => this.updateQuantity(e));
-
-            // Plus/minus button handlers
-            $(document).on('click', '.ec_qtybtn', (e) => {
-                e.preventDefault();
-                const button = $(e.target);
-                const input = button.siblings('.cart-page-quantity-input');
-                let currentValue = parseInt(input.val()) || 0;
-                let newValue = currentValue;
-
-                if (button.hasClass('inc')) {
-                    // Plus button clicked
-                    newValue = currentValue + 1;
-                } else if (button.hasClass('dec')) {
-                    // Minus button clicked
-                    if (currentValue > 1) {
-                        newValue = currentValue - 1;
-                    }
-                }
-
-                // Update the input value
-                input.val(newValue);
-
-                // Call updateQuantity directly
-                this.updateQuantity({ target: input[0] });
-            });
-
             // Remove item handler
             $(document).on('click', '.remove-cart-page-item', (e) => this.removeItem(e));
 
             // Clear cart handler
             $(document).on('click', '.clear-cart-page-btn', (e) => this.clearCart(e));
 
+            // Update cart handler
+            $(document).on('click', '.update-cart-btn', (e) => this.updateCart(e));
+
             // Login form submission
             $('#loginForm').on('submit', (e) => this.handleLogin(e));
         }
 
-        async updateQuantity(e) {
-            const input = $(e.target);
-            const quantity = parseInt(input.val());
-            const itemId = input.data('item-id');
-            console.log('Updating quantity for item:', itemId, 'to:', quantity);
-
-            if (quantity < 1) {
-                input.val(1);
-                return;
-            }
-
+        async updateCart(e) {
+            e.preventDefault();
+            const button = $(e.target);
+            const originalText = button.html();
             // Show loading state
-            input.prop('disabled', true);
-            const originalValue = input.val();
-
+            button.prop('disabled', true).html('<i class="fi-rr-spinner spinner"></i> Updating...');
+            const quantities = {};
+            $('.cart-plus-minus').each(function() {
+                const itemId = $(this).data('item-id');
+                const quantity = parseInt($(this).val()) || 1;
+                if (quantity < 1) {
+                    $(this).val(1);
+                    quantities[itemId] = 1;
+                } else {
+                    quantities[itemId] = quantity;
+                }
+            });
             try {
                 const response = await $.ajax({
-                    url: `/cart/page/update-quantity/${itemId}`,
+                    url: '{{ route("cart.page.update") }}',
                     method: 'PUT',
                     data: {
-                        quantity: quantity,
+                        quantities: quantities,
                         _token: '{{ csrf_token() }}'
                     }
                 });
 
                 if (response.success) {
                     await this.updateCartPage(response);
-                    this.showSuccessAlert('Success!', 'Quantity updated successfully!');
+                    this.showSuccessAlert('Success!', 'Cart updated successfully!');
+                    smoothReload();
                 }
             } catch (error) {
-                console.error('Update quantity error:', error);
-                input.val(originalValue); // Revert to original value
-
                 if (error.responseJSON && error.responseJSON.message) {
                     this.showErrorAlert('Error!', error.responseJSON.message);
                 } else {
-                    this.handleAjaxError(error, 'updating quantity');
+                    this.handleAjaxError(error, 'updating cart');
                 }
             } finally {
-                input.prop('disabled', false);
+                button.prop('disabled', false).html(originalText);
             }
         }
 
@@ -95,9 +70,6 @@
             const button = $(e.currentTarget);
             const itemId = button.data('item-id');
             const cartItem = button.closest('tr');
-
-            console.log('Removing item:', itemId);
-
             const result = await Swal.fire({
                 title: 'Remove Item',
                 text: 'Are you sure you want to remove this item from your cart?',
@@ -109,7 +81,6 @@
             });
 
             if (result.isConfirmed) {
-                // Show loading state
                 if (cartItem) {
                     cartItem.css('opacity', '0.6');
                     button.prop('disabled', true).html('<i class="fi-rr-spinner spinner"></i>');
@@ -125,7 +96,6 @@
                     });
 
                     if (response.success) {
-                        // Update the entire cart page
                         await this.updateCartPage(response);
                         this.showSuccessAlert('Removed!', response.message);
                     }
@@ -138,7 +108,6 @@
                     }
 
                     if (error.status === 404) {
-                        // Item already removed, reload cart
                         await this.loadCartItems();
                         this.showInfoAlert('Info', 'Item was already removed from your cart.');
                     } else {
@@ -184,8 +153,6 @@
                         this.showSuccessAlert('Cleared!', response.message);
                     }
                 } catch (error) {
-                    console.error('Clear cart error:', error);
-                    // Reload cart items on error
                     await this.loadCartItems();
                     this.handleAjaxError(error, 'clearing cart');
                 }
@@ -193,9 +160,6 @@
         }
 
         async updateCartPage(response) {
-            console.log('Updating cart page with response:', response);
-
-            // Update cart items
             if (response.html) {
                 $('#cart-items-container').html(response.html);
             }
@@ -207,14 +171,9 @@
             if (response.cartTotal) {
                 $('#cart-total').text(`{{ App\Helpers\AppHelper::currency_symbol() }}${response.cartTotal}`);
             }
-
-            // Update cart count in header
             if (window.shoppingCart) {
                 window.shoppingCart.updateCartCount(response.cartCount || 0);
             }
-
-            // Update checkout button based on auth status
-            this.updateCheckoutButton();
         }
 
         async loadCartItems() {
@@ -233,22 +192,6 @@
             }
         }
 
-        updateCheckoutButton() {
-            const checkoutSection = $('.ec-cart-summary').find('div').last();
-            if ('{{ auth()->check() }}' === '1') {
-                checkoutSection.html(`
-                    <a href="{{ route('checkout') }}" class="btn btn-dark py-2 mt-4 w-100 h-100">
-                        Proceed to checkout <i class="ecicon eci-angle-right ms-2"></i>
-                    </a>
-                `);
-            } else {
-                checkoutSection.html(`
-                    <button type="button" class="btn btn-dark py-2 mt-4 w-100 h-100" onclick="showLoginModal()">
-                        Login to Checkout <i class="ecicon eci-angle-right ms-2"></i>
-                    </button>
-                `);
-            }
-        }
 
         async handleLogin(e) {
             e.preventDefault();
@@ -256,15 +199,13 @@
             const loginBtn = $('#loginBtn');
             const loginText = loginBtn.find('.login-text');
             const loadingText = loginBtn.find('.loading-text');
-
-            // Show loading state
             loginText.addClass('d-none');
             loadingText.removeClass('d-none');
             loginBtn.prop('disabled', true);
 
             try {
                 const response = await $.ajax({
-                    url: '{{ route("login") }}',
+                    url: '{{ route("cart.login") }}',
                     method: 'POST',
                     data: formData,
                     headers: {
@@ -274,25 +215,20 @@
 
                 if (response.success) {
                     $('#loginModal').modal('hide');
-                    // Update UI without page reload
-                    this.updateCheckoutButton();
                     this.showSuccessAlert('Success!', 'Login successful!');
-
-                    // Update cart sidebar if exists
-                    if (window.shoppingCart) {
                         await window.shoppingCart.loadCartSidebar();
-                    }
+                        smoothReload();
                 }
             } catch (error) {
-                console.error('Login error:', error);
-                let errorMessage = 'Login failed. Please try again.';
-
+                let errorMessage = 'An unknown error occurred. Please try again.'; // A safe default message
                 if (error.responseJSON && error.responseJSON.errors) {
                     errorMessage = Object.values(error.responseJSON.errors).flat().join('<br>');
                 }
-
+                else if (error.responseJSON && error.responseJSON.message) {
+                    errorMessage = error.responseJSON.message;
+                }
                 Swal.fire({
-                    title: 'Login Failed',
+                    title: 'Login Failed — Incorrect Email or Password',
                     html: errorMessage,
                     icon: 'error',
                     confirmButtonColor: '#000'
@@ -304,6 +240,7 @@
                 loginBtn.prop('disabled', false);
             }
         }
+
 
         handleAjaxError(error, action) {
             let errorMessage = `Error ${action}`;
@@ -365,7 +302,17 @@
         $('#loginModal').modal('show');
     }
 
-    // Initialize cart page when document is ready
+
+    function smoothReload(delay = 1200) {
+        setTimeout(() => {
+            document.body.style.transition = "opacity 0.5s";
+            document.body.style.opacity = 0;
+            setTimeout(() => {
+                location.reload();
+            }, 500);
+        }, delay);
+    }
+
     $(document).ready(function() {
         if (typeof window.cartPage === 'undefined') {
             window.cartPage = new CartPage();

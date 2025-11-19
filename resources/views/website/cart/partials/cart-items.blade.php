@@ -17,6 +17,7 @@
                                         <small>Color: {{ $item->variant->color->color->name ?? 'N/A' }}</small>
                                     @endif
                                     @if($item->variant->size)
+                                        <br>
                                         <small>Size: {{ $item->variant->size->size->name ?? 'N/A' }}</small>
                                     @endif
                                 </div>
@@ -32,18 +33,18 @@
                 <td data-label="Price" class="ec-cart-pro-price">
                     <span class="amount">{{ App\Helpers\AppHelper::currency_symbol() }}{{ number_format($item->price, 2) }}</span>
                 </td>
-                <td data-label="Quantity" class="ec-cart-pro-qty" style="text-align: center;">
+                <td data-label="Quantity" class="ec-cart-pro-qty"
+                    style="text-align: center;">
                     <div class="cart-qty-plus-minus">
-                        <div class="dec ec_qtybtn">-</div>
-                        <input class="cart-plus-minus cart-quantity-input cart-page-quantity-input" type="number"
+                        <input class="cart-plus-minus" type="text"
                                name="quantity"
                                value="{{ $item->quantity }}"
                                min="1"
                                data-item-id="{{ $item->id }}"
-                               style="text-align: center; width: 60px;" />
-                        <div class="inc ec_qtybtn">+</div>
+                        />
                     </div>
                 </td>
+
                 <td data-label="Total" class="ec-cart-pro-subtotal">
                     {{ App\Helpers\AppHelper::currency_symbol() }}{{ number_format($item->price * $item->quantity, 2) }}
                 </td>
@@ -61,6 +62,7 @@
         <div class="col-lg-12">
             <div class="ec-cart-update-bottom">
                 <a href="{{ route('products.index') }}" class="btn-return">Return to shop</a>
+                <button class="btn btn-secondary update-cart-btn">Update Cart</button>
                 <a href="javascript:void(0);" class="btn btn-dark clear-cart-page-btn">Clear Cart</a>
             </div>
         </div>
@@ -75,4 +77,3 @@
         </a>
     </div>
 @endif
-
