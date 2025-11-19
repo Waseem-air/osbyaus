@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ColorController;
 use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\admin\DashboardController;
+use App\Http\Controllers\admin\OrderController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\SizeController;
 use Illuminate\Support\Facades\Route;
@@ -18,10 +19,14 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin'])->grou
     Route::get('/store-menu', [AdminController::class, 'store_menu'])->name('store.menu');
     Route::get('/profile', [AdminController::class, 'profile'])->name('profile');
     Route::get('/media-links', [AdminController::class, 'media_links'])->name('media.links');
-    Route::get('/orders-management', [AdminController::class, 'orders_management'])->name('orders.management');
 
-
-
+    // Order Routes
+    Route::prefix('orders')->name('order.')->group(function () {
+        Route::get('/', [OrderController::class, 'index'])->name('index');
+        Route::get('/{id}/show', [OrderController::class, 'show'])->name('show');
+        Route::post('/{id}/update-status', [OrderController::class, 'updateStatus'])->name('update-status');
+        Route::delete('/{id}/delete', [OrderController::class, 'destroy'])->name('delete');
+    });
 
     // Color Routes
     Route::prefix('colors')->name('color.')->group(function () {

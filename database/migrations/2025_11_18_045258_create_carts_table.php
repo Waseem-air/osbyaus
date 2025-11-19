@@ -8,7 +8,8 @@ return new class extends Migration
 {
     public function up()
     {
-        Schema::create('carts', function (Blueprint $table) {
+        if (!Schema::hasTable('carts')) {
+            Schema::create('carts', function (Blueprint $table) {
             $table->id();
             $table->string('session_id')->unique();
             $table->foreignId('user_id')->nullable()->constrained()->onDelete('cascade');
@@ -16,6 +17,7 @@ return new class extends Migration
             $table->decimal('total', 10, 2)->default(0);
             $table->timestamps();
         });
+        }
     }
 
     public function down()

@@ -27,8 +27,4 @@ class AdminController extends Controller
     {
         return view('admin.medialinks');
     }
-     public function orders_management()
-    {
-        return view('admin.orders');
-    }
 }

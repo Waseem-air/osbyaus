@@ -35,6 +35,11 @@ class Order extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function customer()
+    {
+        return $this->belongsTo(User::class);
+    }
+
     public function items()
     {
         return $this->hasMany(OrderItem::class);
@@ -84,5 +89,10 @@ class Order extends Model
         $this->subtotal = $this->items->sum('total');
         $this->total_amount = $this->subtotal + $this->tax_amount + $this->shipping_amount;
         $this->save();
+    }
+
+    public function statusHistories()
+    {
+        return $this->hasMany(OrderStatusHistory::class)->latest();
     }
 }
