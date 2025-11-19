@@ -52,7 +52,7 @@
                                         <div class="col-12 mb-1">
                                             <label>First Name</label>
                                             <input type="text"
-                                                   class="form-control auth-input @error('first_name') is-invalid @enderror"
+                                                   class="form-control auth-input"
                                                    name="first_name"
                                                    value="{{ old('first_name') }}"
                                                    placeholder="Your first name"
@@ -67,7 +67,7 @@
                                         <div class="col-12 mb-1">
                                             <label>Last Name</label>
                                             <input type="text"
-                                                   class="form-control auth-input @error('last_name') is-invalid @enderror"
+                                                   class="form-control auth-input"
                                                    name="last_name"
                                                    value="{{ old('last_name') }}"
                                                    placeholder="Your last name"
@@ -82,7 +82,7 @@
                                         <div class="col-12 mb-1">
                                             <label>Email</label>
                                             <input type="email"
-                                                   class="form-control auth-input @error('email') is-invalid @enderror"
+                                                   class="form-control auth-input"
                                                    name="email"
                                                    value="{{ old('email') }}"
                                                    placeholder="Email address"
@@ -94,32 +94,40 @@
                                         </div>
 
                                         <!-- Password -->
+
+                                        <!-- Password -->
                                         <div class="col-12 mb-1">
                                             <label>Password</label>
                                             <div class="position-relative">
                                                 <input type="password"
-                                                       class="form-control auth-input @error('password') is-invalid @enderror"
+                                                       class="form-control auth-input"
                                                        name="password"
                                                        placeholder="Enter password"
                                                        id="password"
                                                        required autocomplete="new-password">
 
                                                 <span class="password-show" onclick="togglePassword('password', this)">
-                    <i class="fi-rr-eye"></i>
-                </span>
-
-                                                @error('password')
-                                                <div class="invalid-feedback d-block">{{ $message }}</div>
-                                                @enderror
+            <i class="fi-rr-eye"></i>
+        </span>
                                             </div>
+
+                                            <!-- Small note -->
+                                            <small class="text-muted mt-0 pt-0" style="font-size: 12px;">
+                                                Password must be at least 8 characters.
+                                            </small>
+
+                                            @error('password')
+                                            <div class="invalid-feedback d-block">{{ $message }}</div>
+                                            @enderror
                                         </div>
+
 
                                         <!-- Confirm Password -->
                                         <div class="col-12 mb-1">
                                             <label>Confirm Password</label>
                                             <div class="position-relative">
                                                 <input type="password"
-                                                       class="form-control auth-input @error('password_confirmation') is-invalid @enderror"
+                                                       class="form-control auth-input"
                                                        name="password_confirmation"
                                                        placeholder="Re-enter password"
                                                        id="password_confirmation"

@@ -61,7 +61,7 @@
                                         <div class="col-12 mb-3">
                                             <label>Email</label>
                                             <input type="email"
-                                                class="form-control auth-input @error('email') is-invalid @enderror"
+                                                class="form-control auth-input"
                                                 name="email"
                                                 value="{{ old('email') }}"
                                                 placeholder="Email address"
@@ -77,7 +77,7 @@
                                             <label>Password</label>
                                             <div class="position-relative">
                                                 <input type="password"
-                                                    class="form-control auth-input @error('password') is-invalid @enderror"
+                                                    class="form-control auth-input"
                                                     name="password"
                                                     placeholder="Enter password"
                                                     id="password"
