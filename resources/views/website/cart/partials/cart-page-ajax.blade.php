@@ -174,9 +174,6 @@
             if (window.shoppingCart) {
                 window.shoppingCart.updateCartCount(response.cartCount || 0);
             }
-
-            // Update checkout button based on auth status
-            this.updateCheckoutButton();
         }
 
         async loadCartItems() {
@@ -195,22 +192,6 @@
             }
         }
 
-        updateCheckoutButton() {
-            const checkoutSection = $('.ec-cart-summary').find('div').last();
-            if ('{{ auth()->check() }}' === '1') {
-                checkoutSection.html(`
-                    <a href="{{ route('checkout') }}" class="btn btn-dark py-2 mt-4 w-100 h-100">
-                        Proceed to checkout <i class="ecicon eci-angle-right ms-2"></i>
-                    </a>
-                `);
-            } else {
-                checkoutSection.html(`
-                    <button type="button" class="btn btn-dark py-2 mt-4 w-100 h-100" onclick="showLoginModal()">
-                        Login to Checkout <i class="ecicon eci-angle-right ms-2"></i>
-                    </button>
-                `);
-            }
-        }
 
         async handleLogin(e) {
             e.preventDefault();
@@ -218,15 +199,13 @@
             const loginBtn = $('#loginBtn');
             const loginText = loginBtn.find('.login-text');
             const loadingText = loginBtn.find('.loading-text');
-
-            // Show loading state
             loginText.addClass('d-none');
             loadingText.removeClass('d-none');
             loginBtn.prop('disabled', true);
 
             try {
                 const response = await $.ajax({
-                    url: '{{ route("login") }}',
+                    url: '{{ route("cart.login") }}',
                     method: 'POST',
                     data: formData,
                     headers: {
@@ -236,25 +215,20 @@
 
                 if (response.success) {
                     $('#loginModal').modal('hide');
-                    // Update UI without page reload
-                    this.updateCheckoutButton();
                     this.showSuccessAlert('Success!', 'Login successful!');
-
-                    // Update cart sidebar if exists
-                    if (window.shoppingCart) {
                         await window.shoppingCart.loadCartSidebar();
-                    }
+                        smoothReload();
                 }
             } catch (error) {
-                console.error('Login error:', error);
-                let errorMessage = 'Login failed. Please try again.';
-
+                let errorMessage = 'An unknown error occurred. Please try again.'; // A safe default message
                 if (error.responseJSON && error.responseJSON.errors) {
                     errorMessage = Object.values(error.responseJSON.errors).flat().join('<br>');
                 }
-
+                else if (error.responseJSON && error.responseJSON.message) {
+                    errorMessage = error.responseJSON.message;
+                }
                 Swal.fire({
-                    title: 'Login Failed',
+                    title: 'Login Failed — Incorrect Email or Password',
                     html: errorMessage,
                     icon: 'error',
                     confirmButtonColor: '#000'
@@ -266,6 +240,7 @@
                 loginBtn.prop('disabled', false);
             }
         }
+
 
         handleAjaxError(error, action) {
             let errorMessage = `Error ${action}`;
@@ -328,13 +303,13 @@
     }
 
 
-    function smoothReload(delay = 1000) {
+    function smoothReload(delay = 1200) {
         setTimeout(() => {
-            document.body.style.transition = "opacity 0.4s";
+            document.body.style.transition = "opacity 0.5s";
             document.body.style.opacity = 0;
             setTimeout(() => {
                 location.reload();
-            }, 400);
+            }, 500);
         }, delay);
     }
 

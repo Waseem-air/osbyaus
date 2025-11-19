@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Website;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Auth\LoginRequest;
 use App\Models\Cart;
 use App\Models\CartItem;
 use App\Models\Product;
@@ -10,7 +11,9 @@ use App\Models\ProductColor;
 use App\Models\ProductSize;
 use App\Models\ProductVariant;
 use App\Models\CustomSize;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -707,4 +710,19 @@ class CartController extends Controller
     {
         Cookie::queue(self::CART_COOKIE_NAME, $cart->session_id, self::COOKIE_EXPIRY);
     }
+
+    public function login(LoginRequest $request): JsonResponse
+    {
+        $request->authenticate();
+        $request->session()->regenerate();
+        $user = Auth::user();
+         return response()->json([
+                'success' => true,
+                'message' => 'Login successful',
+                'user' => [
+                    'name' => $user->username,
+                    'email' => $user->email
+                ]
+            ]);
+        }
 }

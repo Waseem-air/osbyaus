@@ -23,6 +23,8 @@ Route::prefix('cart')->group(function () {
     Route::delete('/remove/{cartItemId}', [CartController::class, 'removeItem'])->name('cart.remove');
     Route::delete('/clear', [CartController::class, 'clearCart'])->name('cart.clear');
     Route::get('/items', [CartController::class, 'getCartItems'])->name('cart.items');
+    //cart page login customer
+    Route::post('/login', [CartController::class, 'login'])->name('cart.login');
 });
 
 Route::get('/checkout', [CheckoutController::class, 'index'])

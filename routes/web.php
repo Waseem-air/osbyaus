@@ -19,6 +19,12 @@ require __DIR__ . '/website.php';
 // ---------------------------------------------------------
 require __DIR__ . '/cart_routes.php';
 
+
+// ---------------------------------------------------------
+// 🧭 Customer Routes
+// ---------------------------------------------------------
+require __DIR__ . '/customer_routes.php';
+
 // Route::get('/dashboard', function () {
 //     return view('dashboard');
 // })->middleware(['auth', 'verified'])->name('dashboard');
