@@ -299,7 +299,7 @@
         <tbody>
         @foreach($cart->items as $item)
             <tr>
-                <td data-label="" class="ec-cart-pro-name">
+                <td data-label="" class="ec-cart-pro-name  p-sm-1">
                     <a href="{{ route('product.detail', $item->product->slug) }}">
                         <img class="ec-cart-pro-img mr-4"
                              src="{{ asset($item->product->main_image?->image_path ?? 'website/assets/images/product/default-product.jpg') }}"
