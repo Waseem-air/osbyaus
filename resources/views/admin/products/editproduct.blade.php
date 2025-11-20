@@ -742,7 +742,7 @@
                                     <span class="status-label">Active</span>
                                     <label class="switch">
                                         <input type="checkbox" name="status"
-                                               value="active" {{ $product->status ? 'checked' : '' }}>
+                                               value="1" {{ $product->status ? 'checked' : '' }}>
                                         <span class="slider"></span>
                                     </label>
                                 </div>

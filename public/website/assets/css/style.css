@@ -27033,6 +27033,7 @@ li.ec-brand-item {
   background-size: cover;
   position: relative;
   z-index: 1;
+  
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -31832,7 +31833,14 @@ section.ec-instagram-section {
   .ec-main-slider .ec-slide-bg-wrapper {
     position: relative;
   }
-
+  .ec-slide-bg{
+    height: 217px;
+    overflow: hidden;
+  }
+  .ec-slide-bg-1{
+    height: 217px;
+    overflow: hidden;
+  }
   .ec-main-slider .ec-slide-bg-wrapper::after {
     content: "";
     position: absolute;

@@ -330,9 +330,8 @@ class ProductController extends Controller
             $product->fabric = $request->fabric;
             $product->embellishment = $request->embellishment;
             $product->cut = $request->cut;
-//            $product->status = $request->has('status')?? false;
+        //    $product->status = $request->status;
             $product->save();
-
             // Sync categories
             $product->categories()->sync($request->categories);
 

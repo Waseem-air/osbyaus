@@ -21,7 +21,7 @@
                                 favorite look is just a click away!
                             </p>
                         </div>
-                        <a href="products.html" class="btn btn-lg">
+                        <a href="{{ route('products.index') }}" class="btn btn-lg">
                             Shop Now
                             <i class="fi-rr-arrow-small-right"></i>
                         </a>
@@ -50,7 +50,7 @@
                                 favorite look is just a click away!
                             </p>
                         </div>
-                        <a href="products.html" class="btn btn-lg">
+                        <a href="{{ route('products.index') }}" class="btn btn-lg">
                             Shop Now
                             <i class="fi-rr-arrow-small-right"></i>
                         </a>
@@ -73,7 +73,7 @@
                     <div class="section-title mb-6 d-flex justify-content-between">
                         <h2 class="ec-title">Popular This Week</h2>
                         <a href="{{ route('products.index') }}" class="ec-stitle">View All
-                            <img src="website/assets/images/icon/arrow_right.svg" alt="">
+                            <img src="website/assets/images/icon/arrow_right.svg" alt="" class="">
                         </a>
                     </div>
                 </div>
