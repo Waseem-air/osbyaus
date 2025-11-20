@@ -110,5 +110,21 @@ class Product extends Model
             ->orderBy('created_at', 'desc');
     }
 
+    /**
+     * Get users who have this product in their wishlist.
+     */
+    public function wishlistedByUsers()
+    {
+        return $this->belongsToMany(User::class, 'wishlists', 'product_id', 'user_id')
+            ->withTimestamps();
+    }
+
+    /**
+     * Get wishlist entries for this product.
+     */
+    public function wishlistEntries()
+    {
+        return $this->hasMany(Wishlist::class);
+    }
 
 }
