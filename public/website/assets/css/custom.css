@@ -68,21 +68,6 @@
 /* SIZE BADGES                */
 /* -------------------------- */
 
-.size-badge-custom {
-    background: #f8f9fa !important;
-    border: 2px dashed #dee2e6 !important;
-    color: #6c757d !important;
-    cursor: pointer !important;
-    padding: 8px 12px !important;
-    border-radius: 4px !important;
-    display: inline-block !important;
-}
-
-.size-badge-custom:hover {
-    background: #e9ecef !important;
-    border-color: #6c757d !important;
-}
-
 .ec-size-from input {
     width: 100% !important;
 }
