@@ -5,7 +5,6 @@
             <div class="ec-vendor-block">
                 <div class="ec-vendor-block-detail">
                     <h5>{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}</h5>
-                    <p>{{ Auth::user()->email }}</p>
                 </div>
                 <div class="ec-vendor-block-items">
                     <ul>

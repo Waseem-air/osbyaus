@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Customer\AddressController;
 use App\Http\Controllers\Customer\CustomerDashboardController;
 use App\Http\Controllers\Customer\OrderController;
 use App\Http\Controllers\Customer\ProfileController;
@@ -20,6 +21,16 @@ Route::prefix('customer')->name('customer.')->middleware(['auth', 'role:customer
     Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
     Route::post('/orders/{order}/cancel', [OrderController::class, 'cancel'])->name('orders.cancel');
     Route::get('/orders/{order}/invoice', [OrderController::class, 'invoice'])->name('orders.invoice');
+
+
+    // 📍 Address Management
+    Route::get('/addresses', [AddressController::class, 'index'])->name('addresses.index');
+    Route::get('/addresses/create', [AddressController::class, 'create'])->name('addresses.create');
+    Route::post('/addresses', [AddressController::class, 'store'])->name('addresses.store');
+    Route::get('/addresses/{address}/edit', [AddressController::class, 'edit'])->name('addresses.edit');
+    Route::put('/addresses/{address}', [AddressController::class, 'update'])->name('addresses.update');
+    Route::delete('/addresses/{address}', [AddressController::class, 'destroy'])->name('addresses.destroy');
+    Route::put('/addresses/{address}/set-default', [AddressController::class, 'setDefault'])->name('addresses.setDefault');
 
     // ❤️ Wishlist Management
     Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
