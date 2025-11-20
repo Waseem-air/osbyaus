@@ -1,0 +1,168 @@
+/* -------------------------- */
+/* FORM INPUT & ERROR STYLES  */
+/* -------------------------- */
+
+.invalid-feedback {
+    color: #d9534f !important; /* light red */
+    font-size: 14px !important;
+    margin-top: 2px !important;
+}
+
+.auth-input.is-invalid {
+    border-color: #f5b5b5 !important;
+    box-shadow: none !important;
+}
+
+.eci-arrow-up {
+    margin-top: 10px !important;
+}
+
+.auth-form .col-12.mb-3 {
+    margin-bottom: 18px !important;
+}
+
+/* -------------------------- */
+/* SPINNER (FI ICON)          */
+/* -------------------------- */
+
+.fi-rr-spinner.spinner {
+    animation: spin 1s linear infinite !important;
+    display: inline-block !important;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+}
+
+/* -------------------------- */
+/* CART BADGE & SIDECART      */
+/* -------------------------- */
+
+.cart-count-badge {
+    position: absolute !important;
+    top: -8px !important;
+    right: -8px !important;
+    background: #000 !important;
+    color: #fff !important;
+    border-radius: 50% !important;
+    width: 20px !important;
+    height: 20px !important;
+    font-size: 12px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    line-height: 1 !important;
+}
+
+.ec-side-cart {
+    z-index: 9999 !important;
+}
+
+.ec-side-cart-overlay.ec-close {
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+/* -------------------------- */
+/* SIZE BADGES                */
+/* -------------------------- */
+
+.size-badge-custom {
+    background: #f8f9fa !important;
+    border: 2px dashed #dee2e6 !important;
+    color: #6c757d !important;
+    cursor: pointer !important;
+    padding: 8px 12px !important;
+    border-radius: 4px !important;
+    display: inline-block !important;
+}
+
+.size-badge-custom:hover {
+    background: #e9ecef !important;
+    border-color: #6c757d !important;
+}
+
+.ec-size-from input {
+    width: 100% !important;
+}
+
+/* -------------------------- */
+/* SWEETALERT2 CUSTOM THEME   */
+/* -------------------------- */
+
+.swal2-container {
+    z-index: 999999 !important;
+}
+
+.swal2-html-container {
+    font-size: 14px !important;
+    color: #000 !important;
+}
+
+.swal2-icon.swal2-success,
+.swal2-icon.swal2-error,
+.swal2-icon.swal2-warning {
+    border-color: #000 !important;
+    color: #000 !important;
+}
+
+.swal2-confirm {
+    background: #000 !important;
+    color: #fff !important;
+    border-radius: 6px !important;
+    padding: 8px 20px !important;
+}
+
+.swal2-cancel {
+    background: #e1e1e1 !important;
+    color: #000 !important;
+    border-radius: 6px !important;
+    padding: 8px 20px !important;
+}
+
+/* -------------------------- */
+/* CART ITEMS REMOVE BUTTON   */
+/* -------------------------- */
+
+.eccart-pro-items li .ec-pro-content .remove-cart-item {
+    line-height: 1.5 !important;
+    position: absolute !important;
+    top: 0 !important;
+    right: 0 !important;
+    padding: 0 9px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    height: 34px !important;
+    width: 34px !important;
+    color: #D0D0D0 !important;
+    border: 1px solid #F2F2F2 !important;
+    border-radius: 8px !important;
+    font-size: 18px !important;
+}
+
+.eccart-pro-items li .ec-pro-content .remove-cart-item:hover {
+    color: #94010E !important;
+}
+
+/* -------------------------- */
+/* IMAGE CLICK FIX (IMPORTANT)*/
+/* -------------------------- */
+
+/* Disable blocking elements */
+.ec-pro-image-outer * ,
+.ec-pro-image * {
+    pointer-events: none !important;
+}
+
+/* Enable clicking on image link only */
+.ec-pro-image a {
+    pointer-events: auto !important;
+}
+
+/* Ensure overlay elements never block click */
+.ec-pro-actions,
+.ec-pro-actions-sale {
+    pointer-events: none !important;
+}
