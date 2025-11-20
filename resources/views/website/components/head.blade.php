@@ -48,7 +48,9 @@
             border-color: #f5b5b5 !important; /* soft red border */
             box-shadow: none !important;
         }
-
+        .eci-arrow-up{
+            margin-top:10px!important;
+        }
         /* OPTIONAL: spacing correction */
         .auth-form .col-12.mb-3 {
             margin-bottom: 18px !important;

@@ -1374,12 +1374,7 @@ progress {
   appearance: none;
 }
 
-.form-select:focus {
-  border-color: #ffb984;
-  outline: 0;
-  -webkit-box-shadow: 0 0 0 4px rgba(255, 112, 4, 0.25);
-  box-shadow: 0 0 0 4px rgba(255, 112, 4, 0.25);
-}
+
 
 .form-select:focus::-ms-value {
   color: #495057;

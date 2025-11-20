@@ -27,4 +27,8 @@ class AdminController extends Controller
     {
         return view('admin.medialinks');
     }
+    public function store_details()
+    {
+        return view('admin.storedetails');
+    }
 }

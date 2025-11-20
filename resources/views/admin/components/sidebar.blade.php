@@ -37,6 +37,18 @@
     <div class="text">Orders Management</div>
 </a>
 
+                   <a href="{{ url('/admin/store-details') }}" class="">
+    <div class="icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" 
+             xmlns="http://www.w3.org/2000/svg">
+            <path d="M3 9L4 4H20L21 9H3Z" fill="#111111"/>
+            <path d="M4 10H20V20C20 21.1 19.1 22 18 22H6C4.9 22 4 21.1 4 20V10Z" fill="#111111"/>
+            <path d="M9 14H15V16H9V14Z" fill="#ffffff"/> <!-- door highlight -->
+        </svg>
+    </div>
+    <div class="text">Store Details</div>
+</a>
+
                     </li>
                     <li class="menu-item">
                         <a href="{{ url('/admin/transaction') }}" class="">
@@ -113,6 +125,11 @@
 
     </ul>
 </li>
+
+
+
+ 
+
 
 
                     <!-- Attributes Dropdown -->
