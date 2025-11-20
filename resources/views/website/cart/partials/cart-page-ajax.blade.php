@@ -151,6 +151,7 @@
                     if (response.success) {
                         await this.updateCartPage(response);
                         this.showSuccessAlert('Cleared!', response.message);
+                        smoothReload();
                     }
                 } catch (error) {
                     await this.loadCartItems();
