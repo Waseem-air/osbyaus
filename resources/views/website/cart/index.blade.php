@@ -80,8 +80,7 @@
                                                 <!-- Price -->
                                                 <td data-label="Price" class="ec-cart-pro-price">
                                                     <span class="amount">
-                                                        {{ App\Helpers\AppHelper::currency_symbol() }}
-                                                        {{ number_format($item->price, 2) }}
+                                                        {{ App\Helpers\AppHelper::currency_symbol() }}{{ number_format($item->price, 2) }}
                                                     </span>
                                                 </td>
 
@@ -99,8 +98,7 @@
 
                                                 <!-- Total -->
                                                 <td data-label="Total" class="ec-cart-pro-subtotal">
-                                                    {{ App\Helpers\AppHelper::currency_symbol() }}
-                                                    {{ number_format($item->price * $item->quantity, 2) }}
+                                                    {{ App\Helpers\AppHelper::currency_symbol() }}{{ number_format($item->price * $item->quantity, 2) }}
                                                 </td>
 
                                                 <!-- Remove -->
@@ -178,31 +176,28 @@
                                     <div>
                                         <span class="text-left">Subtotal</span>
                                         <span class="text-right" id="cart-subtotal">
-                                            {{ App\Helpers\AppHelper::currency_symbol() }}
-                                            {{ number_format($cart->subtotal ?? 0, 2) }}
+                                            {{ App\Helpers\AppHelper::currency_symbol() }}{{ number_format($cart->subtotal ?? 0, 2) }}
                                         </span>
                                     </div>
 
                                     <div>
                                         <span class="text-left">Shipping</span>
                                         <span class="text-right">
-                                            <span class="text-left">(Free Delivery)</span>
-                                            {{ App\Helpers\AppHelper::currency_symbol() }}0.00
+                                            <span class="text-left">(Free Delivery)</span>{{ App\Helpers\AppHelper::currency_symbol() }}0.00
                                         </span>
                                     </div>
 
                                     <div class="ec-cart-summary-total">
                                         <span class="text-left">Total Amount</span>
                                         <span class="text-right-total" id="cart-total">
-                                            {{ App\Helpers\AppHelper::currency_symbol() }}
-                                            {{ number_format($cart->total ?? 0, 2) }}
+                                            {{ App\Helpers\AppHelper::currency_symbol() }}{{ number_format($cart->total ?? 0, 2) }}
                                         </span>
                                     </div>
 
                                     @auth
                                         @if($cart->items_count > 0)
-                                            <div>
-                                                <a href="{{ route('checkout.index') }}" class="btn btn-dark py-2 mt-4 w-100">
+                                            <div class="mt-4">
+                                                <a href="{{ route('checkout.index') }}" class="btn btn-dark w-100">
                                                     Proceed to checkout <i class="ecicon eci-angle-right ms-2"></i>
                                                 </a>
                                             </div>
@@ -212,7 +207,7 @@
     <button type="button"
             class="btn btn-dark w-100"
             onclick="showLoginModal()">
-        Login to Checkout 
+        Login to Checkout
         <i class="ecicon eci-angle-right ms-2"></i>
     </button>
 </div>

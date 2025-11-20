@@ -99,36 +99,36 @@
                                                     <div class="row">
                                                         <div class="col-md-6">
                                                             <label>First Name</label>
-                                                            <input type="text" name="shipping_first_name" class="form-control shipping-input">
+                                                            <input type="text" name="shipping_first_name" class="form-control shipping-input" value="{{ $user->first_name }}">
                                                         </div>
                                                         <div class="col-md-6">
                                                             <label>Last Name</label>
-                                                            <input type="text" name="shipping_last_name" class="form-control shipping-input">
+                                                            <input type="text" name="shipping_last_name" class="form-control shipping-input" value="{{ $user->last_name }}">
                                                         </div>
                                                         <div class="col-md-6">
                                                             <label>Phone</label>
-                                                            <input type="text" name="shipping_phone" class="form-control shipping-input">
+                                                            <input type="text" name="shipping_phone" class="form-control shipping-input" value="{{ $user->phone }}">
                                                         </div>
                                                         <div class="col-md-6">
                                                             <label>Email</label>
-                                                            <input type="email" name="shipping_email" class="form-control shipping-input">
+                                                            <input type="email" name="shipping_email" class="form-control shipping-input" value="{{ $user->email }}">
                                                         </div>
                                                         <div class="col-md-12">
                                                             <label>Address</label>
-                                                            <textarea name="shipping_address" rows="3" class="form-control shipping-input"></textarea>
+                                                            <textarea name="shipping_address" rows="3" class="form-control shipping-input">{{ $user->address }}</textarea>
                                                         </div>
                                                         <div class="col-md-4">
                                                             <label>City</label>
-                                                            <input type="text" name="shipping_city" class="form-control shipping-input">
+                                                            <input type="text" name="shipping_city" class="form-control shipping-input" value="{{ $user->city }}" >
                                                         </div>
                                                         <div class="col-md-4">
                                                             <label>State</label>
-                                                            <input type="text" name="shipping_state" class="form-control shipping-input">
+                                                            <input type="text" name="shipping_state" class="form-control shipping-input" value="{{ $user->state }}">
                                                         </div>
 
                                                         <div class="col-md-4">
                                                             <label>Postal Code</label>
-                                                            <input type="text" name="shipping_postal_code" class="form-control shipping-input">
+                                                            <input type="text" name="shipping_postal_code" class="form-control shipping-input" value="{{ $user->postal_code }}">
                                                         </div>
                                                     </div>
                                                 </div>
