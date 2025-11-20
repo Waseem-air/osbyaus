@@ -37,7 +37,7 @@
 
 <!-- Chat Btn Start -->
 <a href="" class="chat-btn">
-    <i class="ecicon eci-whatsapp"></i>
+    <i class="ecicon eci-whatsapp cart-page" style="margin-top:10px;"></i>
 </a>
 <!-- Chat Btn End -->
 
