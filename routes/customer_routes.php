@@ -12,10 +12,11 @@ Route::prefix('customer')->name('customer.')->middleware(['auth', 'role:customer
     Route::get('/dashboard', [CustomerDashboardController::class, 'dashboard'])->name('dashboard');
 
     // 👤 Profile Management
+
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::put('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.updatePassword');
-
+    Route::put('/profile/address', [ProfileController::class, 'updateAddress'])->name('profile.address.update');
+    Route::put('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password.update');
     // 📦 Order Management
     Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
     Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
