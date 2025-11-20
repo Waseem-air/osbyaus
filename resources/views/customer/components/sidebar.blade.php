@@ -1,3 +1,4 @@
+@php use App\Models\Wishlist; @endphp
 <div class="ec-shop-leftside ec-vendor-sidebar col-xl-3 col-md-12 mb-4">
     <div class="ec-sidebar-wrap ec-border-box">
         <!-- Sidebar Category Block -->
@@ -38,6 +39,9 @@
                                         d="M9.74976 15.751C-7.59439 6.46112 4.54675 -3.62363 9.74976 2.75334C14.9535 -3.62363 27.0946 6.46112 9.74976 15.751Z"
                                         stroke="currentColor" stroke-width="1.5" />
                                 </svg>
+                                @php
+                                    $wishlistCount = Wishlist::where('user_id', \Illuminate\Support\Facades\Auth::user()->id)->count();
+                                @endphp
                                 Wishlist ({{ $wishlistCount }})
                             </a>
                         </li>
