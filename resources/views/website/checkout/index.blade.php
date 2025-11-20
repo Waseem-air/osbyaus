@@ -148,8 +148,8 @@
                                     </div>
                                 </div>
 
-                                <div class="mt-4">
-                                    <button type="submit" class="btn btn-dark btn-lg w-100" id="checkoutBtn">
+                                <div class="mt-4 mb-2">
+                                    <button type="submit" class="btn btn-dark btn-lg w-100 mb-2" id="checkoutBtn">
                                         <span class="btn-text">Proceed to Payment</span>
                                         <span class="btn-loading d-none">
                                         <i class="fi-rr-spinner spinner me-2"></i> Processing...
