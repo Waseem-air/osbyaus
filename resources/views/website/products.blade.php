@@ -1,6 +1,6 @@
 @extends('website.layouts.main')
 @section('title', 'Products')
-@section('meta_description', 'Discover the best global fashion trends. Shop stylish clothing for men & women with fast worldwide delivery.')
+@section('meta_description', 'Discover best global fashion trends. Shop stylish clothing for men & women with fast worldwide delivery.')
 @section('meta_keywords', 'fashion store, clothing shop, global fashion, men fashion, women fashion, ecommerce clothing')
 
 @section('content')
@@ -215,63 +215,86 @@
             const maxPriceDisplay = document.getElementById('max-price');
             const sortInput = document.getElementById('sort-input');
             const filterForm = document.getElementById('filter-form');
-            const loadMoreBtn = document.getElementById('load-more-btn');
-            const loadMoreLoader = document.getElementById('load-more-loader');
-            const endOfProducts = document.getElementById('end-of-products');
-            const loadedCount = document.getElementById('loaded-count');
-            const resultsCount = document.getElementById('results-count');
+
+            // Initialize load more button with a more robust approach
+            let loadMoreBtn = null;
+            let loadMoreLoader = null;
+            let endOfProducts = null;
+            let loadedCount = null;
+            let resultsCount = null;
+
+            // Function to initialize elements after DOM is ready
+            function initializeElements() {
+                loadMoreBtn = document.getElementById('load-more-btn');
+                loadMoreLoader = document.getElementById('load-more-loader');
+                endOfProducts = document.getElementById('end-of-products');
+                loadedCount = document.getElementById('loaded-count');
+                resultsCount = document.getElementById('results-count');
+
+                console.log('Elements initialized:', {
+                    loadMoreBtn: !!loadMoreBtn,
+                    loadMoreLoader: !!loadMoreLoader,
+                    endOfProducts: !!endOfProducts,
+                    loadedCount: !!loadedCount,
+                    resultsCount: !!resultsCount
+                });
+            }
 
             // Initialize load more button
             function initializeLoadMore() {
+                initializeElements();
                 updateLoadMoreVisibility();
                 updateLoadedCount();
             }
 
             // Show loading state immediately when filters change
             function showFilterLoadingState() {
-                resultsCount.textContent = 'Filtering...';
+                if (resultsCount) {
+                    resultsCount.textContent = 'Filtering...';
+                }
                 const productsContainer = document.getElementById('products-container');
                 if (productsContainer) {
                     productsContainer.style.opacity = '0.6';
                 }
             }
 
-            // Update URL with current filter state
-            function updateURLWithFilters() {
-                const formData = new FormData(filterForm);
-                const params = new URLSearchParams();
-
-                for (const [key, value] of formData.entries()) {
-                    if (key !== '_token') {
-                        params.append(key, value);
-                    }
-                }
-
-                const newURL = window.location.pathname + '?' + params.toString();
-                window.history.pushState({path: newURL}, '', newURL);
-            }
-
             // Update load more button visibility - FIXED VERSION
             function updateLoadMoreVisibility() {
+                console.log('updateLoadMoreVisibility called');
+                console.log('hasMore:', hasMore);
+                console.log('totalProducts:', totalProducts);
+                console.log('currentPage:', currentPage);
+                console.log('loadMoreBtn element:', loadMoreBtn);
+
                 // Always check if there are more products to load based on the response
                 if (hasMore) {
                     if (loadMoreBtn) {
+                        // Use multiple methods to ensure the button is visible
                         loadMoreBtn.style.display = 'block';
+                        loadMoreBtn.style.visibility = 'visible';
+                        loadMoreBtn.classList.remove('d-none');
+                        loadMoreBtn.setAttribute('style', 'display: block !important');
+                        console.log('Showing load more button with multiple methods');
                     }
                     if (endOfProducts) {
                         endOfProducts.style.display = 'none';
+                        endOfProducts.classList.add('d-none');
                     }
                 } else {
                     if (loadMoreBtn) {
                         loadMoreBtn.style.display = 'none';
+                        loadMoreBtn.classList.add('d-none');
+                        console.log('Hiding load more button');
                     }
                     if (totalProducts > 0 && endOfProducts) {
                         endOfProducts.style.display = 'block';
+                        endOfProducts.classList.remove('d-none');
                     }
                 }
 
                 if (loadMoreLoader) {
                     loadMoreLoader.style.display = 'none';
+                    loadMoreLoader.classList.add('d-none');
                 }
             }
 
@@ -281,7 +304,9 @@
                 if (loadedCount) {
                     loadedCount.textContent = `${currentLoaded} / ${totalProducts}`;
                 }
-                resultsCount.textContent = `Showing: ${currentLoaded} of ${totalProducts} Results`;
+                if (resultsCount) {
+                    resultsCount.textContent = `Showing: ${currentLoaded} of ${totalProducts} Results`;
+                }
             }
 
             // Price range slider
@@ -293,7 +318,6 @@
                 maxPriceDisplay.value = maxVal;
                 resetLoadMore();
                 loadProducts();
-                updateURLWithFilters();
             }
 
             if (priceMin && priceMax) {
@@ -307,29 +331,35 @@
                     showFilterLoadingState();
                     resetLoadMore();
                     loadProducts();
-                    updateURLWithFilters();
                 });
             });
 
             // Sort select
-            document.getElementById('sort-by').addEventListener('change', function() {
-                showFilterLoadingState();
-                sortInput.value = this.value;
-                resetLoadMore();
-                loadProducts();
-                updateURLWithFilters();
-            });
+            const sortByElement = document.getElementById('sort-by');
+            if (sortByElement) {
+                sortByElement.addEventListener('change', function() {
+                    showFilterLoadingState();
+                    sortInput.value = this.value;
+                    resetLoadMore();
+                    loadProducts();
+                });
+            }
 
             // Clear filters
-            document.getElementById('clear-filters').addEventListener('click', function() {
-                window.location.href = "{{ route('products.clear-filters') }}";
-            });
+            const clearFiltersElement = document.getElementById('clear-filters');
+            if (clearFiltersElement) {
+                clearFiltersElement.addEventListener('click', function() {
+                    window.location.href = "{{ route('products.clear-filters') }}";
+                });
+            }
 
             // Load more button
-            if (loadMoreBtn) {
-                loadMoreBtn.addEventListener('click', function() {
-                    loadMoreProducts();
-                });
+            function setupLoadMoreButton() {
+                if (loadMoreBtn) {
+                    loadMoreBtn.addEventListener('click', function() {
+                        loadMoreProducts();
+                    });
+                }
             }
 
             // Reset load more state - FIXED VERSION
@@ -338,12 +368,15 @@
                 // Don't set hasMore to true here, let it be determined by the server response
                 if (loadMoreBtn) {
                     loadMoreBtn.style.display = 'none';
+                    loadMoreBtn.classList.add('d-none');
                 }
                 if (loadMoreLoader) {
                     loadMoreLoader.style.display = 'none';
+                    loadMoreLoader.classList.add('d-none');
                 }
                 if (endOfProducts) {
                     endOfProducts.style.display = 'none';
+                    endOfProducts.classList.add('d-none');
                 }
             }
 
@@ -364,12 +397,15 @@
                     document.getElementById('no-products').style.display = 'none';
                     if (loadMoreBtn) {
                         loadMoreBtn.style.display = 'none';
+                        loadMoreBtn.classList.add('d-none');
                     }
                     if (loadMoreLoader) {
                         loadMoreLoader.style.display = 'none';
+                        loadMoreLoader.classList.add('d-none');
                     }
                     if (endOfProducts) {
                         endOfProducts.style.display = 'none';
+                        endOfProducts.classList.add('d-none');
                     }
 
                     const formData = new FormData(filterForm);
@@ -393,9 +429,16 @@
                             const productsContainer = document.getElementById('products-container');
                             productsContainer.style.opacity = '1';
                             productsContainer.innerHTML = data.html;
+
+                            // Explicitly update these variables
                             totalProducts = data.total;
                             hasMore = data.hasMore;
                             perPage = data.perPage || 12;
+
+                            // Debug logging
+                            console.log('Data received:', data);
+                            console.log('hasMore:', hasMore);
+                            console.log('totalProducts:', totalProducts);
 
                             document.getElementById('loading-spinner').style.display = 'none';
                             document.getElementById('products-container').style.display = 'block';
@@ -405,13 +448,19 @@
                                 document.getElementById('products-container').style.display = 'none';
                                 if (loadMoreBtn) {
                                     loadMoreBtn.style.display = 'none';
+                                    loadMoreBtn.classList.add('d-none');
                                 }
                                 if (endOfProducts) {
                                     endOfProducts.style.display = 'none';
+                                    endOfProducts.classList.add('d-none');
                                 }
                             } else {
                                 updateLoadedCount();
-                                // Remove the conditional check here and rely solely on updateLoadMoreVisibility()
+                                // Re-initialize elements to ensure we have the correct references
+                                initializeElements();
+                                // Setup the load more button event listener
+                                setupLoadMoreButton();
+                                // Explicitly call updateLoadMoreVisibility after updating variables
                                 updateLoadMoreVisibility();
                             }
                         })
@@ -437,9 +486,11 @@
 
                 if (loadMoreBtn) {
                     loadMoreBtn.style.display = 'none';
+                    loadMoreBtn.classList.add('d-none');
                 }
                 if (loadMoreLoader) {
                     loadMoreLoader.style.display = 'block';
+                    loadMoreLoader.classList.remove('d-none');
                 }
 
                 const formData = new FormData(filterForm);
@@ -466,13 +517,22 @@
                             productsGrid.insertAdjacentHTML('beforeend', data.html);
                         }
 
+                        // Explicitly update these variables
                         hasMore = data.hasMore;
                         totalProducts = data.total;
+
+                        // Debug logging
+                        console.log('Load more data received:', data);
+                        console.log('hasMore after load more:', hasMore);
+
                         updateLoadedCount();
 
                         if (loadMoreLoader) {
                             loadMoreLoader.style.display = 'none';
+                            loadMoreLoader.classList.add('d-none');
                         }
+
+                        // Explicitly call updateLoadMoreVisibility after updating variables
                         updateLoadMoreVisibility();
 
                         if (hasMore && loadMoreBtn) {
@@ -489,9 +549,11 @@
                         console.error('Error loading more products:', error);
                         if (loadMoreLoader) {
                             loadMoreLoader.style.display = 'none';
+                            loadMoreLoader.classList.add('d-none');
                         }
                         if (loadMoreBtn) {
                             loadMoreBtn.style.display = 'block';
+                            loadMoreBtn.classList.remove('d-none');
                             loadMoreBtn.innerHTML = '<i class="fi-rr-exclamation"></i> Error - Click to Retry';
                         }
                         currentPage--;
@@ -503,7 +565,7 @@
 
             // Initialize on page load
             initializeLoadMore();
-
+            setupLoadMoreButton();
             // Debug helper
             document.querySelectorAll('input[type="checkbox"], select').forEach(element => {
                 element.addEventListener('change', function() {
