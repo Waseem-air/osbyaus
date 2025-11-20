@@ -11,11 +11,12 @@
                 <div class="col-12">
                     <div class="row ec_breadcrumb_inner">
                         <div class="col-md-12 col-sm-12">
+                            <!-- ec-breadcrumb-list start -->
                             <ul class="ec-breadcrumb-list text-left">
-                                <li class="ec-breadcrumb-item"><a href="{{ route('home') }}"><i class="fi-rr-home"></i>
-                                        Home</a></li>
-                                <li class="ec-breadcrumb-item active">Shopping Cart</li>
+                                <li class="ec-breadcrumb-item"><a href="index.html"><i class="fi-rr-home"></i></a></li>
+                                <li class="ec-breadcrumb-item active">Cart</li>
                             </ul>
+                            <!-- ec-breadcrumb-list end -->
                         </div>
                     </div>
                 </div>

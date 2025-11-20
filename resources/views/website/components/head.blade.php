@@ -151,6 +151,26 @@
         .ec-size-from input {
             width: 100% !important;
         }
+        .eccart-pro-items li .ec-pro-content .remove-cart-item {
+  line-height: 1.5;
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 0 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 34px;
+  width: 34px;
+  color: #D0D0D0;
+  border: 1px solid #F2F2F2;
+  border-radius: 8px;
+  font-size: 18px;
+}
+
+.eccart-pro-items li .ec-pro-content .remove-cart-item:hover {
+  color: #94010E;
+}
 
     </style>
 
