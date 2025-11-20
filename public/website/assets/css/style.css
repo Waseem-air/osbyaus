@@ -18435,7 +18435,7 @@ body.ec-open:before {
 .ec-vendor-uploads .ec-vendor-dashboard-card .setting-form .auth-input {
   height: 50px;
   border: 1px solid #E6E6E6;
-  color: #A4A4A4;
+  color: #010101;
   background-color: #FAFAFA;
   margin-bottom: 12px;
 }
@@ -19018,7 +19018,7 @@ h4.ec-faq-title.active::before {
 .contact-section .section-contact-card .auth-form .auth-input {
   height: 50px;
   border: 1px solid #E6E6E6;
-  color: #A4A4A4;
+  color: #010101;
   background-color: #FAFAFA;
   margin-bottom: 20px;
 }
@@ -19033,7 +19033,7 @@ h4.ec-faq-title.active::before {
 
 .contact-section .section-contact-card .auth-form textarea {
   border: 1px solid #E6E6E6;
-  color: #A4A4A4;
+  color: #010101;
   background-color: #FAFAFA;
   margin-bottom: 20px;
 }
@@ -21384,7 +21384,7 @@ input[type=range]::-ms-thumb {
   -ms-flex-pack: center;
   justify-content: center;
   cursor: pointer;
-  color: #A4A4A4;
+  color: #010101;
   height: 19px;
   position: relative;
 }
@@ -21624,7 +21624,7 @@ input[type=range]::-ms-thumb {
 }
 
 .ec-cart-summary-bottom .ec-cart-summary .text-left {
-  color: #A4A4A4;
+  color: #010101;
   font-size: 16px;
   line-height: 24px;
   letter-spacing: 0;
@@ -21650,7 +21650,7 @@ input[type=range]::-ms-thumb {
 }
 
 .ec-cart-summary-bottom .ec-cart-summary .text-left-qty {
-  color: #A4A4A4;
+  color: #010101;
   font-size: 14px;
   line-height: 24px;
   letter-spacing: 0;
@@ -21750,25 +21750,25 @@ input[type=range]::-ms-thumb {
 .checkout form .billing-input {
   height: 49px;
   border: 1px solid #E6E6E6;
-  color: #A4A4A4;
+  color: #010101;
   background-color: #FAFAFA;
   margin-bottom: 20px;
 }
 
 ::-moz-placeholder {
-  color: #A4A4A4;
+  color: #010101;
 }
 
 .checkout form .billing-input:hover,
 .checkout form .billing-input:focus,
 .checkout form .billing-input:active {
-  color: #A4A4A4;
+  color: #010101;
   background-color: #FAFAFA;
 }
 
 .checkout form textarea {
   border: 1px solid #E6E6E6;
-  color: #A4A4A4;
+  color: #010101;
   background-color: #FAFAFA;
   margin-bottom: 20px;
 }
@@ -21776,7 +21776,7 @@ input[type=range]::-ms-thumb {
 .checkout form textarea:hover,
 .checkout form textarea:focus,
 .checkout form textarea:active {
-  color: #A4A4A4 !important;
+  color: #010101 !important;
   background-color: #FAFAFA;
 }
 
@@ -21784,7 +21784,7 @@ input[type=range]::-ms-thumb {
   height: 49px;
   border: 1px solid #E6E6E6 !important;
   box-shadow: none !important;
-  color: #A4A4A4;
+  color: #010101;
   background-color: #FAFAFA;
   margin-bottom: 20px;
 }
@@ -21939,7 +21939,7 @@ input[type=range]::-ms-thumb {
 .billing_details form .billing-detail-input {
   height: 49px;
   border: 1px solid #E6E6E6;
-  color: #A4A4A4;
+  color: #010101;
   background-color: #ffffff;
   margin-bottom: 20px;
 }
@@ -21958,13 +21958,13 @@ input[type=range]::-ms-thumb {
 }
 
 ::-moz-placeholder {
-  color: #A4A4A4;
+  color: #010101;
 }
 
 .billing_details form .billing-detail-input:hover,
 .billing_details form .billing-detail-input:focus,
 .billing_details form .billing-detail-input:active {
-  color: #A4A4A4;
+  color: #010101;
   background-color: #ffffff;
 }
 
@@ -21972,7 +21972,7 @@ input[type=range]::-ms-thumb {
   height: 49px;
   border: 1px solid #E6E6E6 !important;
   box-shadow: none !important;
-  color: #A4A4A4;
+  color: #010101;
   background-color: #ffffff;
   margin-bottom: 20px;
 }
@@ -22208,7 +22208,7 @@ input[type=range]::-ms-thumb {
 .ec-size-from input {
   height: 50px;
   border: 1px solid #E6E6E6;
-  color: #A4A4A4;
+  color: #010101;
   background-color: #FAFAFA;
   margin-bottom: 12px;
 }
@@ -22216,7 +22216,7 @@ input[type=range]::-ms-thumb {
 .auth-card .auth-form .auth-input {
   height: 50px;
   border: 1px solid #E6E6E6;
-  color: #A4A4A4;
+  color: #010101;
   background-color: #FAFAFA;
   margin-bottom: 12px;
 }
