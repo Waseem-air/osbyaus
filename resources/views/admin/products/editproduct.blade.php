@@ -549,9 +549,10 @@
                     <!-- Form section -->
                     <div class="col-lg-7 col-12">
                         <form id="editProductForm" class="form-edit-product" enctype="multipart/form-data"
-                              action="{{ route('admin.product.update', $product->id) }}" method="POST">
+                              action="{{ route('admin.product.update-product', $product->id) }}">
                             @csrf
-                            @method('PUT')
+                            @method('POST')
+                            <input type="hidden" name="id" value="{{ $product->id }}">
                             <!-- Product Information -->
                             <div class="wg-box mb-30">
                                 <h1 class="mb-2">Edit Product Information</h1>
@@ -1056,7 +1057,7 @@
                         this.setLoadingState(submitBtn, true);
 
                         // ✅ FIX: Use POST method directly since Laravel handles method spoofing
-                        const response = await fetch(`/admin/products/${this.productId}/update`, {
+                        const response = await fetch(`/admin/products/${this.productId}/update-product`, {
                             method: 'POST', // ✅ Use POST directly
                             headers: {
                                 'X-CSRF-TOKEN': '{{ csrf_token() }}',
@@ -1076,7 +1077,7 @@
                         if (result.status === 'success') {
                             this.showNotification(result.message, 'success');
                             setTimeout(() => {
-                                window.location.href = '{{ route("admin.product.show", $product->id) }}';
+                                window.location.reload();
                             }, 1500);
                         } else {
                             this.showNotification(result.message, 'error');

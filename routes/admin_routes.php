@@ -30,6 +30,26 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin'])->grou
         Route::delete('/{id}/delete', [OrderController::class, 'destroy'])->name('delete');
     });
 
+
+    // 🏷️ Product Routes
+// 🏷️ Product Routes - FIXED VERSION
+    Route::prefix('products')->name('product.')->group(function () {
+        Route::get('/', [ProductController::class, 'product_list'])->name('index');
+        Route::get('/add', [ProductController::class, 'add_product'])->name('add');
+        Route::post('/store', [ProductController::class, 'store_product'])->name('store');
+        Route::get('/{id}/show', [ProductController::class, 'show_product'])->name('show');
+        Route::get('/{id}/get', [ProductController::class, 'get_product'])->name('get');
+        Route::get('/{id}/edit', [ProductController::class, 'edit_product'])->name('edit');
+
+        Route::post('/{id}/update-product', [ProductController::class, 'update_product'])->name('update-product');
+        Route::delete('/{id}/delete', [ProductController::class, 'delete_product'])->name('delete');
+        Route::delete('/image/{id}/delete', [ProductController::class, 'delete_product_image'])->name('image.delete');
+        Route::post('/image/{id}/set-main', [ProductController::class, 'set_main_image'])->name('image.set-main');
+    });
+
+
+
+
     // Color Routes
     Route::prefix('colors')->name('color.')->group(function () {
         Route::get('/', [ColorController::class, 'color_list'])->name('index');
@@ -58,24 +78,6 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin'])->grou
         Route::post('/{id}/update', [CategoryController::class, 'update_category'])->name('update');
         Route::delete('/{id}/delete', [CategoryController::class, 'delete_category'])->name('delete');
     });
-
-    // 🏷️ Product Routes
-    Route::prefix('products')->name('product.')->group(function () {
-        Route::get('/', [ProductController::class, 'product_list'])->name('index');
-        Route::get('/add', [ProductController::class, 'add_product'])->name('add');
-        Route::post('/store', [ProductController::class, 'store_product'])->name('store');
-        Route::get('/{id}/show', [ProductController::class, 'show_product'])->name('show');
-        Route::get('/{id}/get', [ProductController::class, 'get_product'])->name('get');
-        Route::get('/{id}/edit', [ProductController::class, 'edit_product'])->name('edit');
-        Route::put('/{id}/update', [ProductController::class, 'update_product'])->name('update');
-        Route::delete('/{id}/delete', [ProductController::class, 'delete_product'])->name('delete');
-        Route::delete('/image/{id}/delete', [ProductController::class, 'delete_product_image'])->name('image.delete');
-        Route::post('/image/{id}/set-main', [ProductController::class, 'set_main_image'])->name('image.set-main');
-    });
-
-
-
-
 
 
     // 🏷️ customer Routes

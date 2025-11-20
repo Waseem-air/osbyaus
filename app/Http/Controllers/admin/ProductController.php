@@ -285,8 +285,9 @@ class ProductController extends Controller
         }
     }
     // ✅ Update Product
-    public function update_product(Request $request, $id)
+    public function update_product(Request $request)
     {
+        $id = $request->id;
         $validator = Validator::make($request->all(), [
             'categories' => 'required|array|min:1',
             'categories.*' => 'exists:categories,id',
@@ -307,6 +308,7 @@ class ProductController extends Controller
             'images.*' => 'image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
+
         if ($validator->fails()) {
             return response()->json([
                 'status' => 'error',
@@ -317,7 +319,6 @@ class ProductController extends Controller
 
         try {
             DB::beginTransaction();
-
             $product = Product::findOrFail($id);
             $product->name = $request->name;
             $product->slug = Str::slug($request->name);
@@ -329,7 +330,7 @@ class ProductController extends Controller
             $product->fabric = $request->fabric;
             $product->embellishment = $request->embellishment;
             $product->cut = $request->cut;
-            $product->status = $request->has('status') && $request->status === 'active' ? true : false;
+//            $product->status = $request->has('status')?? false;
             $product->save();
 
             // Sync categories
