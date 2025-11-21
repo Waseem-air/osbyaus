@@ -17,7 +17,7 @@ class Order extends Model
         'billing_address', 'billing_city', 'billing_state', 'billing_country', 'billing_postal_code',
         'shipping_first_name', 'shipping_last_name', 'shipping_email', 'shipping_phone',
         'shipping_address', 'shipping_city', 'shipping_state', 'shipping_country', 'shipping_postal_code',
-        'order_notes'
+        'order_notes', 'customer_name', 'customer_email', 'customer_phone'
     ];
 
     protected $casts = [

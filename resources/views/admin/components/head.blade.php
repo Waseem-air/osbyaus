@@ -1,34 +1,23 @@
-<!DOCTYPE html>
-<!--[if IE 8 ]><html class="ie" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US" lang="en-US"> <![endif]-->
-<!--[if (gte IE 9)|!(IE)]><!-->
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US" lang="en-US">
-<!--<![endif]-->
-
 <head>
-    <!-- Basic Page Needs -->
     <meta charset="utf-8">
-    <!--[if IE]><meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'><![endif]-->
-    <title>Osbyaus</title>
-
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>{{ config('app.name') }}</title>
     <meta name="author" content="themesflat.com">
-
     <!-- Mobile Specific Metas -->
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
-
     <!-- Theme Style -->
     <link rel="stylesheet" type="text/css" href="{{ asset('admin/css/animate.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('admin/css/animation.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('admin/css/bootstrap.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('admin/css/bootstrap-select.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('admin/css/styles.css') }}">
-
     <!-- Font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
     <style>
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
@@ -39,17 +28,14 @@
         .wg-table.table-product-list .wg-product .title .body-text {
             font-size: 14px !important;
         }
-        /* Input focus custom border color */
-/* Form control focus — only border color, transparent background */
-/* Admin panel input focus — only border color, transparent background */
-.admin-form .form-control:focus,
-.form-control:focus {
-    border: 0.5px solid #94010E !important; /* thin dark red border */
-    background-color: transparent !important;
-    box-shadow: 0 0 0 1px rgba(148, 1, 14, 0.6) !important; /* darker red shadow */
-    outline: none !important;
-}
-   .admin-table {
+
+        .admin-form .form-control:focus,
+        .form-control:focus {
+            border: 0.5px solid #94010E !important; /* thin dark red border */
+            background-color: transparent !important;
+            box-shadow: 0 0 0 1px rgba(148, 1, 14, 0.6) !important; /* darker red shadow */
+            outline: none !important;
+        }  .admin-table {
             width: 100%;
             font-size: 16px; /* increase font size */
             border: none;
@@ -414,7 +400,6 @@
     <link rel="stylesheet" href="{{ asset('admin/icon/style.css') }}">
     <link rel="stylesheet" href="{{ asset('css/custom-sweetalert.css') }}">
     <link href="{{ asset('css/form-errors.css') }}" rel="stylesheet">
-
     <!-- Favicon and Touch Icons  -->
     <link rel="shortcut icon" href="{{ asset('admin/images/favicon.png') }}">
     <link rel="apple-touch-icon-precomposed" href="{{ asset('admin/images/favicon.png') }}">

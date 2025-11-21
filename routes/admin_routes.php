@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\admin\AdminOrderController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ColorController;
 use App\Http\Controllers\Admin\CustomerController;
@@ -91,6 +92,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin'])->grou
         Route::delete('/{id}/delete', [CustomerController::class, 'delete_customer'])->name('delete');
     });
 
+    Route::post('/create-order', [AdminOrderController::class, 'createOrderFromAdmin'])->name('create.order');
 
 
 });

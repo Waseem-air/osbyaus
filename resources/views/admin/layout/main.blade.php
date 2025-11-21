@@ -1,3 +1,5 @@
+<!DOCTYPE html>
+<html lang="en">
 @include("admin.components.head")
 @include("admin.components.header")
 <!-- #wrapper -->
@@ -27,3 +29,6 @@
 </div>
 <!-- /#wrapper -->
 @include("admin.components.scripts")
+
+</body>
+</html>
