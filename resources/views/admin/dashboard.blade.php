@@ -13,6 +13,9 @@
                     </button>
                 </div>
             </div>
+            <!-- ADD ORDER MODAL -->
+            @include('admin.partials.add-order-popup',['products' => $products])
+
 
             <div class="main-content-wrap">
                 <div class="tf-section-4 mb-30">
@@ -637,13 +640,5 @@
         <!-- /bottom-page -->
     </div>
     <!-- /main-content -->
-
-
-
-
-
-
-    <!-- ADD ORDER MODAL -->
-    @include('admin.partials.add-order-popup')
 
 @endsection
