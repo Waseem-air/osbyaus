@@ -330,9 +330,8 @@ class ProductController extends Controller
             $product->fabric = $request->fabric;
             $product->embellishment = $request->embellishment;
             $product->cut = $request->cut;
-        //    $product->status = $request->status;
+            $product->status = $request->status == 1 ? 'active' : 'inactive';
             $product->save();
-            // Sync categories
             $product->categories()->sync($request->categories);
 
             // Sync colors - delete existing and create new
