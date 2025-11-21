@@ -297,7 +297,7 @@
                 <div class="row mt-5">
                     <div class="col-12 wg-box-1">
                         <div class="row mb-3">
-                            <div class="col-12 d-flex justify-content-start">
+                            <div class="col-12 d-flex justify-content-end">
                                 <button class="tf-button style-1 w208" data-bs-toggle="modal" data-bs-target="#addOrderModal">
                                     <i class="fi fi-rr-plus me-1"></i> Add New Order
                                 </button>
