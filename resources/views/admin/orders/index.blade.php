@@ -291,18 +291,15 @@
     <div class="main-content">
         <div class="main-content-inner">
             <div class="container mt-4">
-                <h1>Order Management</h1>
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h1 class="m-0">Order Management</h1>
 
+                    <button class="tf-button style-1 w208" data-bs-toggle="modal" data-bs-target="#addOrderModal">
+                        <i class="fi fi-rr-plus me-1"></i> Add New Order
+                    </button>
+                </div>
                 <!-- ================= ORDER TABS ================= -->
                 <div class="row mt-5">
-                    <div class="col-12 wg-box-1">
-                        <div class="row mb-3">
-                            <div class="col-12 d-flex justify-content-end">
-                                <button class="tf-button style-1 w208" data-bs-toggle="modal" data-bs-target="#addOrderModal">
-                                    <i class="fi fi-rr-plus me-1"></i> Add New Order
-                                </button>
-                            </div>
-                        </div>
                         <!-- ADD ORDER MODAL -->
                         @include('admin.partials.add-order-popup')
                         <div class="custom-tab-btns mb-0">
