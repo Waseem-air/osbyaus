@@ -15,6 +15,11 @@ use Illuminate\Support\Facades\Log;
 
 class OrderController extends Controller
 {
+
+    public function detail(Request $request)
+    {
+    return view('admin.orders.detial');
+    }
     // ✅ Show Order List with AJAX support
     public function index(Request $request)
     {

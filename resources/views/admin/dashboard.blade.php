@@ -6,6 +6,14 @@
                         <!-- main-content-wrap -->
                         <div class="main-content-inner">
                             <!-- main-content-wrap -->
+ <div class="row mb-3">
+    <div class="col-12 d-flex justify-content-end">
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addOrderModal">
+            <i class="fi fi-rr-plus me-1"></i> Add New Order
+        </button>
+    </div>
+</div>
+
                             <div class="main-content-wrap">
                                 <div class="tf-section-4 mb-30">
                                     <!-- chart-default -->
@@ -586,4 +594,74 @@
                         <!-- /bottom-page -->
                     </div>
                     <!-- /main-content -->
+
+
+
+
+
+
+                    <!-- ADD ORDER MODAL -->
+<div class="modal fade" id="addOrderModal">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title">Add New Order</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+
+                <!-- ===================== PRODUCT SELECT ===================== -->
+                <div class="mb-4">
+                    <label class="fw-bold mb-1">Select Product</label>
+                    <select class="form-select" id="productSelect">
+                        <option value="">-- Choose Product --</option>
+
+                        @foreach($products as $product)
+                            <option value="{{ $product->id }}"
+                                data-price="{{ $product->discount_price ?? $product->price }}">
+                                {{ $product->name }} (PKR {{ $product->discount_price ?? $product->price }})
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <!-- Product Price Auto Display -->
+                <div class="mb-4">
+                    <label class="fw-bold mb-1">Product Price</label>
+                    <input type="text" class="form-control" id="productPrice" readonly>
+                </div>
+
+                <!-- ===================== USER DETAILS ===================== -->
+                <h5 class="mb-3">Customer Information</h5>
+
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label class="fw-bold mb-1">Customer Name</label>
+                        <input type="text" class="form-control" placeholder="Enter Name">
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                        <label class="fw-bold mb-1">Email</label>
+                        <input type="email" class="form-control" placeholder="Enter Email">
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                        <label class="fw-bold mb-1">Phone Number</label>
+                        <input type="text" class="form-control" placeholder="03XX-XXXXXXX">
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button class="btn btn-dark">Save Order</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
 @endsection

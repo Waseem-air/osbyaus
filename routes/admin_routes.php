@@ -25,7 +25,8 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin'])->grou
     // Order Routes
     Route::prefix('orders')->name('order.')->group(function () {
         Route::get('/', [OrderController::class, 'index'])->name('index');
-        Route::get('/{id}/show', [OrderController::class, 'show'])->name('show');
+        Route::get('/detail', [OrderController::class, 'detail'])->name('detail');
+        Route::get('/{id}/show', [OrderController::class, 'detail'])->name('show');
         Route::post('/{id}/update-status', [OrderController::class, 'updateStatus'])->name('update-status');
         Route::delete('/{id}/delete', [OrderController::class, 'destroy'])->name('delete');
     });

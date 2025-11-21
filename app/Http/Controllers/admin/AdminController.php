@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Product;
+
 
 class AdminController extends Controller
 {
@@ -15,10 +17,15 @@ class AdminController extends Controller
     {
         return view('admin.storemenu');
     }
-     public function dashboard()
-    {
-        return view('admin.dashboard');
-    }
+    public function dashboard()
+{
+    $products = Product::select('id', 'name', 'price', 'discount_price')
+                        ->active()
+                        ->get();
+
+    return view('admin.dashboard', compact('products'));
+}
+
      public function profile()
     {
         return view('admin.profile&setting');
