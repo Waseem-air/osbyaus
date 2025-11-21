@@ -12,7 +12,7 @@
                             </div>
                             <div class="ec-footer-widget-item">
                                 <h4 class="ec-footer-heading">Phone:</h4>
-                                <p class="text-white">{{ env('CONTACT_PHONE') ?? '0432488558' }}</p>
+                                <p class="text-white">{{ env('CONTACT_PHONE') ?? '61432488558' }}</p>
                             </div>
                             <div class="ec-footer-widget-item">
                                 <h4 class="ec-footer-heading">Email:</h4>

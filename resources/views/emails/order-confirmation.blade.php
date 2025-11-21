@@ -298,7 +298,7 @@
             <p>If you have any questions about your order, please contact our customer support team:</p>
             <ul style="margin-left: 20px;">
                 <li>Email: {{ config('app.contact_email', 'osbyaus@gmail.com') }}</li>
-                <li>Phone: {{ config('app.contact_phone', '0432488558') }}</li>
+                <li>Phone: {{ config('app.contact_phone', '61432488558') }}</li>
                 <li>Reference your order number: <strong>#{{ $order->order_number }}</strong></li>
             </ul>
         </div>
@@ -320,7 +320,7 @@
 
         <div class="contact-info">
             <p>
-                📞 {{ config('app.contact_phone', '0432488558') }}<br>
+                📞 {{ config('app.contact_phone', '61432488558') }}<br>
                 ✉️ {{ config('app.contact_email', 'osbyaus@gmail.com') }}
             </p>
         </div>
