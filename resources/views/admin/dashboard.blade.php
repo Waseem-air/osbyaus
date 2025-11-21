@@ -6,16 +6,6 @@
         <!-- main-content-wrap -->
         <div class="main-content-inner">
             <!-- main-content-wrap -->
-            <div class="row mb-3">
-                <div class="col-12 d-flex justify-content-start">
-                    <button class="tf-button style-1 w208" data-bs-toggle="modal" data-bs-target="#addOrderModal">
-                        <i class="fi fi-rr-plus me-1"></i> Create New Order
-                    </button>
-                </div>
-            </div>
-            <!-- ADD ORDER MODAL -->
-            @include('admin.partials.add-order-popup')
-
 
             <div class="main-content-wrap">
                 <div class="tf-section-4 mb-30">

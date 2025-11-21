@@ -296,7 +296,17 @@
                 <!-- ================= ORDER TABS ================= -->
                 <div class="row mt-5">
                     <div class="col-12 wg-box-1">
+                        <div class="row mb-3">
+                            <div class="col-12 d-flex justify-content-start">
+                                <button class="tf-button style-1 w208" data-bs-toggle="modal" data-bs-target="#addOrderModal">
+                                    <i class="fi fi-rr-plus me-1"></i> Add New Order
+                                </button>
+                            </div>
+                        </div>
+                        <!-- ADD ORDER MODAL -->
+                        @include('admin.partials.add-order-popup')
                         <div class="custom-tab-btns mb-0">
+
                             <button class="tab-btn active" data-tab="all">All Orders ({{ $orderCounts['all'] }})
                             </button>
                             <button class="tab-btn" data-tab="pending">Pending ({{ $orderCounts['pending'] }})</button>

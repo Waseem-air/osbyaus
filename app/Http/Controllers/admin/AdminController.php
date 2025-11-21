@@ -18,9 +18,9 @@ class AdminController extends Controller
         return view('admin.storemenu');
     }
     public function dashboard()
-        {
-            return view('admin.dashboard');
-        }
+    {
+        return view('admin.dashboard');
+    }
 
      public function profile()
     {
