@@ -14,7 +14,7 @@ return [
     */
 
     'name' => env('APP_NAME', 'OsByAus'),
-    'contact_address' => env('CONTACT_ADDRESS', '138/27 yattenden crescent Baulkham hills'),
+    'contact_address' => env('CONTACT_ADDRESS', '40 Belltree Cres, Castle Hill NSW 2154, Australia'),
     'contact_phone' => env('CONTACT_PHONE', '61432488558'),
     'contact_email' => env('CONTACT_EMAIL', 'osbyaus@gmail.com'),
 

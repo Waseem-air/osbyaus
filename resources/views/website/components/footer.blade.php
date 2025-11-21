@@ -8,7 +8,7 @@
                         <div class="ec-footer-widget ec-footer-widget-wrapper">
                             <div class="ec-footer-widget-item">
                                 <h4 class="ec-footer-heading">Address:</h4>
-                                <p style="font-size: 13px !important;">{{ env('CONTACT_ADDRESS')  ?? '138/27 yattenden crescent Baulkham hills'}}</p>
+                                <p style="font-size: 13px !important;">{{ env('CONTACT_ADDRESS')  ?? '40 Belltree Cres, Castle Hill NSW 2154, Australia'}}</p>
                             </div>
                             <div class="ec-footer-widget-item">
                                 <h4 class="ec-footer-heading">Phone:</h4>
