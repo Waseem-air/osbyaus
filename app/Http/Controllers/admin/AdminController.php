@@ -18,13 +18,9 @@ class AdminController extends Controller
         return view('admin.storemenu');
     }
     public function dashboard()
-{
-    $products = Product::select('id', 'name', 'price', 'discount_price')
-                        ->active()
-                        ->get();
-
-    return view('admin.dashboard', compact('products'));
-}
+        {
+            return view('admin.dashboard');
+        }
 
      public function profile()
     {

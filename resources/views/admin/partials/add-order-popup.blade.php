@@ -21,25 +21,36 @@
                                 <label class="form-label fw-semibold">Select Product <span class="text-danger">*</span></label>
                                 <select class="form-control" name="product_id" id="productSelect" required>
                                     <option value="">-- Choose Product --</option>
+                                    @php
+                                        use App\Models\Product;
+                                        $products = Product::select('id', 'name', 'price', 'discount_price')
+                                                          ->active()->get();
+                                    @endphp
                                     @foreach($products as $product)
                                         <option value="{{ $product->id }}"
                                                 data-price="{{ $product->discount_price ?? $product->price }}">
-                                            {{ $product->name }} - ({{ App\Helpers\AppHelper::currency_symbol() }}{{ $product->discount_price ?? $product->price }})
+                                            {{ $product->name }} -
+                                            ({{ App\Helpers\AppHelper::currency_symbol() }}{{ $product->discount_price ?? $product->price }})
                                         </option>
                                     @endforeach
                                 </select>
                                 <div class="text-danger small mt-1" id="productError"></div>
                             </div>
                             <div class="col-md-3">
-                                <label class="form-label fw-semibold">Quantity <span class="text-danger">*</span></label>
-                                <input type="number" class="form-control" name="quantity" id="orderQuantity" min="1" value="1" required>
+                                <label class="form-label fw-semibold">Quantity <span
+                                            class="text-danger">*</span></label>
+                                <input type="number" class="form-control" name="quantity" id="orderQuantity" min="1"
+                                       value="1" required>
                                 <div class="text-danger small mt-1" id="quantityError"></div>
                             </div>
 
                             <div class="col-md-4">
-                                <label class="form-label fw-semibold">Total Amount <span class="text-danger">*</span></label>
-                                <input type="number" class="form-control" name="total_amount" placeholder="Enter Total amount" id="totalAmount" step="0.01" required>
-                                <small class="text-muted">Enter the total amount including any additional charges</small>
+                                <label class="form-label fw-semibold">Total Amount <span
+                                            class="text-danger">*</span></label>
+                                <input type="number" class="form-control" name="total_amount"
+                                       placeholder="Enter Total amount" id="totalAmount" step="0.01" required>
+                                <small class="text-muted">Enter the total amount including any additional
+                                    charges</small>
                             </div>
                         </div>
                     </div>
@@ -49,18 +60,23 @@
                         <h6 class="fw-bold mb-3">Customer Information</h6>
                         <div class="row g-3">
                             <div class="col-md-4">
-                                <label class="form-label fw-semibold">Customer Name <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" name="customer_name" placeholder="Enter Name" required>
+                                <label class="form-label fw-semibold">Customer Name <span
+                                            class="text-danger">*</span></label>
+                                <input type="text" class="form-control" name="customer_name" placeholder="Enter Name"
+                                       required>
                                 <div class="text-danger small mt-1" id="customerNameError"></div>
                             </div>
                             <div class="col-md-4">
                                 <label class="form-label fw-semibold">Email <span class="text-danger">*</span></label>
-                                <input type="email" class="form-control" name="customer_email" placeholder="Enter Email" required>
+                                <input type="email" class="form-control" name="customer_email" placeholder="Enter Email"
+                                       required>
                                 <div class="text-danger small mt-1" id="customerEmailError"></div>
                             </div>
                             <div class="col-md-4">
-                                <label class="form-label fw-semibold">Phone Number <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" name="customer_phone" placeholder="03XX-XXXXXXX" required>
+                                <label class="form-label fw-semibold">Phone Number <span
+                                            class="text-danger">*</span></label>
+                                <input type="text" class="form-control" name="customer_phone" placeholder="03XX-XXXXXXX"
+                                       required>
                                 <div class="text-danger small mt-1" id="customerPhoneError"></div>
                             </div>
                         </div>
@@ -78,7 +94,8 @@
                                 </select>
                             </div>
                             <div class="col-md-4">
-                                <label class="form-label fw-semibold">Order Status <span class="text-danger">*</span></label>
+                                <label class="form-label fw-semibold">Order Status <span
+                                            class="text-danger">*</span></label>
                                 <select class="form-control" name="order_status" id="orderStatus" required>
                                     <option value="pending">Pending</option>
                                     <option value="processing">Processing</option>
@@ -91,7 +108,8 @@
 
                             <div class="col-md-4">
                                 <label class="form-label fw-semibold">Order Notes</label>
-                                <input type="text" class="form-control" name="order_notes" placeholder="Add any order notes..." id="orderNotes">
+                                <input type="text" class="form-control" name="order_notes"
+                                       placeholder="Add any order notes..." id="orderNotes">
                             </div>
                         </div>
                     </div>
@@ -111,7 +129,7 @@
 </div>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
+    document.addEventListener("DOMContentLoaded", function () {
 
         const addOrderForm = document.getElementById("addOrderForm");
         const addOrderBtn = document.getElementById("addOrderBtn");

@@ -14,7 +14,7 @@
                 </div>
             </div>
             <!-- ADD ORDER MODAL -->
-            @include('admin.partials.add-order-popup',['products' => $products])
+            @include('admin.partials.add-order-popup')
 
 
             <div class="main-content-wrap">
