@@ -36,10 +36,11 @@
 </div>
 
 <!-- Chat Btn Start -->
-<a href="" class="chat-btn">
+<a href="https://wa.me/61401089446" target="_blank" class="chat-btn">
     <i class="ecicon eci-whatsapp cart-page" style="margin-top:10px;"></i>
 </a>
 <!-- Chat Btn End -->
+
 
 {{--Scripts Links--}}
 @include('website.components.script-links')

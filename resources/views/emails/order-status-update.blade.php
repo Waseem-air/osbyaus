@@ -309,7 +309,7 @@
 
         <div class="contact-info">
             <p>
-                📞 {{ config('app.contact_phone', '0432488558') }}<br>
+                📞 {{ config('app.contact_phone', '61432488558') }}<br>
                 ✉️ {{ config('app.contact_email', 'osbyaus@gmail.com') }}
             </p>
         </div>
