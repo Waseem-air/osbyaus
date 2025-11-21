@@ -47,13 +47,13 @@
         .payment-button {
             display: inline-block;
             background: #000;
-            padding: 14px 30px;
+            padding: 8px 20px;
             color: #fff !important;
             text-decoration: none;
-            font-size: 16px;
+            font-size: 14px;
             font-weight: bold;
             border-radius: 4px;
-            margin: 15px 0;
+            margin: 10px 0;
         }
 
         /* ORDER DETAILS BOX */
@@ -124,7 +124,7 @@
 
         <!-- BUTTON AREA -->
         <div style="text-align:center;">
-            <h3 style="font-size:18px;">Pay Now</h3>
+            <h3 style="font-size:14px;">Pay Now</h3>
             <p>Click below to complete your secure payment:</p>
             <a href="{{ $paymentLink }}" class="payment-button">
                 PAY NOW – {{ AppHelper::currency_symbol() }}{{ number_format($order->total_amount, 2) }}
