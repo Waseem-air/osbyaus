@@ -287,6 +287,7 @@ class ProductController extends Controller
     // ✅ Update Product
     public function update_product(Request $request)
     {
+
         $id = $request->id;
         $validator = Validator::make($request->all(), [
             'categories' => 'required|array|min:1',

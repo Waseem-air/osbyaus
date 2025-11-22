@@ -548,8 +548,7 @@
 
                     <!-- Form section -->
                     <div class="col-lg-7 col-12">
-                        <form id="editProductForm" class="form-edit-product" enctype="multipart/form-data"
-                              action="{{ route('admin.product.update-product', $product->id) }}">
+                        <form id="editProductForm" class="form-edit-product" enctype="multipart/form-data">
                             @csrf
                             @method('POST')
                             <input type="hidden" name="id" value="{{ $product->id }}">
@@ -1037,28 +1036,20 @@
             handleFormSubmission() {
                 const form = document.getElementById('editProductForm');
                 const submitBtn = document.getElementById('submitBtn');
-
                 form.addEventListener('submit', async (e) => {
                     e.preventDefault();
-
                     if (!this.validateForm()) {
                         return;
                     }
-
                     const formData = new FormData(form);
-
-                    // Add new images
                     const fileInput = document.getElementById('productImages');
                     for (let i = 0; i < fileInput.files.length; i++) {
                         formData.append('images[]', fileInput.files[i]);
                     }
-
                     try {
                         this.setLoadingState(submitBtn, true);
-
-                        // ✅ FIX: Use POST method directly since Laravel handles method spoofing
-                        const response = await fetch(`/admin/products/${this.productId}/update-product`, {
-                            method: 'POST', // ✅ Use POST directly
+                        const response = await fetch(`/admin/products/update`, {
+                            method: 'POST',
                             headers: {
                                 'X-CSRF-TOKEN': '{{ csrf_token() }}',
                                 'Accept': 'application/json'
@@ -1066,14 +1057,11 @@
                             body: formData
                         });
 
-                        // ✅ Check if response is JSON
                         const contentType = response.headers.get('content-type');
                         if (!contentType || !contentType.includes('application/json')) {
                             throw new Error('Server returned non-JSON response');
                         }
-
                         const result = await response.json();
-
                         if (result.status === 'success') {
                             this.showNotification(result.message, 'success');
                             setTimeout(() => {
@@ -1086,7 +1074,6 @@
                             }
                         }
                     } catch (error) {
-                        console.error('Error:', error);
                         if (error.message.includes('non-JSON')) {
                             this.showNotification('Server error: Please check your form and try again.', 'error');
                         } else {

@@ -42,8 +42,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin'])->grou
         Route::get('/{id}/show', [ProductController::class, 'show_product'])->name('show');
         Route::get('/{id}/get', [ProductController::class, 'get_product'])->name('get');
         Route::get('/{id}/edit', [ProductController::class, 'edit_product'])->name('edit');
-
-        Route::post('/{id}/update-product', [ProductController::class, 'update_product'])->name('update-product');
+        Route::post('/update', [ProductController::class, 'update_product'])->name('update-product');
         Route::delete('/{id}/delete', [ProductController::class, 'delete_product'])->name('delete');
         Route::delete('/image/{id}/delete', [ProductController::class, 'delete_product_image'])->name('image.delete');
         Route::post('/image/{id}/set-main', [ProductController::class, 'set_main_image'])->name('image.set-main');
