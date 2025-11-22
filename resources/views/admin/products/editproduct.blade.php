@@ -1048,7 +1048,7 @@
                     }
                     try {
                         this.setLoadingState(submitBtn, true);
-                        const response = await fetch(`/admin/products/update`, {
+                        const response = await fetch(`/admin/products/update-product`, {
                             method: 'POST',
                             headers: {
                                 'X-CSRF-TOKEN': '{{ csrf_token() }}',
