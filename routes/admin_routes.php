@@ -1,14 +1,14 @@
 <?php
 
-use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\admin\AdminController;
 use App\Http\Controllers\admin\AdminOrderController;
-use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\admin\CategoryController;
 use App\Http\Controllers\Admin\ColorController;
-use App\Http\Controllers\Admin\CustomerController;
+use App\Http\Controllers\admin\CustomerController;
 use App\Http\Controllers\admin\DashboardController;
 use App\Http\Controllers\admin\OrderController;
-use App\Http\Controllers\Admin\ProductController;
-use App\Http\Controllers\Admin\SizeController;
+use App\Http\Controllers\admin\ProductController;
+use App\Http\Controllers\admin\SizeController;
 use Illuminate\Support\Facades\Route;
 
 
