@@ -65,20 +65,19 @@
     padding: 20px;
 }
 
-/* ================= TABLE ================= */
+/* ================= PRODUCTS TABLE ================= */
 .order-items-table {
     width: 100%;
     border-collapse: collapse;
-    font-size: 16px; /* Added font size */
+    font-size: 16px;
 }
 
 .order-items-table th,
 .order-items-table td {
     padding: 12px 15px;
-    border: none !important;       /* REMOVE ALL BORDERS */
+    border: none !important;
 }
 
-/* Remove any potential borders from table elements */
 .order-items-table thead tr,
 .order-items-table tbody tr,
 .order-items-table tfoot tr {
@@ -89,6 +88,12 @@
 .order-items-table tbody td,
 .order-items-table tfoot td {
     border: none !important;
+}
+
+/* Align Total column to the end */
+.order-items-table th:nth-child(4),
+.order-items-table td:nth-child(4) {
+    text-align: right;
 }
 
 /* ================= RESPONSIVE ================= */
@@ -131,6 +136,108 @@
     font-size: 14px;
     border-radius: 8px;
 }
+
+.p-img {
+    width: 40px;
+    height: 40px;
+    border-radius: 9px;
+}
+
+/* ================= CHECKBOX ================= */
+.custom-check {
+    width: 20px !important;
+    height: 20px !important;
+    cursor: pointer;
+}
+
+.custom-check:checked {
+    background-color: #94010E !important;
+    border-color: #94010E !important;
+}
+
+/* ================= ORDER SUMMARY TABLE ================= */
+.order-table-1 {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 16px;
+    margin-top: 20px;
+}
+
+.order-table-1 td {
+    padding: 12px 15px;
+    /* Remove all borders */
+    border: none !important;
+}
+
+.order-table-1 tr:last-child td {
+    font-weight: bold;
+    font-size: 18px;
+    color: #94010E;
+}
+
+.order-table-1 tr:last-child {
+    /* Remove border top */
+    border-top: none !important;
+}
+
+.order-table-1 .label {
+    text-align: left;
+    color: #666;
+}
+
+.order-table-1 .value {
+    text-align: right;
+    font-weight: 500;
+}
+
+/* ================= PRODUCTS CARD LAYOUT ================= */
+.products-card-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.products-table-container {
+    width: 100%;
+}
+
+.order-summary-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+.order-summary-wrapper {
+    width: 100%;
+    max-width: 400px;
+}
+
+@media (max-width: 576px) {
+    .order-table-1 {
+        font-size: 16px;
+    }
+    
+    .order-table-1 td {
+        padding: 10px 12px;
+    }
+    
+    .order-table-1 tr:last-child td {
+        font-size: 17px;
+    }
+    
+    .order-summary-container {
+        justify-content: center;
+    }
+    
+    .order-summary-wrapper {
+        max-width: 100%;
+    }
+    
+    /* Ensure products table maintains 100% width on mobile */
+    .order-items-table {
+        width: 100%;
+        min-width: 100%;
+    }
+}
 </style>
 
 <div class="main-content">
@@ -160,7 +267,6 @@
                                 </div>
 
                                 <div class="col-12 col-md-6 d-flex justify-content-md-end flex-wrap gap-2">
-
                                     <div class="dropdown">
                                         <button class="btn btn-secondary dropdown-toggle btn-action" data-bs-toggle="dropdown">
                                             Change Status
@@ -181,21 +287,17 @@
                                     <button class="btn btn-save btn-action">
                                         <i class="fi fi-rr-disk me-2"></i> Save
                                     </button>
-
                                 </div>
                             </div>
 
                             <!-- ========= CUSTOMER & INFO CARDS ========= -->
                             <div class="row mt-5">
-
                                 <!-- CUSTOMER CARD -->
                                 <div class="col-sm-4">
                                     <div class="customer-card card shadow-none">
                                         <div class="card-body">
-
                                             <div class="d-flex align-items-center mb-3">
                                                 <img src="https://via.placeholder.com/56" class="customer-img rounded-circle me-3" alt="Customer">
-
                                                 <div>
                                                     <h5 class="m-0 fw-bold mb-3">Customer</h5>
                                                     <p class="mb-3">Full Name: Shristi Singh</p>
@@ -203,9 +305,7 @@
                                                     <p class="mb-3">Phone: +91 904 231 1212</p>
                                                 </div>
                                             </div>
-
                                             <button class="btn view-profile-btn w-100">View Profile</button>
-
                                         </div>
                                     </div>
                                 </div>
@@ -214,10 +314,8 @@
                                 <div class="col-sm-4">
                                     <div class="customer-card card shadow-none">
                                         <div class="card-body">
-
                                             <div class="d-flex align-items-center mb-3">
                                                 <img src="https://via.placeholder.com/56" class="customer-img rounded-circle me-3" alt="Customer">
-
                                                 <div>
                                                     <h5 class="m-0 fw-bold mb-3">Order Info</h5>
                                                     <p class="mb-3">Shipping: Next express</p>
@@ -225,9 +323,7 @@
                                                     <p class="mb-3">Status: Pending</p>
                                                 </div>
                                             </div>
-
                                             <button class="btn view-profile-btn w-100">Download Info</button>
-
                                         </div>
                                     </div>
                                 </div>
@@ -236,46 +332,35 @@
                                 <div class="col-sm-4">
                                     <div class="customer-card card shadow-none">
                                         <div class="card-body">
-
                                             <div class="d-flex align-items-center mb-3">
                                                 <img src="https://via.placeholder.com/56" class="customer-img rounded-circle me-3" alt="Customer">
-
                                                 <div>
                                                     <h5 class="m-0 fw-bold mb-3">Deliver to</h5>
                                                     <p class="mb-3">Full Name: Shristi Singh</p>
                                                     <p class="mb-2">Address: Dharam Colony, Palam Vihar, Gurgaon, Haryana</p>
                                                 </div>
                                             </div>
-
                                             <button class="btn view-profile-btn w-100">View Profile</button>
-
                                         </div>
                                     </div>
                                 </div>
-
                             </div>
 
                             <!-- ========= PAYMENT + NOTE SECTION ========= -->
                             <div class="row mt-5">
-
                                 <!-- PAYMENT CARD -->
                                 <div class="col-sm-4">
                                     <div class="customer-card card shadow-none h-100">
                                         <div class="card-body">
-
                                             <h5 class="m-0 fw-bold mb-3">Payment Details</h5>
-
                                             <div class="d-flex align-items-center mb-3">
                                                 <img src="https://upload.wikimedia.org/wikipedia/commons/0/04/Mastercard-logo.png" style="width:55px;" class="me-3" alt="MasterCard">
-
                                                 <div>
                                                     <p class="mb-2">Master Card **** **** 6557</p>
                                                 </div>
                                             </div>
-
                                             <p class="mb-2">Business Name: Shristi Sin</p>
                                             <p class="mb-2">Phone: +91 904 231 1212</p>
-
                                         </div>
                                     </div>
                                 </div>
@@ -284,97 +369,131 @@
                                 <div class="col-sm-8">
                                     <div class="card shadow-none h-100 customer-card">
                                         <div class="card-body">
-
                                             <h5 class="fw-bold mb-3">Notes</h5>
                                             <textarea class="form-control" rows="8" placeholder="Add notes here..."></textarea>
-
                                         </div>
                                     </div>
                                 </div>
-
                             </div>
 
                         </div>
-
                     </div>
                 </div>
             </div>
 
-            <!-- ================= PRODUCTS TABLE ================= -->
+            <!-- ================= PRODUCTS TABLE & ORDER SUMMARY ================= -->
             <div class="row">
                 <div class="col-12">
                     <div class="order-card">
-
                         <div class="order-card-header">Products</div>
+                        <div class="order-card-body products-card-container">
+                            
+                            <!-- Products Table -->
+                            <div class="products-table-container">
+                                <div class="table-responsive">
+                                    <table class="order-items-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Product Name</th>
+                                                <th>Item Price</th>
+                                                <th>Quantity</th>
+                                                <th>Total</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
 
-                        <div class="order-card-body p-0">
-                            <div class="table-responsive">
-
-                                <table class="order-items-table">
-                                    <thead>
-                                        <tr>
-                                            <th>Product Name</th>
-                                            <th>Item Price</th>
-                                            <th>Quantity</th>
-                                            <th>Total</th>
-                                        </tr>
-                                    </thead>
-
-                                    <tbody>
-                                        <tr>
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <div class="bg-light rounded me-3" style="width: 50px; height: 50px;"></div>
-                                                    <div>
-                                                        <p class="mb-0 fw-bold">Wireless Bluetooth Headphones</p>
-                                                        <small class="text-muted">Color: Black</small>
+                                            <!-- PRODUCT ROW 1 -->
+                                            <tr>
+                                                <td>
+                                                    <div class="d-flex align-items-center">
+                                                        <input type="checkbox" class="custom-check me-3">
+                                                        <div class="rounded me-3 p-img">
+                                                            <img src="{{ asset('admin/images/p-image.svg') }}" alt="">
+                                                        </div>
+                                                        <div>
+                                                            <p class="mb-0">Wireless Bluetooth Headphones</p>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            </td>
-                                            <td>$99.99</td>
-                                            <td>1</td>
-                                            <td>$99.99</td>
-                                        </tr>
+                                                </td>
+                                                <td>$99.99</td>
+                                                <td>1</td>
+                                                <td>$99.99</td>
+                                            </tr>
 
-                                        <tr>
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <div class="bg-light rounded me-3" style="width: 50px; height: 50px;"></div>
-                                                    <div>
-                                                        <p class="mb-0 fw-bold">Smartphone Case</p>
-                                                        <small class="text-muted">Color: Blue</small>
+                                            <!-- PRODUCT ROW 2 -->
+                                            <tr>
+                                                <td>
+                                                    <div class="d-flex align-items-center">
+                                                        <input type="checkbox" class="custom-check me-3">
+                                                        <div class="rounded me-3 p-img">
+                                                            <img src="{{ asset('admin/images/p-image.svg') }}" alt="">
+                                                        </div>
+                                                        <div>
+                                                            <p class="mb-0">Wireless Bluetooth Headphones</p>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            </td>
-                                            <td>$19.99</td>
-                                            <td>2</td>
-                                            <td>$39.98</td>
-                                        </tr>
+                                                </td>
+                                                <td>$99.99</td>
+                                                <td>1</td>
+                                                <td>$99.99</td>
+                                            </tr>
 
-                                        <tr>
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <div class="bg-light rounded me-3" style="width: 50px; height: 50px;"></div>
-                                                    <div>
-                                                        <p class="mb-0 fw-bold">USB-C Charging Cable</p>
-                                                        <small class="text-muted">Length: 6ft</small>
+                                            <!-- PRODUCT ROW 3 -->
+                                            <tr>
+                                                <td>
+                                                    <div class="d-flex align-items-center">
+                                                        <input type="checkbox" class="custom-check me-3">
+                                                        <div class="rounded me-3 p-img">
+                                                            <img src="{{ asset('admin/images/p-image.svg') }}" alt="">
+                                                        </div>
+                                                        <div>
+                                                            <p class="mb-0">Wireless Bluetooth Headphones</p>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            </td>
-                                            <td>$12.99</td>
-                                            <td>1</td>
-                                            <td>$12.99</td>
-                                        </tr>
-                                    </tbody>
+                                                </td>
+                                                <td>$99.99</td>
+                                                <td>1</td>
+                                                <td>$99.99</td>
+                                            </tr>
 
-                                </table>
-
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
+                            
+                            <!-- Order Summary Table -->
+                            <div class="order-summary-container">
+                                <div class="order-summary-wrapper">
+                                    <table class="order-table-1">
+                                        <tr>
+                                            <td class="label">Subtotal</td>
+                                            <td class="value">Rs. 3,201</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="label">Tax (20%)</td>
+                                            <td class="value">Rs. 640</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="label">Discount</td>
+                                            <td class="value">0</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="label">Shipping Rate</td>
+                                            <td class="value">0</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="label">Total</td>
+                                            <td class="value">Rs. 16,884</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            
                         </div>
-
                     </div>
                 </div>
             </div>
+
         </div>
     </div>
 </div>
