@@ -19,7 +19,8 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin'])->grou
     Route::get('/store-menu', [AdminController::class, 'store_menu'])->name('store.menu');
     Route::get('/profile', [AdminController::class, 'profile'])->name('profile');
     Route::get('/media-links', [AdminController::class, 'media_links'])->name('media.links');
-        Route::get('/store-details', [AdminController::class, 'store_details'])->name('store.details');
+    Route::get('/store-banner', [AdminController::class, 'store_banner'])->name('store.banner');
+    Route::get('/store-details', [AdminController::class, 'store_details'])->name('store.details');
 
 
     // Order Routes
