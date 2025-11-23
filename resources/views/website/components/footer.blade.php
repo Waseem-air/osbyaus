@@ -77,15 +77,20 @@
                 </div>
             </div>
         </div>
+
         <div class="footer-bottom">
             <div class="container">
                 <div class="row align-items-center">
                     <!-- Footer Copyright Start -->
                     <div class="col footer-copy">
-                        <div class="footer-bottom-copy ">
+                        <div class="footer-bottom-copy">
                             <div class="ec-copy">
                                 &copy; <span id="copyright_year"></span>
-                                <a class="site-name" href="#">Osbyaus.</a> All Rights Reserved.
+                                <a class="site-name" href="#">{{ config('app.name') }}</a>.
+                                All Rights Reserved.
+                                <span class="ms-2">| Developed by
+                            <a href="https://a1apps.com.au/" target="_blank">A1Apps.com.au</a>
+                        </span>
                             </div>
                         </div>
                     </div>
@@ -93,6 +98,8 @@
                 </div>
             </div>
         </div>
+
+
     </div>
 </footer>
 <!-- Footer Area End -->

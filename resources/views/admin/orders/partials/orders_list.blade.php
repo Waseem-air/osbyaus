@@ -24,8 +24,6 @@
                         <div>
                             <small class="fw-bold">{{ $order->billing_first_name }} {{ $order->billing_last_name }}</small>
                             <br>
-                            <small>{{ $order->billing_email }}</small>
-                            <br>
                             <small>{{ $order->billing_phone }}</small>
                         </div>
                     </td>

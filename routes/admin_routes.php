@@ -1,14 +1,13 @@
 <?php
 
-use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\admin\AdminController;
 use App\Http\Controllers\admin\AdminOrderController;
-use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\admin\CategoryController;
 use App\Http\Controllers\Admin\ColorController;
-use App\Http\Controllers\Admin\CustomerController;
-use App\Http\Controllers\admin\DashboardController;
+use App\Http\Controllers\admin\CustomerController;
 use App\Http\Controllers\admin\OrderController;
-use App\Http\Controllers\Admin\ProductController;
-use App\Http\Controllers\Admin\SizeController;
+use App\Http\Controllers\admin\ProductController;
+use App\Http\Controllers\admin\SizeController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -43,7 +42,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin'])->grou
         Route::get('/{id}/get', [ProductController::class, 'get_product'])->name('get');
         Route::get('/{id}/edit', [ProductController::class, 'edit_product'])->name('edit');
 
-        Route::post('/{id}/update-product', [ProductController::class, 'update_product'])->name('update-product');
+        Route::post('/update-product', [ProductController::class, 'update_product'])->name('update-product');
         Route::delete('/{id}/delete', [ProductController::class, 'delete_product'])->name('delete');
         Route::delete('/image/{id}/delete', [ProductController::class, 'delete_product_image'])->name('image.delete');
         Route::post('/image/{id}/set-main', [ProductController::class, 'set_main_image'])->name('image.set-main');
