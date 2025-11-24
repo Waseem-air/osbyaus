@@ -16,10 +16,6 @@ use Illuminate\Support\Facades\Log;
 class OrderController extends Controller
 {
 
-    public function detail(Request $request)
-    {
-    return view('admin.orders.detial');
-    }
     // ✅ Show Order List with AJAX support
     public function index(Request $request)
     {
@@ -161,12 +157,18 @@ class OrderController extends Controller
     }
 
     // ✅ View Order Details
-    public function show($id)
-    {
-        $order = Order::with(['user', 'items.product', 'items.variant', 'statusHistories.user'])
-            ->findOrFail($id);
 
-        return view('admin.orders.show', compact('order'));
+    public function detail($id)
+    {
+        $order = Order::with([
+            'user',
+            'items.product.images',
+            'items.variant.color',
+            'items.variant.size',
+            'statusHistories.user'
+        ])->findOrFail($id);
+
+        return view('admin.orders.details', compact('order'));
     }
 
     // ✅ Delete Order

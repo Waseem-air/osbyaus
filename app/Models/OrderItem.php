@@ -61,4 +61,13 @@ class OrderItem extends Model
         }
         return null;
     }
+
+    // In OrderItem.php
+    public function getImageAttribute()
+    {
+        if ($this->product && $this->product->mainImage) {
+            return $this->product->mainImage->image_path;
+        }
+        return 'admin/images/p-image.svg'; // Default image
+    }
 }
