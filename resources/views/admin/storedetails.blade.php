@@ -63,8 +63,10 @@
     <div class="main-content-inner">
         <div class="container mt-4">
 
+        <h1>Store Details</h1>
+
             <!-- PROFILE SETTINGS -->
-            <div class="custom-tab-card">
+            <div class="custom-tab-card mt-5">
                 <form>
 
                     <!-- PROFILE PICTURE -->

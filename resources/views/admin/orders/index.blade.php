@@ -286,18 +286,42 @@
                 padding: 5px 10px;
             }
         }
+        /* Default Desktop */
+.header-flex {
+    display: flex;
+    justify-content: space-between;
+    /* align-items: center; */
+}
+
+/* Mobile Responsive */
+@media (max-width: 576px) {
+    .header-flex {
+        flex-direction: column;
+        align-items: flex-start; /* Heading left align */
+        gap: 20px;
+    }
+
+    .header-btn {
+        width: 100% !important;   /* Full width button */
+    }
+    .form-search.w-25 {
+        width: 100% !important;
+    }
+}
+
 
     </style>
     <div class="main-content">
         <div class="main-content-inner">
             <div class="container mt-4">
-                <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h1 class="m-0">Order Management</h1>
+                <div class="d-flex justify-content-between mb-4 header-flex">
+    <h1 class="m-0">Order Management</h1>
 
-                    <button class="tf-button style-1 w208" data-bs-toggle="modal" data-bs-target="#addOrderModal">
-                        <i class="fi fi-rr-plus me-1"></i> Add New Order
-                    </button>
-                </div>
+    <button class="tf-button style-1 w208 header-btn" data-bs-toggle="modal" data-bs-target="#addOrderModal">
+        <i class="fi fi-rr-plus me-1"></i> Add New Order
+    </button>
+</div>
+
                 <!-- ================= ORDER TABS ================= -->
                 <div class="row mt-5">
                         <!-- ADD ORDER MODAL -->

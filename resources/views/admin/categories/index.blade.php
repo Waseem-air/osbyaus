@@ -154,9 +154,13 @@
                 <!-- Search and Filter Bar -->
                 <div class="search-bar-container mb-2">
                     <!-- Search Form -->
-                    <form class="form-search">
+                    <form class="form-search" id="searchForm">
                         <fieldset class="name">
-                            <input type="text" id="searchCategory" placeholder="Search categories..." name="search">
+                            <input type="text" placeholder="Search customers..." id="customerSearch"
+                                   name="search" value="{{ request('search') }}">
+                            <button type="submit" class="search-icon">
+                                <i class="icon-search"></i>
+                            </button>
                         </fieldset>
                     </form>
 

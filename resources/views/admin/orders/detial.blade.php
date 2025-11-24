@@ -81,7 +81,7 @@
 .order-items-table thead tr,
 .order-items-table tbody tr,
 .order-items-table tfoot tr {
-    border: none !important;
+    border-bottom: 1px solid #DBDADE;
 }
 
 .order-items-table thead th,
@@ -137,11 +137,7 @@
     border-radius: 8px;
 }
 
-.p-img {
-    width: 40px;
-    height: 40px;
-    border-radius: 9px;
-}
+
 
 /* ================= CHECKBOX ================= */
 .custom-check {
@@ -203,7 +199,7 @@
 .order-summary-container {
     display: flex;
     justify-content: flex-end;
-    margin-top: 20px;
+    margin-top: 10px;
 }
 
 .order-summary-wrapper {
@@ -238,6 +234,15 @@
         min-width: 100%;
     }
 }
+.p-img{
+    width:60px;
+    height:60px;
+}
+.notes-textarea {
+    resize: none;  /* user cannot resize */
+    cursor: not-allowed; /* optional, shows readonly cursor */
+}
+
 </style>
 
 <div class="main-content">
@@ -267,22 +272,11 @@
                                 </div>
 
                                 <div class="col-12 col-md-6 d-flex justify-content-md-end flex-wrap gap-2">
-                                    <div class="dropdown">
-                                        <button class="btn btn-secondary dropdown-toggle btn-action" data-bs-toggle="dropdown">
-                                            Change Status
-                                        </button>
-                                        <ul class="dropdown-menu">
-                                            <li><a class="dropdown-item" href="#">Pending</a></li>
-                                            <li><a class="dropdown-item" href="#">Confirmed</a></li>
-                                            <li><a class="dropdown-item" href="#">Shipped</a></li>
-                                            <li><a class="dropdown-item" href="#">Delivered</a></li>
-                                            <li><a class="dropdown-item" href="#">Cancelled</a></li>
-                                        </ul>
-                                    </div>
-
-                                    <button class="btn btn-print btn-action">
-                                        <i class="fi fi-rr-print me-2"></i> Print
+                                   <button class="btn btn-print btn-action">
+                                        <i class="icon-printer icon-btn me-2"></i>
                                     </button>
+
+
 
                                     <button class="btn btn-save btn-action">
                                         <i class="fi fi-rr-disk me-2"></i> Save
@@ -293,11 +287,11 @@
                             <!-- ========= CUSTOMER & INFO CARDS ========= -->
                             <div class="row mt-5">
                                 <!-- CUSTOMER CARD -->
-                                <div class="col-sm-4">
+                                <div class="col-sm-4 ">
                                     <div class="customer-card card shadow-none">
                                         <div class="card-body">
-                                            <div class="d-flex align-items-center mb-3">
-                                                <img src="https://via.placeholder.com/56" class="customer-img rounded-circle me-3" alt="Customer">
+                                            <div class="d-flex mb-3">
+                                                <img src="{{ asset('admin/images/p-1.svg') }}" class="customer-img  me-3" alt="Customer">
                                                 <div>
                                                     <h5 class="m-0 fw-bold mb-3">Customer</h5>
                                                     <p class="mb-3">Full Name: Shristi Singh</p>
@@ -311,11 +305,11 @@
                                 </div>
 
                                 <!-- ORDER INFO CARD -->
-                                <div class="col-sm-4">
+                                <div class="col-sm-4 mt-3 mt-sm-0">
                                     <div class="customer-card card shadow-none">
                                         <div class="card-body">
-                                            <div class="d-flex align-items-center mb-3">
-                                                <img src="https://via.placeholder.com/56" class="customer-img rounded-circle me-3" alt="Customer">
+                                            <div class="d-flex  mb-3">
+                                                <img src="{{ asset('admin/images/p-2.svg') }}" class="customer-img me-3" alt="Customer">
                                                 <div>
                                                     <h5 class="m-0 fw-bold mb-3">Order Info</h5>
                                                     <p class="mb-3">Shipping: Next express</p>
@@ -329,11 +323,11 @@
                                 </div>
 
                                 <!-- DELIVER TO CARD -->
-                                <div class="col-sm-4">
+                                <div class="col-sm-4 mt-3 mt-sm-0">
                                     <div class="customer-card card shadow-none">
                                         <div class="card-body">
-                                            <div class="d-flex align-items-center mb-3">
-                                                <img src="https://via.placeholder.com/56" class="customer-img rounded-circle me-3" alt="Customer">
+                                            <div class="d-flex  mb-3">
+                                                <img src="{{ asset('admin/images/p-2.svg') }}" class="customer-img  me-3" alt="Customer">
                                                 <div>
                                                     <h5 class="m-0 fw-bold mb-3">Deliver to</h5>
                                                     <p class="mb-3">Full Name: Shristi Singh</p>
@@ -367,11 +361,16 @@
 
                                 <!-- NOTE AREA -->
                                 <div class="col-sm-8">
-                                    <div class="card shadow-none h-100 customer-card">
+                                    <div class="shadow-none h-100">
                                         <div class="card-body">
                                             <h5 class="fw-bold mb-3">Notes</h5>
-                                            <textarea class="form-control" rows="8" placeholder="Add notes here..."></textarea>
+                                            <div class="form-control notes-textarea" style="height: 100px; overflow-y: auto;">
+                                                Add notes here...
+                                            </div>
                                         </div>
+                                    </div>
+
+
                                     </div>
                                 </div>
                             </div>
@@ -407,8 +406,8 @@
                                                 <td>
                                                     <div class="d-flex align-items-center">
                                                         <input type="checkbox" class="custom-check me-3">
-                                                        <div class="rounded me-3 p-img">
-                                                            <img src="{{ asset('admin/images/p-image.svg') }}" alt="">
+                                                        <div class="rounded me-3 ">
+                                                            <img src="{{ asset('admin/images/p-image.svg') }}" alt="" class="p-img">
                                                         </div>
                                                         <div>
                                                             <p class="mb-0">Wireless Bluetooth Headphones</p>
@@ -426,7 +425,7 @@
                                                     <div class="d-flex align-items-center">
                                                         <input type="checkbox" class="custom-check me-3">
                                                         <div class="rounded me-3 p-img">
-                                                            <img src="{{ asset('admin/images/p-image.svg') }}" alt="">
+                                                            <img src="{{ asset('admin/images/p-image.svg') }}" alt="" class="p-img">
                                                         </div>
                                                         <div>
                                                             <p class="mb-0">Wireless Bluetooth Headphones</p>
@@ -444,7 +443,7 @@
                                                     <div class="d-flex align-items-center">
                                                         <input type="checkbox" class="custom-check me-3">
                                                         <div class="rounded me-3 p-img">
-                                                            <img src="{{ asset('admin/images/p-image.svg') }}" alt="">
+                                                            <img src="{{ asset('admin/images/p-image.svg') }}" alt="" class="p-img">
                                                         </div>
                                                         <div>
                                                             <p class="mb-0">Wireless Bluetooth Headphones</p>

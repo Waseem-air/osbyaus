@@ -89,10 +89,10 @@
                             </button>
                             <div class="action-menu">
                                 <a href="{{ route('admin.order.show', $order->id) }}">
-                                    <i class="icon-eye"></i> View Details
+                                    <i class="icon-eye"></i> 
                                 </a>
-                                <a href="#" class="text-primary edit-order" data-order-id="{{ $order->id }}">
-                                    <i class="icon-edit"></i> Edit Order
+                                <a href="#" class=" edit-order" data-order-id="{{ $order->id }}">
+                                    <i class="icon-edit"></i> 
                                 </a>
 
                                 <!-- Show Payment Link in Actions -->
@@ -105,8 +105,8 @@
                                     </a>
                                 @endif
 
-                                <a href="#" class="text-danger delete-order" data-order-id="{{ $order->id }}">
-                                    <i class="icon-trash-2"></i> Delete
+                                <a href="#" class="delete-order" data-order-id="{{ $order->id }}">
+                                    <i class="icon-trash-2"></i>
                                 </a>
                             </div>
                         </div>
@@ -124,14 +124,6 @@
         </table>
     </div>
 
-    <!-- Pagination -->
-    @if($orders->hasPages())
-        <nav aria-label="Page navigation" class="mt-3">
-            <ul class="pagination justify-content-end">
-                {{ $orders->links() }}
-            </ul>
-        </nav>
-    @endif
 </div>
 
 <!-- Add SweetAlert CSS & JS -->
@@ -237,8 +229,9 @@
         background: white;
         box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         border-radius: 6px;
-        min-width: 160px;
+        min-width: auto;
         z-index: 1000;
+        padding:10px;
     }
 
     .action-dropdown:hover .action-menu {
@@ -252,11 +245,6 @@
         color: #333;
         border-bottom: 1px solid #f0f0f0;
     }
-
-    .action-menu a:hover {
-        background: #f8f9fa;
-    }
-
     .action-menu a:last-child {
         border-bottom: none;
     }

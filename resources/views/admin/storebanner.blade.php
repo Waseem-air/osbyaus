@@ -53,15 +53,14 @@
 }
 
 .banner-table th {
-    background-color: #f8f9fa;
     font-weight: 600;
     width: 144px;
     color: #333;
     padding: 15px 12px;
-    border-bottom: 2px solid #dee2e6;
+    border-bottom: 1px solid #dee2e6;
     font-size: 14px;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    /* letter-spacing: 0.5px; */
 }
 
 .banner-table td {
@@ -97,28 +96,18 @@
 }
 
 .icon-btn {
-    width: 36px;
-    height: 36px;
+    width: 15px;
+    height: 15px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     border-radius: 6px;
-    background: #f8f9fa;
     color: #666;
-    margin-left: 8px;
+    margin-left: 6px;
     cursor: pointer;
     transition: all 0.3s ease;
-    border: 1px solid #eaeaea;
-    font-size: 14px;
+    font-size: 18px;
 }
-
-.icon-btn:hover {
-    background: #94010E;
-    color: white;
-    transform: translateY(-1px);
-    box-shadow: 0 2px 8px rgba(148, 1, 14, 0.3);
-}
-
 /* ================= RESPONSIVE STYLES ================= */
 /* Large Desktop (1200px and above) */
 @media (min-width: 1200px) {
@@ -179,8 +168,8 @@
     }
 
     .icon-btn {
-        width: 32px;
-        height: 32px;
+        width: 15px;
+        height: 15px;
         margin-left: 6px;
         font-size: 12px;
     }
@@ -251,7 +240,6 @@
     }
 
     .action-icons::before {
-        content: "Actions";
         font-weight: 600;
         color: #333;
         margin-right: auto;
@@ -309,7 +297,6 @@
     }
 
     .action-icons::before {
-        content: "Actions";
         font-weight: 600;
         color: #333;
         margin-right: auto;
@@ -321,8 +308,8 @@
     }
 
     .icon-btn {
-        width: 40px;
-        height: 40px;
+        width: 15px;
+        height: 15px;
         margin: 0 5px;
     }
 
@@ -465,11 +452,15 @@
             <!-- Search and Filter Bar -->
             <div class="search-bar-container mb-2 mt-4">
                 <!-- Search Form -->
-                <form class="form-search">
-                    <fieldset class="name">
-                        <input type="text" id="searchCategory" placeholder="Search categories..." name="search">
-                    </fieldset>
-                </form>
+                <form class="form-search" id="searchForm">
+                        <fieldset class="name">
+                            <input type="text" placeholder="Search Banner..." id="customerSearch"
+                                   name="search" value="{{ request('search') }}">
+                            <button type="submit" class="search-icon">
+                                <i class="icon-search"></i>
+                            </button>
+                        </fieldset>
+                    </form>
 
                 <!-- Add New Button -->
                 <button class="tf-button style-1 w208" data-bs-toggle="offcanvas" data-bs-target="#addCategoryOffcanvas">
@@ -519,9 +510,9 @@
                                                 </td>
 
                                                 <td class="text-end action-icons">
-                                                    <i class="fi fi-rr-edit icon-btn"></i>
-                                                    <i class="fi fi-rr-trash icon-btn"></i>
-                                                    <i class="fi fi-rr-lock icon-btn"></i>
+                                                    <i class="icon-edit icon-btn"></i>
+                                                    <i class="icon-trash icon-btn"></i>
+                                                    <i class="icon-lock icon-btn"></i>
                                                 </td>
                                             </tr>
 
@@ -539,11 +530,13 @@
                                                     Get ready for summer with our exclusive collection of beachwear and casual outfits.
                                                 </td>
 
-                                                <td class="text-end action-icons">
-                                                    <i class="fi fi-rr-edit icon-btn"></i>
-                                                    <i class="fi fi-rr-trash icon-btn"></i>
-                                                    <i class="fi fi-rr-lock icon-btn"></i>
+                                               <td class="text-end action-icons">
+                                                    <i class="icon-edit icon-btn"></i>
+                                                    <i class="icon-trash icon-btn"></i>
+                                                    <i class="icon-lock icon-btn"></i>
                                                 </td>
+
+
                                             </tr>
                                         </tbody>
                                     </table>
