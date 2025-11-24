@@ -89,21 +89,11 @@
                             </button>
                             <div class="action-menu">
                                 <a href="{{ route('admin.order.show', $order->id) }}">
-                                    <i class="icon-eye"></i> 
+                                    <i class="icon-eye"></i>
                                 </a>
                                 <a href="#" class=" edit-order" data-order-id="{{ $order->id }}">
-                                    <i class="icon-edit"></i> 
+                                    <i class="icon-edit"></i>
                                 </a>
-
-                                <!-- Show Payment Link in Actions -->
-                                @if($order->payment_status === 'pending' && $order->stripe_payment_link)
-                                    <a href="javascript:void(0);"
-                                       class="text-info show-payment-link"
-                                       data-payment-link="{{ $order->stripe_payment_link }}"
-                                       data-order-number="{{ $order->order_number }}">
-                                        <i class="icon-external-link"></i> Payment Link
-                                    </a>
-                                @endif
 
                                 <a href="#" class="delete-order" data-order-id="{{ $order->id }}">
                                     <i class="icon-trash-2"></i>
