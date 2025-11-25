@@ -86,7 +86,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin'])->grou
     Route::prefix('customers')->name('customer.')->group(function () {
         Route::get('/', [CustomerController::class, 'customer_list'])->name('index');
         Route::get('/{id}/show', [CustomerController::class, 'show_customer'])->name('show');
-                Route::get('/detail', [CustomerController::class, 'detail'])->name('detail');
+        Route::get('/detail', [CustomerController::class, 'detail'])->name('detail');
         Route::post('/store', [CustomerController::class, 'store_customer'])->name('store');
         Route::get('/{id}/get', [CustomerController::class, 'get_customer'])->name('get');
         Route::post('/{id}/update', [CustomerController::class, 'update_customer'])->name('update');
