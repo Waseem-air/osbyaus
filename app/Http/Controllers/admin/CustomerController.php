@@ -10,6 +10,10 @@ use Illuminate\Support\Str;
 
 class CustomerController extends Controller
 {
+    public function detail()
+    {
+        return view('admin.customers.detail');
+    }
     // ✅ Show Customer List with Filters
     public function customer_list(Request $request)
     {

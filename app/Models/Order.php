@@ -58,8 +58,9 @@ class Order extends Model
     // Methods
 public static function generateOrderNumber()
 {
-    return 'ORD-' . strtoupper(Str::random(6));
+    return 'ORD-' . rand(10000, 99999);
 }
+
 
 
 
