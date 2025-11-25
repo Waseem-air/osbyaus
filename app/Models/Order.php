@@ -56,14 +56,12 @@ class Order extends Model
     }
 
     // Methods
-    public static function generateOrderNumber()
-    {
-        $prefix = 'ORD';
-        $timestamp = now()->format('Ymd');
-        $random = strtoupper(substr(uniqid(), -6));
+public static function generateOrderNumber()
+{
+    return 'ORD-' . strtoupper(Str::random(6));
+}
 
-        return "{$prefix}-{$timestamp}-{$random}";
-    }
+
 
     public function getBillingFullNameAttribute()
     {
