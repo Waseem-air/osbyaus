@@ -34,8 +34,5 @@ class AdminController extends Controller
     {
         return view('admin.storedetails');
     }
-    public function store_banner()
-    {
-        return view('admin.storebanner');
-    }
+    
 }

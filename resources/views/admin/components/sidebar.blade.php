@@ -124,8 +124,8 @@
         </li>
 
 
-       <li class="sub-menu-item {{ request()->routeIs('admin.store.banner') ? 'active' : '' }}">
-    <a href="{{ route('admin.store.banner') }}" class="d-flex align-items-center">
+       <li class="sub-menu-item {{ request()->routeIs('admin.banner.index') ? 'active' : '' }}">
+    <a href="{{ route('admin.banner.index') }}" class="d-flex align-items-center">
         <div class="icon me-2">
             <i class="icon-image" style="color:black; font-size:18px;"></i>
         </div>

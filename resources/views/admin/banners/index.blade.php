@@ -482,65 +482,61 @@
                                 <h4 class="mb-3 fw-bold">Banner List</h4>
 
                                 <div class="table-responsive">
-                                    <table class="table banner-table">
-                                        <thead>
-                                            <tr>
-                                                <th>Image</th>
-                                                <th>Top Text</th>
-                                                <th>Main Title</th>
-                                                <th>Sub Title</th>
-                                                <th>Details</th>
-                                                <th class="text-end">Action</th>
-                                            </tr>
-                                        </thead>
+                        <table class="table banner-table">
+                            <thead>
+                                <tr>
+                                    <th>Image</th>
+                                    <th>Top Text</th>
+                                    <th>Main Title</th>
+                                    <th>Sub Title</th>
+                                    <th>Details</th>
+                                    <th>Status</th>
+                                    <th class="text-end">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse($banners as $banner)
+                                <tr>
+                                    <td>
+                                        <img src="{{ $banner->image_url }}" class="banner-img" alt="Banner">
+                                    </td>
+                                    <td data-label="Top Text">{{ $banner->top_text ?? 'N/A' }}</td>
+                                    <td data-label="Main Title">{{ $banner->main_title }}</td>
+                                    <td data-label="Sub Title">{{ $banner->sub_title ?? 'N/A' }}</td>
+                                    <td data-label="Details" class="details-cell">
+                                        {{ Str::limit($banner->details, 100) }}
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-{{ $banner->is_active ? 'success' : 'danger' }}">
+                                            {{ $banner->is_active ? 'Active' : 'Inactive' }}
+                                        </span>
+                                    </td>
+                                    <td class="text-end action-icons">
 
-                                        <tbody>
-                                            <tr>
-                                                <td>
-                                                    <img src="{{ asset('admin/images/placeholder.png') }}" class="banner-img">
-                                                </td>
-
-                                                <td data-label="Top Text">Flat Sale</td>
-                                                <td data-label="Main Title">50% Off</td>
-                                                <td data-label="Sub Title">READY TO WEAR</td>
-
-                                                <td data-label="Details" class="details-cell">
-                                                    Explore our curated collection of trendy outfits and timeless classics.
-                                                    Your next favorite look is just a click away!
-                                                </td>
-
-                                                <td class="text-end action-icons">
-                                                    <i class="icon-edit icon-btn"></i>
-                                                    <i class="icon-trash icon-btn"></i>
-                                                    <i class="icon-lock icon-btn"></i>
-                                                </td>
-                                            </tr>
-
-                                            <!-- Additional rows for demonstration -->
-                                            <tr>
-                                                <td>
-                                                    <img src="{{ asset('admin/images/placeholder.png') }}" class="banner-img">
-                                                </td>
-
-                                                <td data-label="Top Text">Summer Sale</td>
-                                                <td data-label="Main Title">30% Off</td>
-                                                <td data-label="Sub Title">SUMMER COLLECTION</td>
-
-                                                <td data-label="Details" class="details-cell">
-                                                    Get ready for summer with our exclusive collection of beachwear and casual outfits.
-                                                </td>
-
-                                               <td class="text-end action-icons">
-                                                    <i class="icon-edit icon-btn"></i>
-                                                    <i class="icon-trash icon-btn"></i>
-                                                    <i class="icon-lock icon-btn"></i>
-                                                </td>
-
-
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
+                                        
+                                        <form action="{{ route('admin.banner.destroy', $banner) }}" method="POST" class="d-inline">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="icon-trash icon-btn border-0 bg-transparent" 
+                                                    onclick="return confirm('Are you sure you want to delete this banner?')" 
+                                                    title="Delete"></button>
+                                        </form>
+                                        
+                                        <form action="{{ route('admin.banner.toggle-status', $banner) }}" method="POST" class="d-inline">
+                                            @csrf
+                                            <button type="submit" class="icon-lock icon-btn border-0 bg-transparent" 
+                                                    title="{{ $banner->is_active ? 'Deactivate' : 'Activate' }}"></button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                @empty
+                                <tr>
+                                    <td colspan="7" class="text-center">No banners found.</td>
+                                </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
                             </div>
 
                         </div>
@@ -550,23 +546,25 @@
 
                             <h1>Top Banner</h1>
 
-                            <form id="passwordForm">
-                                <div class="row row-inputs mt-5">
-
-                                    <!-- TEXT HERE Field -->
-                                    <div class="col-12 mb-3">
-                                        <label class="profile-form-label fw-bold">Text Here</label>
-                                        <textarea class="form-control" rows="4" placeholder="Enter text here..."></textarea>
+                            <form id="topHeaderTextForm">
+                        @csrf
+                        <div class="row">
+                            <div class="col-12 mb-3">
+                                <label class="profile-form-label fw-bold">Text Here</label>
+                                <textarea class="form-control" rows="4" placeholder="Enter text here..." name="is_top_header_text" id="topHeaderText"></textarea>
+                                <div class="form-text">This text will be displayed in the top header section of your website.</div>
+                            </div>
+                            
+                            <div class="col-12">
+                                <button type="submit" class="tf-button btn" id="saveBtn">
+                                    <span id="btnText">Save Changes</span>
+                                    <div id="spinner" class="spinner-border spinner-border-sm d-none" role="status">
+                                        <span class="visually-hidden">Loading...</span>
                                     </div>
-
-                                </div>
-
-                                <!-- Save Button -->
-                                <div class="mt-3">
-                                    <button type="submit" class="tf-button btn w-auto">Save</button>
-                                </div>
-
-                            </form>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
 
                         </div>
 
@@ -578,59 +576,75 @@
     </div>
 </div>
 
-<!-- Offcanvas -->
+<!-- Add Banner Offcanvas -->
 <div class="offcanvas offcanvas-end" tabindex="-1" id="addCategoryOffcanvas" aria-labelledby="addCategoryOffcanvasLabel">
-  <div class="offcanvas-header">
-    <h5 class="offcanvas-title" id="addCategoryOffcanvasLabel">Add New Banner</h5>
-    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-  </div>
-  
-  <div class="offcanvas-body">
-
-    <!-- Heading -->
-    <h6>Image Product</h6>
-    <p>Note: Format photos SVG, PNG, or JPG (Max size 4mb)</p>
-
-    <!-- Image Input with Dashed Border -->
-    <div class="mb-3 mt-3">
-        <label for="bannerImageInput" class="custom-file-drop">
-            <i class="icon-image"></i>
-            <span>Drop your image here, or browse (JPEG, PNG are allowed)</span>
-        </label>
-        <input type="file" id="bannerImageInput" accept=".svg,.png,.jpg,.jpeg" class="d-none">
-        <img id="bannerPreview" src="{{ asset('admin/images/placeholder.png') }}" alt="Preview" class="mt-3 banner-preview">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="addCategoryOffcanvasLabel">Add New Banner</h5>
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
+    
+    <div class="offcanvas-body">
+        <form action="{{ route('admin.banner.store') }}" method="POST" enctype="multipart/form-data">
+            @csrf
+            
+            <h6>Banner Image</h6>
+            <p>Note: Format photos SVG, PNG, or JPG (Max size 4mb)</p>
 
-    <!-- Top Text -->
-    <div class="mb-3">
-        <label class="form-label">Top Text</label>
-        <input type="text" class="form-control" placeholder="Enter top text">
+            <!-- Image Input -->
+            <div class="mb-3 mt-3">
+                <label for="bannerImageInput" class="custom-file-drop">
+                    <i class="icon-image"></i>
+                    <span>Drop your image here, or browse (JPEG, PNG are allowed)</span>
+                </label>
+                <input type="file" id="bannerImageInput" name="image" accept=".svg,.png,.jpg,.jpeg" class="d-none" required>
+                <img id="bannerPreview" src="{{ asset('admin/images/placeholder.png') }}" alt="Preview" class="mt-3 banner-preview">
+                @error('image')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
+            </div>
+
+            <!-- Top Text -->
+            <div class="mb-3">
+                <label class="form-label">Top Text</label>
+                <input type="text" class="form-control" name="top_text" placeholder="Enter top text" value="{{ old('top_text') }}">
+                @error('top_text')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
+            </div>
+
+            <!-- Main Title -->
+            <div class="mb-3">
+                <label class="form-label">Main Title</label>
+                <input type="text" class="form-control" name="main_title" placeholder="Enter main title" value="{{ old('main_title') }}" required>
+                @error('main_title')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
+            </div>
+
+            <!-- Sub Title -->
+            <div class="mb-3">
+                <label class="form-label">Sub Title</label>
+                <input type="text" class="form-control" name="sub_title" placeholder="Enter sub title" value="{{ old('sub_title') }}">
+                @error('sub_title')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
+            </div>
+
+            <!-- Details -->
+            <div class="mb-3">
+                <label class="form-label">Details</label>
+                <textarea class="form-control" name="details" rows="4" placeholder="Enter details here...">{{ old('details') }}</textarea>
+                @error('details')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
+            </div>
+
+            <!-- Save Button -->
+            <div class="mb-3">
+                <button type="submit" class="tf-button btn w-100 save-btn">Save Banner</button>
+            </div>
+        </form>
     </div>
-
-    <!-- Main Title -->
-    <div class="mb-3">
-        <label class="form-label">Main Title</label>
-        <input type="text" class="form-control" placeholder="Enter main title">
-    </div>
-
-    <!-- Sub Title -->
-    <div class="mb-3">
-        <label class="form-label">Sub Title</label>
-        <input type="text" class="form-control" placeholder="Enter sub title">
-    </div>
-
-    <!-- Details -->
-    <div class="mb-3">
-        <label class="form-label">Details</label>
-        <textarea class="form-control" rows="4" placeholder="Enter details here..."></textarea>
-    </div>
-
-    <!-- Save Button -->
-    <div class="mb-3">
-        <button type="button" class="tf-button btn w-100 save-btn">Save</button>
-    </div>
-
-  </div>
 </div>
 
 @endsection
@@ -686,5 +700,69 @@ document.getElementById('bannerImageInput').addEventListener('change', function(
     reader.readAsDataURL(event.target.files[0]);
 });
 </script>
+<script>
+// Image preview functionality
+document.getElementById('bannerImageInput').addEventListener('change', function(e) {
+    const preview = document.getElementById('bannerPreview');
+    const file = e.target.files[0];
+    
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            preview.src = e.target.result;
+        }
+        reader.readAsDataURL(file);
+    }
+});
 
+// Drag and drop functionality
+const dropArea = document.querySelector('.custom-file-drop');
+const fileInput = document.getElementById('bannerImageInput');
+
+['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+    dropArea.addEventListener(eventName, preventDefaults, false);
+});
+
+function preventDefaults(e) {
+    e.preventDefault();
+    e.stopPropagation();
+}
+
+['dragenter', 'dragover'].forEach(eventName => {
+    dropArea.addEventListener(eventName, highlight, false);
+});
+
+['dragleave', 'drop'].forEach(eventName => {
+    dropArea.addEventListener(eventName, unhighlight, false);
+});
+
+function highlight() {
+    dropArea.classList.add('highlight');
+}
+
+function unhighlight() {
+    dropArea.classList.remove('highlight');
+}
+
+dropArea.addEventListener('drop', handleDrop, false);
+
+function handleDrop(e) {
+    const dt = e.dataTransfer;
+    const files = dt.files;
+    fileInput.files = files;
+    
+    // Trigger change event
+    const event = new Event('change');
+    fileInput.dispatchEvent(event);
+}
+
+// Click to upload
+dropArea.addEventListener('click', () => {
+    fileInput.click();
+});
+</script>
 @endpush
+
+
+
+

@@ -8,6 +8,7 @@ use App\Http\Controllers\admin\CustomerController;
 use App\Http\Controllers\admin\OrderController;
 use App\Http\Controllers\admin\ProductController;
 use App\Http\Controllers\admin\SizeController;
+use App\Http\Controllers\admin\BannerController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -19,7 +20,6 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin'])->grou
     Route::get('/store-menu', [AdminController::class, 'store_menu'])->name('store.menu');
     Route::get('/profile', [AdminController::class, 'profile'])->name('profile');
     Route::get('/media-links', [AdminController::class, 'media_links'])->name('media.links');
-    Route::get('/store-banner', [AdminController::class, 'store_banner'])->name('store.banner');
     Route::get('/store-details', [AdminController::class, 'store_details'])->name('store.details');
 
 
@@ -49,9 +49,14 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin'])->grou
         Route::post('/image/{id}/set-main', [ProductController::class, 'set_main_image'])->name('image.set-main');
     });
 
-
-
-
+   Route::prefix('banner')->name('banner.')->group(function () {
+    Route::get('/', [BannerController::class, 'index'])->name('index');
+    Route::post('/', [BannerController::class, 'store'])->name('store');
+    // Route::get('/{banner}/edit', [BannerController::class, 'edit'])->name('edit');
+    // Route::put('/{banner}', [BannerController::class, 'update'])->name('update');
+    Route::delete('/{banner}', [BannerController::class, 'destroy'])->name('destroy');
+    Route::post('/{banner}/toggle-status', [BannerController::class, 'toggleStatus'])->name('toggle-status');
+});
     // Color Routes
     Route::prefix('colors')->name('color.')->group(function () {
         Route::get('/', [ColorController::class, 'color_list'])->name('index');

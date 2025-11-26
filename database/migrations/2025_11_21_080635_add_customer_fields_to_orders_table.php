@@ -9,24 +9,22 @@ return new class extends Migration
     public function up()
     {
         Schema::table('orders', function (Blueprint $table) {
-            // Change stripe_payment_link to LONGTEXT if already exists
+
+            // Fix: change to nullable longText
             if (Schema::hasColumn('orders', 'stripe_payment_link')) {
-                $table->longText('stripe_payment_link')->change();
+                $table->longText('stripe_payment_link')->nullable()->change();
             } else {
                 $table->longText('stripe_payment_link')->nullable()->after('stripe_customer_id');
             }
 
-            // Add customer_name
             if (!Schema::hasColumn('orders', 'customer_name')) {
                 $table->string('customer_name')->nullable()->after('stripe_payment_link');
             }
 
-            // Add customer_email
             if (!Schema::hasColumn('orders', 'customer_email')) {
                 $table->string('customer_email')->nullable()->after('customer_name');
             }
 
-            // Add customer_phone
             if (!Schema::hasColumn('orders', 'customer_phone')) {
                 $table->string('customer_phone')->nullable()->after('customer_email');
             }
