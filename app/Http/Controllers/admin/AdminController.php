@@ -26,7 +26,7 @@ class AdminController extends Controller
     {
         return view('admin.profile&setting');
     }
-     public function media_links()
+     public function index()
     {
         return view('admin.medialinks');
     }

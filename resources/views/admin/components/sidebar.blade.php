@@ -116,8 +116,8 @@
         </li>
 
         <!-- Social Media Links -->
-        <li class="sub-menu-item {{ request()->routeIs('admin.media.links') ? 'active' : '' }}">
-            <a href="{{ route('admin.media.links') }}" class="">
+        <li class="sub-menu-item {{ request()->routeIs('admin.social-media.index') ? 'active' : '' }}">
+            <a href="{{ route('admin.social-media.index') }}" class="">
                 <div class="icon"><i class="icon-share-2"></i></div>
                 <div class="text">Social Media Links</div>
             </a>
