@@ -56,6 +56,13 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin'])->grou
     // Route::put('/{banner}', [BannerController::class, 'update'])->name('update');
     Route::delete('/{banner}', [BannerController::class, 'destroy'])->name('destroy');
     Route::post('/{banner}/toggle-status', [BannerController::class, 'toggleStatus'])->name('toggle-status');
+
+    // 🌟 TOP HEADER TEXT ROUTE
+    Route::post('/top-header-text', [BannerController::class, 'updateTopHeaderText'])
+        ->name('top-header-text.update');
+
+    Route::get('/top-header-text', [BannerController::class, 'topHeaderText'])
+        ->name('top-header-text');
 });
     // Color Routes
     Route::prefix('colors')->name('color.')->group(function () {

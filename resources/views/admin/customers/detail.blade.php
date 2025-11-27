@@ -11,23 +11,38 @@
     }
 
     /* Tabs Styling */
+    .tab-buttons {
+        display: flex;
+        width: 100%;
+        justify-content: space-between;
+    }
+    
     .tab-buttons .tab-btn {
         background: transparent;
         border: none;
-        padding: 10px 15px;
+        padding: 12px 20px;
         font-weight: 600;
         font-size: 15px;
         cursor: pointer;
         border-bottom: 3px solid transparent;
+        flex: 1; /* Auto width ke liye */
+        /* text-align: center; */
+        white-space: nowrap;
+        transition: all 0.3s ease;
+    }
+
+    .tab-buttons .tab-btn:hover {
+        background-color: #f8f9fa;
     }
 
     .tab-buttons .tab-btn.active {
         color: #94010E;
         border-bottom: 3px solid #94010E;
+        background-color: #fff;
     }
 
     .tab-content {
-        padding: 10px 0;
+        padding: 20px 0;
     }
 
     .profile-info-left p {
@@ -46,6 +61,24 @@
         line-height: 100%;
         letter-spacing: 0px;
         color: black;
+    }
+
+    /* Mobile responsive */
+    @media (max-width: 768px) {
+        .tab-buttons {
+            flex-direction: column;
+        }
+        
+        .tab-buttons .tab-btn {
+            flex: none;
+            width: 100%;
+            border-bottom: 1px solid #eaeaea;
+            border-radius: 0;
+        }
+        
+        .tab-buttons .tab-btn.active {
+            border-bottom: 3px solid #94010E;
+        }
     }
 
     @media (max-width: 767px) {
@@ -75,16 +108,19 @@
                         <div class="row py-3 gx-3">
 
                             <!-- Customer Info -->
-                            <div class="col-md-4 d-flex align-items-center gap-3 border-end py-3 px-3">
-                                <img src="{{ asset('admin/images/customer-img.png') }}"
-                                     alt="Customer"
-                                     width="60" height="60">
+                           <div class="col-md-4 d-flex flex-column justify-content-center align-items-center text-center border-end py-3 px-3">
 
-                                <div class="d-flex flex-column">
-                                    <h6 class="fw-bold mb-1">Robert Fox</h6>
-                                    <p class="mb-0 text-muted">robert@gmail.com</p>
-                                </div>
-                            </div>
+    <img src="{{ asset('admin/images/customer-img.png') }}"
+         alt="Customer"
+         width="60" height="60">
+
+    <div class="d-flex flex-column mt-2">
+        <h6 class="fw-bold mb-1">Robert Fox</h6>
+        <p class="mb-0 text-muted">robert@gmail.com</p>
+    </div>
+
+</div>
+
 
                             <!-- Personal Info -->
                             <div class="col-md-4 border-end py-3 px-3">
@@ -92,18 +128,18 @@
                                 <div class="d-flex mt-3">
                                     <!-- Labels -->
                                     <div class="me-3 profile-info-left">
-                                        <p class="mb-2">Contact Number</p>
-                                        <p class="mb-2">Gender</p>
-                                        <p class="mb-2">Date of Birth</p>
-                                        <p class="mb-0">Member Since</p>
+                                        <p class="mb-2 mt-3">Contact Number</p>
+                                        <p class="mb-2 mt-3">Gender</p>
+                                        <p class="mb-2 mt-3">Date of Birth</p>
+                                        <p class="mb-0 mt-3">Member Since</p>
                                     </div>
 
                                     <!-- Values -->
                                     <div class="profile-info-right">
-                                        <p class="mb-2">(201) 555-0124</p>
-                                        <p class="mb-2">Male</p>
-                                        <p class="mb-2">1 Jan, 1985</p>
-                                        <p class="mb-0">3 March, 2023</p>
+                                        <p class="mb-2 mt-3">(201) 555-0124</p>
+                                        <p class="mb-2 mt-3">Male</p>
+                                        <p class="mb-2 mt-3">1 Jan, 1985</p>
+                                        <p class="mb-0 mt-3">3 March, 2023</p>
                                     </div>
                                 </div>
                             </div>
@@ -112,8 +148,8 @@
                             <div class="col-md-4 py-3 px-3">
                                 <!-- Shipping Address -->
                                 <p class="mb-2">Shipping Address</p>
-                                <div class="profile-info-left mb-4">
-                                    <p class="mb-0">3517 W. Gray St. Utica, Pennsylvania 57867</p>
+                                <div class="profile-info-left mb-4 mt-4">
+                                    <p class="mb-0 ">3517 W. Gray St. Utica, Pennsylvania 57867</p>
                                 </div>
 
                                 <!-- Stats -->
@@ -139,7 +175,7 @@
                         <hr class="m-0">
 
                         <!-- ================= TABS ================= -->
-                        <div class="d-flex justify-content-around mt-3 tab-buttons flex-wrap">
+                        <div class="tab-buttons mt-3">
                             <button class="tab-btn active" data-tab="all">All Orders</button>
                             <button class="tab-btn" data-tab="completed">Completed</button>
                             <button class="tab-btn" data-tab="canceled">Canceled</button>

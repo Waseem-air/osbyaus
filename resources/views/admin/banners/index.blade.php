@@ -546,7 +546,8 @@
 
                             <h1>Top Banner</h1>
 
-                            <form id="topHeaderTextForm">
+                            <form id="topHeaderTextForm" action="{{ route('admin.banner.top-header-text.update') }}" method="POST">
+
                         @csrf
                         <div class="row">
                             <div class="col-12 mb-3">

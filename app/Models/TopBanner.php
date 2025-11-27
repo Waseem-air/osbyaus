@@ -2,12 +2,19 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class TopBanner extends Model
 {
-        protected $fillable = [
+    use HasFactory;
+
+    protected $fillable = [
         'heading',
-        'is_active',
+        'is_active'
+    ];
+
+    protected $casts = [
+        'is_active' => 'boolean'
     ];
 }

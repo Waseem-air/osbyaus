@@ -4,6 +4,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Banner;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use App\Models\TopBanner;
 
 class BannerController extends Controller
 {
@@ -104,34 +105,7 @@ class BannerController extends Controller
     }
 
 
-   public function updateTopHeaderText(Request $request)
-{
-    $request->validate([
-        'is_top_header_text' => 'required|string|max:1000',
-    ]);
 
-    // Find or create the top header text record
-    $setting = Banner::where('is_top_header_text', true)->first();
-    
-    if ($setting) {
-        // Update existing record
-        $setting->update([
-            'is_top_header_text' => $request->is_top_header_text
-        ]);
-    } else {
-        // Create new record
-        $setting = Banner::create([
-            'is_top_header_text' => $request->is_top_header_text,
-            'is_active' => true,
-            'sort_order' => 0
-        ]);
-    }
-
-    return response()->json([
-        'success' => true,
-        'message' => 'Top header text updated successfully!'
-    ]);
-}
 
 // Add this method to get the top header text
 public function topHeaderText()
@@ -139,4 +113,32 @@ public function topHeaderText()
     $setting = Banner::where('is_top_header_text', true)->first();
     return view('admin.banners.index', compact('setting')); // Adjust view name as needed
 }
+
+
+public function updateTopHeaderText(Request $request)
+{
+    $request->validate([
+        'is_top_header_text' => 'required|string|max:1000',
+    ]);
+
+    $setting = TopBanner::first();
+
+    if ($setting) {
+        $setting->update([
+            'heading' => $request->is_top_header_text
+        ]);
+    } else {
+        TopBanner::create([
+            'heading' => $request->is_top_header_text,
+            'is_active' => true
+        ]);
+    }
+
+    return redirect()->back()->with('success', 'Top header text updated successfully!');
+}
+
+
+
+
+
 }
