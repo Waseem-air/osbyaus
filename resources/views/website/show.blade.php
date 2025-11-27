@@ -83,8 +83,17 @@
         }
 
     </style>
+    @php
+        // Get valid images for current product using helper
+        $productImages = App\Helpers\AppHelper::getProductImages($product);
+        $relatedProductsWithImages = [];
+        foreach ($relatedPopular as $relatedProduct) {
+            $relatedProduct->validImages = App\Helpers\AppHelper::getProductImages($relatedProduct);
+            $relatedProductsWithImages[] = $relatedProduct;
+        }
+    @endphp
 
-    <!-- Ec breadcrumb start -->
+        <!-- Ec breadcrumb start -->
     <div class="sticky-header-next-sec ec-breadcrumb section-space-mb">
         <div class="container">
             <div class="row">
@@ -124,22 +133,24 @@
                                             <div class="row">
                                                 <div class="col-lg-9 order-lg-2">
                                                     <div class="single-product-cover">
-                                                        @foreach($product->images as $image)
+                                                        @foreach($productImages as $image)
                                                             <div class="single-slide zoom-image-hover">
                                                                 <img class="img-responsive"
                                                                      src="{{ asset($image->image_path) }}"
-                                                                     alt="{{ $product->name }}">
+                                                                     alt="{{ $product->name }}"
+                                                                     onerror="this.src='{{ asset('website/assets/images/product/default-clothing.jpg') }}'">
                                                             </div>
                                                         @endforeach
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-3 order-lg-1 single-nav-thumb-left-side">
                                                     <div class="single-nav-thumb">
-                                                        @foreach($product->images as $image)
+                                                        @foreach($productImages as $image)
                                                             <div class="single-slide">
                                                                 <img class="img-responsive"
                                                                      src="{{ asset($image->image_path) }}"
-                                                                     alt="{{ $product->name }}">
+                                                                     alt="{{ $product->name }}"
+                                                                     onerror="this.src='{{ asset('website/assets/images/product/default-clothing.jpg') }}'">
                                                             </div>
                                                         @endforeach
                                                     </div>
@@ -148,7 +159,6 @@
                                         </div>
                                     </div>
                                 </div>
-
 
                                 <div class="col-lg-6">
                                     <div class="single-pro-desc">
@@ -167,9 +177,6 @@
                     </span>
                                                 </div>
                                                 <div class="d-flex align-items-center">
-                    <span class="ec-read-review-sku">
-                        <a>SKU: <span class="sku-number">{{ $product->sku }}</span></a>
-                    </span>
                                                     <span class="ec-review-sold-item border-0 p-0">
                         <a>
                             <i class="ecicon eci-check"></i>
@@ -184,14 +191,14 @@
                                             <div class="ec-single-price-stoke">
                                                 <div class="ec-single-price">
                                                     @if($product->discount_price && $product->discount_price < $product->price)
-                                                        <span class="new-price">{{ App\Helpers\AppHelper::currency_symbol() }}.{{ number_format($product->discount_price, 2) }}</span>
-                                                        <span class="ec-single-ps-title">{{ App\Helpers\AppHelper::currency_symbol() }}.{{ number_format($product->price, 2) }}</span>
+                                                        <span class="new-price">{{ App\Helpers\AppHelper::currency_symbol() }}{{ number_format($product->discount_price, 2) }}</span>
+                                                        <span class="ec-single-ps-title">{{ App\Helpers\AppHelper::currency_symbol() }}{{ number_format($product->price, 2) }}</span>
                                                         @php
                                                             $discountPercent = round((($product->price - $product->discount_price) / $product->price) * 100);
                                                         @endphp
                                                         <span class="ec-single-ps-title-badge">{{ $discountPercent }}%</span>
                                                     @else
-                                                        <span class="new-price">{{ App\Helpers\AppHelper::currency_symbol() }}.{{ number_format($product->price, 2) }}</span>
+                                                        <span class="new-price">{{ App\Helpers\AppHelper::currency_symbol() }}{{ number_format($product->price, 2) }}</span>
                                                     @endif
                                                 </div>
                                             </div>
@@ -327,10 +334,6 @@
                                         </div>
                                     </div>
                                 </div>
-
-
-
-
                             </div>
                         </div>
                     </div>
@@ -414,7 +417,8 @@
                                                     </div>
                                                     <div class="ec-size-img-wrapper">
                                                         <img src="{{ asset('website/assets/images/product/size.png') }}"
-                                                             alt="Size Guide">
+                                                             alt="Size Guide"
+                                                             onerror="this.src='{{ asset('website/assets/images/product/default-clothing.jpg') }}'">
                                                     </div>
                                                 </div>
                                             </div>
@@ -470,7 +474,6 @@
                                                     <li><strong>Cut:</strong> {{ $product->cut }}</li>
                                                     <li><strong>Embellishment:</strong> {{ $product->embellishment }}
                                                     </li>
-                                                    <li><strong>SKU:</strong> {{ $product->sku }}</li>
                                                     @if($product->categories->count() > 0)
                                                         <li>
                                                             <strong>Category:</strong> {{ $product->categories->first()->name }}
@@ -496,7 +499,7 @@
     <!-- End Single product -->
 
     <!-- Related Products Section Start -->
-    @if($relatedPopular->count() > 0)
+    @if($relatedProductsWithImages && count($relatedProductsWithImages) > 0)
         <section class="section ec-exe-spe-section section-space-mb-100">
             <div class="container">
                 <div class="row">
@@ -505,12 +508,13 @@
                             <div class="section-title mb-6 d-flex justify-content-between">
                                 <h2 class="ec-title">Related Products</h2>
                                 <a href="{{ route('products.index') }}" class="ec-stitle">View All
-                                    <img src="{{ asset('website/assets/images/icon/arrow_right.svg') }}" alt="">
+                                    <img src="{{ asset('website/assets/images/icon/arrow_right.svg') }}" alt=""
+                                         onerror="this.style.display='none'">
                                 </a>
                             </div>
                         </div>
                         <div class="row">
-                            @foreach($relatedPopular as $relatedProduct)
+                            @foreach($relatedProductsWithImages as $relatedProduct)
                                 <div class="col-xl-3 col-lg-4 col-md-6 mb-4">
                                     <div class="ec-product-content p-0">
                                         <div class="ec-product-inner hot-sale-card">
@@ -518,13 +522,14 @@
                                                 <div class="ec-pro-image hot-sale-img">
                                                     <a href="{{ route('product.detail', $relatedProduct->slug) }}"
                                                        class="image sale-img">
-                                                        @if($relatedProduct->images->count() > 0)
+                                                        @if(isset($relatedProduct->validImages[0]))
                                                             <img class="main-image"
-                                                                 src="{{ asset($relatedProduct->images->first()->image_path) }}"
-                                                                 alt="{{ $relatedProduct->name }}"/>
+                                                                 src="{{ asset($relatedProduct->validImages[0]->image_path) }}"
+                                                                 alt="{{ $relatedProduct->name }}"
+                                                                 onerror="this.src='{{ asset('website/assets/images/product/default-clothing.jpg') }}'"/>
                                                         @else
                                                             <img class="main-image"
-                                                                 src="{{ asset('website/assets/images/product/default-product.jpg') }}"
+                                                                 src="{{ asset('website/assets/images/product/default-clothing.jpg') }}"
                                                                  alt="{{ $relatedProduct->name }}"/>
                                                         @endif
                                                     </a>
@@ -614,4 +619,3 @@
     </script>
 
 @endsection
-
