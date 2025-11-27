@@ -1,4 +1,9 @@
 <!-- Header start  -->
+ <?php
+ use App\Models\TopBanner;
+
+     $banner = TopBanner::first();
+?>
 <header class="ec-header">
     <!--Ec Header Top Start -->
     <div class="header-top">
@@ -10,7 +15,7 @@
                     <div class="header-top-social">
                         <ul class="mb-0">
                             <li class="list-inline-item">
-                                <a href="#">Enjoy Free Shipping Over {{ \App\Helpers\AppHelper::currency_symbol() }}{{ env('FREE_DELIVERY_FEE') ?? 500 }} All Over {{ env('COUNTRY') ?? 'Australia' }}</a>
+                                <a href="#">{{$banner->heading}}</a>
                             </li>
                         </ul>
                     </div>
