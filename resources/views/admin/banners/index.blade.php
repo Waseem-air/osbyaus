@@ -498,7 +498,11 @@
                                 @forelse($banners as $banner)
                                 <tr>
                                     <td>
-                                        <img src="{{ $banner->image_url }}" class="banner-img" alt="Banner">
+@if($banner->image)
+    <img src="{{ asset($banner->image) }}" class="banner-img" alt="Banner">
+@else
+    <img src="{{ asset('default/banner.jpg') }}" class="banner-img" alt="Default">
+@endif
                                     </td>
                                     <td data-label="Top Text">{{ $banner->top_text ?? 'N/A' }}</td>
                                     <td data-label="Main Title">{{ $banner->main_title }}</td>

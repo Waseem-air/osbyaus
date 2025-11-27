@@ -32,9 +32,17 @@ class BannerController extends Controller
 
         // Handle image upload
         if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('banners', 'public');
-            $validated['image'] = $imagePath;
-        }
+
+        $image      = $request->file('image');
+        $imageName  = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
+
+        // Save image in public/uploads/banners/
+        $image->move(public_path('uploads/banners'), $imageName);
+
+        // Save DB path
+        $validated['image'] = 'uploads/banners/' . $imageName;
+    }
+
 
         Banner::create($validated);
 

@@ -20,7 +20,7 @@ class Banner extends Model
         'main_title',
         'sub_title',
         'details',
-        'is_top_header_text',
+        'is_right_text',
         'is_active',
         'sort_order',
     ];

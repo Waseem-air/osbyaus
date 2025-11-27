@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('sub_title')->nullable(); // Sub title
             $table->text('details')->nullable(); // Details
             $table->boolean('is_active')->default(true); // Status
-             $table->boolean('is_top_header_text')->default(false); // Status
+             $table->boolean('is_right_text')->default(false); // Status
             $table->integer('sort_order')->default(0); // For ordering banners
             $table->timestamps();
         });
