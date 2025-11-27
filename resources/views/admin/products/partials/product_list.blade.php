@@ -229,7 +229,6 @@
                             </div>
                             <div class="title line-clamp-2 mb-0">
                                 <a href="{{ route('admin.product.show', $product->id) }}" class="body-text" style="color: var(--Body-Text);">{{ $product->name }}</a>
-                                <p style="color: var(--Note);">SKU: {{ $product->sku }}</p>
                             </div>
                         </div>
 

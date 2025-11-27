@@ -94,9 +94,8 @@
         // Function to get valid product images with fallbacks
         function getProductImages($product) {
             $validImages = [];
-            $defaultImage = 'website/assets/images/product/default-product.jpg';
-            $clothingDefault = 'website/assets/images/product/default-clothing.jpg';
-            // Check if product has images in database
+              $clothingDefault = 'website/assets/images/product/01.png';
+              $defaultImage = 'website/assets/images/product/04.png';
             if ($product->images && $product->images->count() > 0) {
                 foreach ($product->images as $image) {
                     if (imageExists($image->image_path)) {

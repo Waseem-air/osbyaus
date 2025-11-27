@@ -432,10 +432,10 @@
                             <div>
                                 <h1 class="mb-2">{{ $product->name }}</h1>
                                 <div class="flex items-center gap-4 flex-wrap">
-                                    <div class="flex items-center gap-2">
-                                        <i class="icon-hash"></i>
-                                        <span>{{ $product->sku }}</span>
-                                    </div>
+{{--                                    <div class="flex items-center gap-2">--}}
+{{--                                        <i class="icon-hash"></i>--}}
+{{--                                        <span>{{ $product->sku }}</span>--}}
+{{--                                    </div>--}}
                                     <div class="status-badge {{ $product->status ? 'status-active' : 'status-inactive' }}">
                                         <i class="icon-{{ $product->status ? 'check-circle' : 'x-circle' }}"></i>
                                         {{ $product->status ? 'Active' : 'Inactive' }}

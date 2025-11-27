@@ -590,12 +590,12 @@
                                     <div class="error-message" id="categoryError"></div>
                                 </fieldset>
 
-                                <!-- SKU -->
-                                <fieldset class="category mb-4">
-                                    <div class="body-title mb-2">SKU <span class="tf-color-1">*</span></div>
-                                    <input type="text" placeholder="Enter SKU" name="sku" class="form-control"
-                                           value="{{ $product->sku }}" required>
-                                </fieldset>
+{{--                                <!-- SKU -->--}}
+{{--                                <fieldset class="category mb-4">--}}
+{{--                                    <div class="body-title mb-2">SKU <span class="tf-color-1">*</span></div>--}}
+{{--                                    <input type="text" placeholder="Enter SKU" name="sku" class="form-control"--}}
+{{--                                           value="{{ $product->sku }}" required>--}}
+{{--                                </fieldset>--}}
 
                                 <!-- Product Name -->
                                 <fieldset class="category mb-4">

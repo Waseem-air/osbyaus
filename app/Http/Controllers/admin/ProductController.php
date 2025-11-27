@@ -35,7 +35,6 @@ class ProductController extends Controller
             $search = $request->search;
             $query->where(function($q) use ($search) {
                 $q->where('name', 'LIKE', "%{$search}%")
-                    ->orWhere('sku', 'LIKE', "%{$search}%")
                     ->orWhere('description', 'LIKE', "%{$search}%");
             });
         }
@@ -118,7 +117,6 @@ class ProductController extends Controller
             'categories' => 'required|array|min:1',
             'categories.*' => 'exists:categories,id',
             'name' => 'required|string|max:255',
-            'sku' => 'required|string|unique:products,sku',
             'description' => 'required|string',
             'regular_price' => 'required|numeric|min:0',
             'sale_price' => 'nullable|numeric|min:0',
@@ -149,7 +147,7 @@ class ProductController extends Controller
             $product = new Product();
             $product->name = $request->name;
             $product->slug = Str::slug($request->name);
-            $product->sku = $request->sku;
+            $product->sku = 'SKU-' . strtoupper(Str::random(6));
             $product->description = $request->description;
             $product->price = $request->regular_price;
             $product->discount_price = $request->sale_price;
@@ -191,7 +189,7 @@ class ProductController extends Controller
                         'product_size_id' => $productSize->id,
                         'price' => $request->regular_price,
                         'stock_quantity' => $request->stock_quantity,
-                        'sku' => $request->sku . '-' . $productColor->color_id . '-' . $productSize->size_id,
+                        'sku' => 'SKU-' . strtoupper(Str::random(6)),
                     ]);
                 }
             }
@@ -293,7 +291,6 @@ class ProductController extends Controller
             'categories' => 'required|array|min:1',
             'categories.*' => 'exists:categories,id',
             'name' => 'required|string|max:255',
-            'sku' => 'required|string|unique:products,sku,' . $id,
             'description' => 'required|string',
             'regular_price' => 'required|numeric|min:0',
             'sale_price' => 'nullable|numeric|min:0',
@@ -323,7 +320,6 @@ class ProductController extends Controller
             $product = Product::findOrFail($id);
             $product->name = $request->name;
             $product->slug = Str::slug($request->name);
-            $product->sku = $request->sku;
             $product->description = $request->description;
             $product->price = $request->regular_price;
             $product->discount_price = $request->sale_price;

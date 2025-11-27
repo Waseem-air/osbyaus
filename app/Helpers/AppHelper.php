@@ -194,9 +194,8 @@ class AppHelper
             }
         }
 
-        // If no valid image found, use default
-        $clothingDefault = 'website/assets/images/product/default-clothing.jpg';
-        $generalDefault = 'website/assets/images/product/default-product.jpg';
+        $clothingDefault = 'website/assets/images/product/01.png';
+        $generalDefault = 'website/assets/images/product/04.png';
         return self::checkImageExists($clothingDefault) ? $clothingDefault : $generalDefault;
     }
 
