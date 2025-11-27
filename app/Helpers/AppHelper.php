@@ -171,4 +171,40 @@ class AppHelper
     {
         return self::config()->commission_type ?? 'percentage';
     }
+
+
+    public static function checkImageExists($imagePath)
+    {
+        if (!$imagePath) return false;
+        try {
+            return file_exists(public_path($imagePath));
+        } catch (\Exception $e) {
+            return false;
+        }
+    }
+
+    public static function getProductImage($product)
+    {
+        // Get the first valid image
+        if ($product->images && $product->images->count() > 0) {
+            foreach ($product->images as $image) {
+                if (self::checkImageExists($image->image_path)) {
+                    return $image->image_path;
+                }
+            }
+        }
+
+        // If no valid image found, use default
+        $clothingDefault = 'website/assets/images/product/default-clothing.jpg';
+        $generalDefault = 'website/assets/images/product/default-product.jpg';
+        return self::checkImageExists($clothingDefault) ? $clothingDefault : $generalDefault;
+    }
+
+
+
+
+
+
+
+
 }
