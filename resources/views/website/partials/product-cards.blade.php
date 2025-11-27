@@ -4,10 +4,10 @@
             <div class="ec-pro-image hot-sale-img">
                 <a href="{{ route('product.detail', $product->slug) }}" class="image sale-img">
                     <img class="main-image"
-                         src="{{ asset(App\Helpers\AppHelper::getProductImage($product)) }}"
+                         src="{{ App\Helpers\AppHelper::getProductImageUrl($product) }}"
                          alt="{{ $product->name }}"
                          loading="lazy"
-                         onerror="this.onerror=null; this.src='{{ asset('website/assets/images/product/default-clothing.jpg') }}'"/>
+                         onerror="this.onerror=null; this.src='{{ asset('website/assets/images/product/01.png') }}'"/>
                 </a>
 
                 <div class="ec-pro-actions">
@@ -34,16 +34,11 @@
 
             <p class="ec-pro-subtitle">
                 @php
-                    $specs = [];
-                    if ($product->embellishment && $product->embellishment !== 'None') {
-                        $specs[] = $product->embellishment;
-                    }
-                    if ($product->fabric) {
-                        $specs[] = $product->fabric;
-                    }
-                    if ($product->cut) {
-                        $specs[] = $product->cut . ' Cut';
-                    }
+                    $specs = array_filter([
+                        $product->embellishment !== 'None' ? $product->embellishment : null,
+                        $product->fabric,
+                        $product->cut ? $product->cut . ' Cut' : null
+                    ]);
                 @endphp
                 {{ implode(' | ', $specs) }}
             </p>

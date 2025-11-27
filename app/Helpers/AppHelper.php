@@ -171,13 +171,25 @@ class AppHelper
     {
         return self::config()->commission_type ?? 'percentage';
     }
-
-
     public static function checkImageExists($imagePath)
     {
-        if (!$imagePath) return false;
+        if (!$imagePath) {
+            return false;
+        }
+
         try {
-            return file_exists(public_path($imagePath));
+            $cleanPath = ltrim($imagePath, '/\\');
+            $publicPath = public_path($cleanPath);
+            if (file_exists($publicPath)) {
+                return true;
+            }
+
+            // Also check in storage as fallback
+            if (Storage::disk('public')->exists($cleanPath)) {
+                return true;
+            }
+
+            return false;
         } catch (\Exception $e) {
             return false;
         }
@@ -185,7 +197,6 @@ class AppHelper
 
     public static function getProductImage($product)
     {
-        // Get the first valid image
         if ($product->images && $product->images->count() > 0) {
             foreach ($product->images as $image) {
                 if (self::checkImageExists($image->image_path)) {
@@ -194,16 +205,61 @@ class AppHelper
             }
         }
 
-        $clothingDefault = 'website/assets/images/product/01.png';
-        $generalDefault = 'website/assets/images/product/04.png';
-        return self::checkImageExists($clothingDefault) ? $clothingDefault : $generalDefault;
+        $defaultImages = [
+            'website/assets/images/product/01.png',
+            'website/assets/images/product/04.png',
+        ];
+
+        foreach ($defaultImages as $defaultImage) {
+            if (self::checkImageExists($defaultImage)) {
+                return $defaultImage;
+            }
+        }
+
+        return 'website/assets/images/product/01.png';
+    }
+
+    public static function getProductImageUrl($product)
+    {
+        $imagePath = self::getProductImage($product);
+        if (str_contains($imagePath, 'uploads/')) {
+            return asset($imagePath);
+        }
+        return asset($imagePath);
     }
 
 
+    public static function getProductImages($product)
+    {
+        $validImages = [];
+        $clothingDefault = 'website/assets/images/product/01.png';
+        $defaultImage = 'website/assets/images/product/04.png';
 
+        // Check if product has images in database
+        if ($product->images && $product->images->count() > 0) {
+            foreach ($product->images as $image) {
+                if (self::checkImageExists($image->image_path)) {
+                    $validImages[] = $image;
+                }
+            }
+        }
 
+        // If no valid images found, use fallbacks
+        if (empty($validImages)) {
+            if (self::checkImageExists($clothingDefault)) {
+                $validImages[] = (object)[
+                    'image_path' => $clothingDefault,
+                    'alt' => $product->name
+                ];
+            } else {
+                $validImages[] = (object)[
+                    'image_path' => $defaultImage,
+                    'alt' => $product->name
+                ];
+            }
+        }
 
-
-
+        return $validImages;
+    }
 
 }

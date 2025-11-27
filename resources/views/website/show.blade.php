@@ -83,53 +83,12 @@
         }
 
     </style>
-
     @php
-        // Function to check if image exists in directory
-        function imageExists($imagePath) {
-            if (!$imagePath) return false;
-            return file_exists(public_path($imagePath));
-        }
-
-        // Function to get valid product images with fallbacks
-        function getProductImages($product) {
-            $validImages = [];
-              $clothingDefault = 'website/assets/images/product/01.png';
-              $defaultImage = 'website/assets/images/product/04.png';
-            if ($product->images && $product->images->count() > 0) {
-                foreach ($product->images as $image) {
-                    if (imageExists($image->image_path)) {
-                        $validImages[] = $image;
-                    }
-                }
-            }
-
-            // If no valid images found, use fallbacks
-            if (empty($validImages)) {
-                if (imageExists($clothingDefault)) {
-                    // Create a mock image object
-                    $validImages[] = (object)[
-                        'image_path' => $clothingDefault,
-                        'alt' => $product->name
-                    ];
-                } else {
-                    $validImages[] = (object)[
-                        'image_path' => $defaultImage,
-                        'alt' => $product->name
-                    ];
-                }
-            }
-
-            return $validImages;
-        }
-
-        // Get valid images for current product
-        $productImages = getProductImages($product);
-
-        // Get valid images for related products
+        // Get valid images for current product using helper
+        $productImages = App\Helpers\AppHelper::getProductImages($product);
         $relatedProductsWithImages = [];
         foreach ($relatedPopular as $relatedProduct) {
-            $relatedProduct->validImages = getProductImages($relatedProduct);
+            $relatedProduct->validImages = App\Helpers\AppHelper::getProductImages($relatedProduct);
             $relatedProductsWithImages[] = $relatedProduct;
         }
     @endphp
