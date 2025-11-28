@@ -372,10 +372,10 @@ html {
   box-sizing: border-box;
 }
 
-hr {
+/* hr {
   margin-bottom: 20px;
   border: dashed 1px #ccc;
-}
+} */
 
 /* List */
 ul,

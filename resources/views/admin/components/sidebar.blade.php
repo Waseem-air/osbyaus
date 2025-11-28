@@ -115,13 +115,13 @@
             </a>
         </li>
 
-        <!-- Social Media Links -->
         <li class="sub-menu-item {{ request()->routeIs('admin.social-media.index') ? 'active' : '' }}">
-            <a href="{{ route('admin.social-media.index') }}" class="">
-                <div class="icon"><i class="icon-share-2"></i></div>
-                <div class="text">Social Media Links</div>
-            </a>
-        </li>
+    <a href="{{ route('admin.social-media.index') }}">
+        <div class="icon"><i class="icon-share-2"></i></div>
+        <div class="text">Social Media Links</div>
+    </a>
+</li>
+
 
 
        <li class="sub-menu-item {{ request()->routeIs('admin.banner.index') ? 'active' : '' }}">
