@@ -418,7 +418,7 @@
                         <div class="wg-box mb-30">
                             <fieldset>
                                 <div class="body-title mb-10">Product Images</div>
-                                <p class="text-muted mb-3">Supported formats: JPG, PNG, JPEG. Max size: 10MB</p>
+                                <p class="text-muted mb-3">Supported formats: JPG, PNG, JPEG. Max size: 2MB</p>
 
                                 <div class="upload-image mb-16">
                                     <div class="up-load">

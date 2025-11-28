@@ -129,7 +129,7 @@ class ProductController extends Controller
             'colors' => 'required|array|min:1',
             'colors.*' => 'exists:colors,id',
             'images' => 'required|array|min:1',
-            'images.*' => 'image|mimes:jpg,jpeg,png|max:10240',
+            'images.*' => 'image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
         if ($validator->fails()) {
