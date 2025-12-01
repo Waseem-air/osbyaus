@@ -113,7 +113,6 @@
     }
     
     .order-table table thead th {
-        background-color: #f8f9fa;
         font-weight: 600;
         border-bottom: 2px solid #E9E7FD;
         padding: 12px 15px;
@@ -134,7 +133,6 @@
     }
     
     .detail-table {
-        background-color: #f8f9fa;
         border-radius: 6px;
         margin-top: 10px;
     }
@@ -144,7 +142,6 @@
     }
     
     .detail-table table th {
-        background-color: #e9ecef;
         border-bottom: 1px solid #E9E7FD;
         padding: 8px 12px;
     }
@@ -195,9 +192,54 @@
         transition: height 0.35s ease;
     }
     
+    /* Order Summary Styles - DIV VERSION */
+    .order-summary-wrapper {
+        width: 100%;
+        max-width: 300px;
+        margin-left: auto;
+        margin-top: 10px;
+        margin-right: 190px;
+    }
+    
+    .summary-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px 0;
+    }
+    
+    .summary-item:last-child {
+        border-bottom: none;
+    }
+    
+    .summary-label {
+        text-align: left;
+        font-weight: 400;
+        font-size: 14px;
+        color: #6c757d;
+    }
+    
+    .summary-value {
+        text-align: right;
+        font-weight: 600;
+        font-size: 14px;
+        color: #2c3e50;
+    }
+    
+    .summary-total .summary-value {
+        font-size: 18px;
+        color: #94010E;
+        font-weight: 700;
+    }
+    
     @media (max-width: 768px) {
         .table-responsive {
             font-size: 0.875rem;
+        }
+        
+        .order-summary-wrapper {
+            max-width: 100%;
+            margin-right: 0;
         }
         
         .order-table table {
@@ -214,12 +256,21 @@
             font-size: 0.8rem;
         }
         
+        .summary-label,
+        .summary-value {
+            font-size: 13px;
+        }
+        
+        .summary-total .summary-value {
+            font-size: 16px;
+        }
+        
         /* Ensure dropdowns work on mobile */
         .dropdown-menu {
             position: absolute !important;
         }
     }
-
+    
     /* Search bar styling */
     .search-bar-container {
         display: flex;
@@ -273,21 +324,24 @@
     .tf-button.style-1:hover {
         background-color: #7a000b;
     }
+    
     .order-table table {
-    font-size: 16px;
-}
-.order-table table th,
-.order-table table td {
-    border-bottom: 1px solid #E9E7FD;
-}
-
-.order-table table thead th {
-    border-bottom: 1px solid #E9E7FD;
-}
-.detail-table table th,
-.detail-table table td {
-    border-bottom: 1px solid #E9E7FD;
-}
+        font-size: 16px;
+    }
+    
+    .order-table table th,
+    .order-table table td {
+        border-bottom: 1px solid #E9E7FD;
+    }
+    
+    .order-table table thead th {
+        border-bottom: 1px solid #E9E7FD;
+    }
+    
+    .detail-table table th,
+    .detail-table table td {
+        border-bottom: 1px solid #E9E7FD;
+    }
 </style>
 
 <div class="main-content">
@@ -404,169 +458,100 @@
                 <div class="col-12">
                     <!-- ================= TAB CONTENT ================= -->
                     <div id="tab-all" class="tab-content">
-                         <div class="table-responsive order-table">
-                    <table class="table table-hover mb-0">
-                        <thead>
-                            <tr>
-                                <th>Order ID</th>
-                                <th>Created</th>
-                                <th>Total</th>
-                                <th>Payment</th>
-                                <th>Status</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>#6548</td>
-                                <td>2 min ago</td>
-                                <td>$654</td>
-                                <td>CC</td>
-                                <td><span class="status-completed">Completed</span></td>
-                                <td>
-                                    <div class="dropdown">
-                                        <button class="btn btn-sm action-btn dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                                            <i class="fas fa-ellipsis-v"></i>
-                                        </button>
-                                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                            <li>
-                                                <a class="dropdown-item view-details" href="#" 
-                                                   data-bs-toggle="collapse" 
-                                                   data-bs-target="#orderDetails6548"
-                                                   aria-expanded="false" 
-                                                   aria-controls="orderDetails6548">
-                                                    View Details
-                                                </a>
-                                            </li>
-                                            <li><a class="dropdown-item" href="#">Edit</a></li>
-                                            <li><a class="dropdown-item" href="#">Cancel</a></li>
-                                        </ul>
-                                    </div>
-                                </td>
-                            </tr>
-                            <!-- Order Details Table (Collapsed by default) -->
-                            <tr class="collapse" id="orderDetails6548" data-bs-parent=".table">
-                                <td colspan="6" class="p-0">
-                                    <div class="detail-table m-2 p-3">
-                                        <h6 class="mb-3">Order Details for #6548</h6>
-                                        <div class="table-responsive">
-                                            <table class="table table-sm table-borderless">
-                                                <thead>
-                                                    <tr>
-                                                        <th>#</th>
-                                                        <th>SKU</th>
-                                                        <th>Name</th>
-                                                        <th>Price</th>
-                                                        <th>Qty</th>
-                                                        <th>Disc.</th>
-                                                        <th>Total</th>
-                                                        <th>Print</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr>
-                                                        <td>1</td>
-                                                        <td>#6548</td>
-                                                        <td>Main Paislay 3 Piece</td>
-                                                        <td>$999.29</td>
-                                                        <td>x1</td>
-                                                        <td>5%</td>
-                                                        <td>Rs. 9,978</td>
-                                                        <td><i class="fas fa-print print-icon"></i></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>2</td>
-                                                        <td>#6549</td>
-                                                        <td>Casual Shirt</td>
-                                                        <td>$49.99</td>
-                                                        <td>x2</td>
-                                                        <td>10%</td>
-                                                        <td>Rs. 89.98</td>
-                                                        <td><i class="fas fa-print print-icon"></i></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>3</td>
-                                                        <td>#6550</td>
-                                                        <td>Formal Trousers</td>
-                                                        <td>$79.99</td>
-                                                        <td>x1</td>
-                                                        <td>0%</td>
-                                                        <td>Rs. 79.99</td>
-                                                        <td><i class="fas fa-print print-icon"></i></td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                            <!-- Additional order rows would go here -->
-                            <tr>
-                                <td>#6549</td>
-                                <td>5 min ago</td>
-                                <td>$324</td>
-                                <td>PayPal</td>
-                                <td><span class="status-completed">Completed</span></td>
-                                <td>
-                                    <div class="dropdown">
-                                        <button class="btn btn-sm action-btn dropdown-toggle" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
-                                            <i class="fas fa-ellipsis-v"></i>
-                                        </button>
-                                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
-                                            <li>
-                                                <a class="dropdown-item view-details" href="#" 
-                                                   data-bs-toggle="collapse" 
-                                                   data-bs-target="#orderDetails6549"
-                                                   aria-expanded="false" 
-                                                   aria-controls="orderDetails6549">
-                                                    View Details
-                                                </a>
-                                            </li>
-                                            <li><a class="dropdown-item" href="#">Edit</a></li>
-                                            <li><a class="dropdown-item" href="#">Cancel</a></li>
-                                        </ul>
-                                    </div>
-                                </td>
-                            </tr>
-                            <!-- Order Details for #6549 -->
-                            <tr class="collapse" id="orderDetails6549" data-bs-parent=".table">
-                                <td colspan="6" class="p-0">
-                                    <div class="detail-table m-2 p-3">
-                                        <h6 class="mb-3">Order Details for #6549</h6>
-                                        <div class="table-responsive">
-                                            <table class="table table-sm table-borderless">
-                                                <thead>
-                                                    <tr>
-                                                        <th>#</th>
-                                                        <th>SKU</th>
-                                                        <th>Name</th>
-                                                        <th>Price</th>
-                                                        <th>Qty</th>
-                                                        <th>Disc.</th>
-                                                        <th>Total</th>
-                                                        <th>Print</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr>
-                                                        <td>1</td>
-                                                        <td>#6549</td>
-                                                        <td>Summer Dress</td>
-                                                        <td>$59.99</td>
-                                                        <td>x1</td>
-                                                        <td>15%</td>
-                                                        <td>Rs. 50.99</td>
-                                                        <td><i class="fas fa-print print-icon"></i></td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+                        <div class="table-responsive order-table">
+                            <table class="table mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Order ID</th>
+                                        <th>Created</th>
+                                        <th>Total</th>
+                                        <th>Payment</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>#6548</td>
+                                        <td>2 min ago</td>
+                                        <td>$654</td>
+                                        <td>CC</td>
+                                        <td><span class="status-completed">Completed</span></td>
+                                        <td>
+                                            <div class="dropdown">
+                                                <button class="btn btn-sm action-btn dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <i class="fas fa-ellipsis-v"></i>
+                                                </button>
+                                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                                    <li>
+                                                        <a class="dropdown-item view-details" href="#" 
+                                                           data-bs-toggle="collapse" 
+                                                           data-bs-target="#orderDetails6548"
+                                                           aria-expanded="false" 
+                                                           aria-controls="orderDetails6548">
+                                                            View Details
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <!-- Order Details Table (Collapsed by default) -->
+                                    <tr class="collapse" id="orderDetails6548" data-bs-parent=".table">
+                                        <td colspan="6" class="p-0">
+                                            <div class="detail-table m-2 p-3">
+                                                <div class="table-responsive">
+                                                    <table class="table table-sm table-borderless">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>#</th>
+                                                                <th>Name</th>
+                                                                <th>Price</th>
+                                                                <th>Qty</th>
+                                                                <th>Disc.</th>
+                                                                <th>Total</th>
+                                                                <th>Print</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr>
+                                                                <td>1</td>
+                                                                <td>Main Paislay 3 Piece</td>
+                                                                <td>$999.29</td>
+                                                                <td>x1</td>
+                                                                <td>5%</td>
+                                                                <td>Rs. 9,978</td>
+                                                                <td><i class="fas fa-print print-icon"></i></td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                
+                                                <!-- Order Summary - NOW IN DIVS -->
+                                                <div class="order-summary-wrapper">
+                                                    <div class="summary-item">
+                                                        <div class="summary-label">Subtotal</div>
+                                                        <div class="summary-value">$120.00</div>
+                                                    </div>
+                                                    <div class="summary-item">
+                                                        <div class="summary-label">Tax (10%)</div>
+                                                        <div class="summary-value">$12.00</div>
+                                                    </div>
+                                                    <div class="summary-item">
+                                                        <div class="summary-label">Discount</div>
+                                                        <div class="summary-value">$0.00</div>
+                                                    </div>
+                                                    <div class="summary-item summary-total">
+                                                        <div class="summary-label">Total</div>
+                                                        <div class="summary-value">$137.00</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
 
                     <div id="tab-completed" class="tab-content d-none">
