@@ -438,11 +438,6 @@
                                     <div class="preview-container flex gap20 flex-wrap mt-3" id="previewContainer"></div>
                                 </div>
                             </fieldset>
-                              <div class="d-block d-md-none">
-                                <button type="submit" class="tf-button w-full" id="submitBtn">
-                                    <i class="icon-save"></i> Add Product
-                                </button>
-                            </div>
 
                         </div>
                     </div>
@@ -590,11 +585,11 @@
                             </div>
 
                             <!-- Submit Button -->
-                            <div class="wg-box d-none d-md-block">
-    <button type="submit" class="tf-button w-full" id="submitBtn">
-        <i class="icon-save"></i> Add Product
-    </button>
-</div>
+                            <div class="wg-box">
+                                <button type="submit" class="tf-button w-full" id="submitBtn">
+                                    <i class="icon-save"></i> Add Product
+                                </button>
+                            </div>
 
                         </form>
                     </div>
@@ -607,7 +602,7 @@
 @endsection
 
 @push('scripts')
-
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         class ProductForm {
             constructor() {
@@ -715,7 +710,15 @@
                     const files = Array.from(e.target.files);
 
                     files.forEach((file, index) => {
-                        if (!file.type.match('image.*')) return;
+                        if (!file.type.match('image.*')) {
+                            this.showSwal('error', 'Invalid File Type', 'Please upload only image files.');
+                            return;
+                        }
+
+                        if (file.size > 2 * 1024 * 1024) { // 2MB limit
+                            this.showSwal('error', 'File Too Large', 'Maximum file size is 2MB.');
+                            return;
+                        }
 
                         const reader = new FileReader();
                         reader.onload = (e) => {
@@ -758,7 +761,8 @@
                         const response = await fetch('{{ route("admin.product.store") }}', {
                             method: 'POST',
                             headers: {
-                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                'Accept': 'application/json'
                             },
                             body: formData
                         });
@@ -766,18 +770,18 @@
                         const result = await response.json();
 
                         if (result.status === 'success') {
-                            this.showNotification(result.message, 'success');
+                            await this.showSwal('success', 'Success!', result.message);
                             setTimeout(() => {
                                 window.location.href = '{{ route("admin.product.index") }}';
-                            }, 1500);
+                            }, 1000);
                         } else {
-                            this.showNotification(result.message, 'error');
+                            this.showSwal('error', 'Error', result.message || 'Something went wrong');
                             if (result.errors) {
                                 this.displayValidationErrors(result.errors);
                             }
                         }
                     } catch (error) {
-                        this.showNotification('An error occurred. Please try again.', 'error');
+                        this.showSwal('error', 'Network Error', 'An error occurred. Please try again.');
                         console.error('Error:', error);
                     } finally {
                         this.setLoadingState(submitBtn, false);
@@ -823,8 +827,12 @@
                 // Check images
                 const images = document.getElementById('productImages').files;
                 if (images.length === 0) {
-                    this.showNotification('Please upload at least one image', 'error');
+                    this.showSwal('warning', 'Image Required', 'Please upload at least one product image');
                     isValid = false;
+                }
+
+                if (!isValid) {
+                    this.showSwal('warning', 'Validation Failed', 'Please fill all required fields correctly.');
                 }
 
                 return isValid;
@@ -843,40 +851,56 @@
             }
 
             displayValidationErrors(errors) {
+                let errorMessages = [];
+
                 for (const [field, messages] of Object.entries(errors)) {
                     const errorElement = document.getElementById(field + 'Error');
                     if (errorElement) {
                         errorElement.textContent = messages[0];
                         errorElement.classList.add('show');
-                    } else {
-                        this.showNotification(messages[0], 'error');
                     }
+                    errorMessages.push(messages[0]);
+                }
+
+                if (errorMessages.length > 0) {
+                    this.showSwal('error', 'Validation Error', errorMessages.join('<br>'));
                 }
             }
 
-            showNotification(message, type) {
-                // Create and show notification
-                const notification = document.createElement('div');
-                notification.className = `alert alert-${type}`;
-                notification.style.cssText = `
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 9999;
-            min-width: 300px;
-            padding: 15px;
-            border-radius: 8px;
-            color: white;
-            font-weight: bold;
-            background-color: ${type === 'success' ? '#28a745' : '#dc3545'};
-        `;
-                notification.textContent = message;
+            // SweetAlert2 notification method
+            showSwal(icon, title, text, showConfirmButton = false, confirmButtonText = null, cancelButtonText = null, timer = 3000) {
+                const options = {
+                    icon: icon,
+                    title: title,
+                    html: text,
+                    showConfirmButton: showConfirmButton,
+                    timer: timer,
+                    timerProgressBar: true,
+                    didOpen: (toast) => {
+                        if (toast) {
+                            toast.addEventListener('mouseenter', Swal.stopTimer);
+                            toast.addEventListener('mouseleave', Swal.resumeTimer);
+                        }
+                    },
+                    showClass: {
+                        popup: 'animate__animated animate__fadeInRight animate__faster'
+                    },
+                    hideClass: {
+                        popup: 'animate__animated animate__fadeOutRight animate__faster'
+                    }
+                };
 
-                document.body.appendChild(notification);
+                if (showConfirmButton) {
+                    options.confirmButtonText = confirmButtonText;
+                    options.confirmButtonColor = 'var(--main)';
+                    options.showCancelButton = true;
+                    options.cancelButtonText = cancelButtonText;
+                    options.cancelButtonColor = 'var(--gray-300)';
+                    options.reverseButtons = true;
+                    options.focusConfirm = true;
+                }
 
-                setTimeout(() => {
-                    notification.remove();
-                }, 3000);
+                return Swal.fire(options);
             }
         }
 

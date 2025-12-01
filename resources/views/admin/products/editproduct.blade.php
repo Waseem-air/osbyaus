@@ -762,8 +762,8 @@
         @include('admin.components.footer')
     </div>
 @endsection
-
 @push('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         class ProductEditForm {
             constructor() {
@@ -873,7 +873,15 @@
                     const files = Array.from(e.target.files);
 
                     files.forEach((file, index) => {
-                        if (!file.type.match('image.*')) return;
+                        if (!file.type.match('image.*')) {
+                            this.showSwal('error', 'Invalid File Type', 'Please upload only image files.');
+                            return;
+                        }
+
+                        if (file.size > 2 * 1024 * 1024) { // 2MB limit
+                            this.showSwal('error', 'File Too Large', 'Maximum file size is 2MB.');
+                            return;
+                        }
 
                         const reader = new FileReader();
                         reader.onload = (e) => {
@@ -906,133 +914,76 @@
             }
 
             setMainImage(imageId) {
-                Swal.fire({
-                    title: 'Set as Main Image?',
-                    text: 'This image will be displayed as the main product image.',
-                    icon: 'question',
-                    showCancelButton: true,
-                    confirmButtonColor: '#28a745',
-                    cancelButtonColor: '#6c757d',
-                    confirmButtonText: 'Yes, set as main',
-                    cancelButtonText: 'Cancel'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        const loadingAlert = Swal.fire({
-                            title: 'Updating...',
-                            text: 'Setting image as main...',
-                            allowOutsideClick: false,
-                            didOpen: () => {
-                                Swal.showLoading();
-                            }
-                        });
+                this.showSwal('question', 'Set as Main Image?', 'This image will be displayed as the main product image.', true, 'Yes, set as main', 'Cancel')
+                    .then((result) => {
+                        if (result.isConfirmed) {
+                            this.showLoadingSwal('Updating...', 'Setting image as main...');
 
-                        $.ajax({
-                            url: `/admin/products/image/${imageId}/set-main`,
-                            method: 'POST',
-                            headers: {
-                                'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                                'Accept': 'application/json'
-                            },
-                            success: (response) => {
-                                Swal.close();
+                            $.ajax({
+                                url: `/admin/products/image/${imageId}/set-main`,
+                                method: 'POST',
+                                headers: {
+                                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                    'Accept': 'application/json'
+                                },
+                                success: (response) => {
+                                    Swal.close();
 
-                                if (response.status === 'success') {
-                                    Swal.fire({
-                                        title: 'Success!',
-                                        text: response.message || 'Main image updated successfully!',
-                                        icon: 'success',
-                                        timer: 1500,
-                                        showConfirmButton: false
-                                    }).then(() => {
-                                        location.reload();
-                                    });
-                                } else {
-                                    Swal.fire({
-                                        title: 'Error!',
-                                        text: response.message || 'Failed to update main image.',
-                                        icon: 'error'
-                                    });
+                                    if (response.status === 'success') {
+                                        this.showSwal('success', 'Success!', response.message || 'Main image updated successfully!', false, null, null, 1500)
+                                            .then(() => {
+                                                location.reload();
+                                            });
+                                    } else {
+                                        this.showSwal('error', 'Error!', response.message || 'Failed to update main image.');
+                                    }
+                                },
+                                error: (xhr) => {
+                                    Swal.close();
+                                    this.showSwal('error', 'Error!', 'Failed to update main image. Please try again.');
                                 }
-                            },
-                            error: (xhr) => {
-                                Swal.close();
-                                Swal.fire({
-                                    title: 'Error!',
-                                    text: 'Failed to update main image. Please try again.',
-                                    icon: 'error'
-                                });
-                            }
-                        });
-                    }
-                });
+                            });
+                        }
+                    });
             }
 
             deleteExistingImage(imageId) {
-                Swal.fire({
-                    title: 'Delete Image?',
-                    text: 'Are you sure you want to delete this image? This action cannot be undone.',
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#d33',
-                    cancelButtonColor: '#3085d6',
-                    confirmButtonText: 'Yes, delete it!',
-                    cancelButtonText: 'Cancel'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        const loadingAlert = Swal.fire({
-                            title: 'Deleting...',
-                            text: 'Please wait while we delete the image.',
-                            allowOutsideClick: false,
-                            didOpen: () => {
-                                Swal.showLoading();
-                            }
-                        });
+                this.showSwal('warning', 'Delete Image?', 'Are you sure you want to delete this image? This action cannot be undone.', true, 'Yes, delete it!', 'Cancel')
+                    .then((result) => {
+                        if (result.isConfirmed) {
+                            this.showLoadingSwal('Deleting...', 'Please wait while we delete the image.');
 
-                        $.ajax({
-                            url: `/admin/products/image/${imageId}/delete`,
-                            method: 'DELETE',
-                            headers: {
-                                'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                                'Accept': 'application/json'
-                            },
-                            success: (response) => {
-                                Swal.close();
+                            $.ajax({
+                                url: `/admin/products/image/${imageId}/delete`,
+                                method: 'DELETE',
+                                headers: {
+                                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                    'Accept': 'application/json'
+                                },
+                                success: (response) => {
+                                    Swal.close();
 
-                                if (response.status === 'success') {
-                                    Swal.fire({
-                                        title: 'Deleted!',
-                                        text: response.message || 'Image deleted successfully!',
-                                        icon: 'success',
-                                        timer: 1500,
-                                        showConfirmButton: false
-                                    });
+                                    if (response.status === 'success') {
+                                        this.showSwal('success', 'Deleted!', response.message || 'Image deleted successfully!', false, null, null, 1500);
 
-                                    // Remove image from DOM
-                                    $(`[data-image-id="${imageId}"]`).fadeOut(300, function () {
-                                        $(this).remove();
-                                    });
-                                } else {
-                                    Swal.fire({
-                                        title: 'Error!',
-                                        text: response.message || 'Failed to delete image.',
-                                        icon: 'error'
-                                    });
+                                        // Remove image from DOM
+                                        $(`[data-image-id="${imageId}"]`).fadeOut(300, function () {
+                                            $(this).remove();
+                                        });
+                                    } else {
+                                        this.showSwal('error', 'Error!', response.message || 'Failed to delete image.');
+                                    }
+                                },
+                                error: (xhr) => {
+                                    Swal.close();
+                                    this.showSwal('error', 'Error!', 'Failed to delete image. Please try again.');
                                 }
-                            },
-                            error: (xhr) => {
-                                Swal.close();
-                                Swal.fire({
-                                    title: 'Error!',
-                                    text: 'Failed to delete image. Please try again.',
-                                    icon: 'error'
-                                });
-                            }
-                        });
-                    }
-                });
+                            });
+                        }
+                    });
             }
 
-            // Form Submission - FIXED METHOD
+            // Form Submission
             handleFormSubmission() {
                 const form = document.getElementById('editProductForm');
                 const submitBtn = document.getElementById('submitBtn');
@@ -1063,21 +1014,21 @@
                         }
                         const result = await response.json();
                         if (result.status === 'success') {
-                            this.showNotification(result.message, 'success');
+                            await this.showSwal('success', 'Success!', result.message, false, null, null, 1500);
                             setTimeout(() => {
                                 window.location.reload();
-                            }, 1500);
+                            }, 1000);
                         } else {
-                            this.showNotification(result.message, 'error');
+                            this.showSwal('error', 'Error', result.message || 'Something went wrong');
                             if (result.errors) {
                                 this.displayValidationErrors(result.errors);
                             }
                         }
                     } catch (error) {
                         if (error.message.includes('non-JSON')) {
-                            this.showNotification('Server error: Please check your form and try again.', 'error');
+                            this.showSwal('error', 'Server Error', 'Please check your form and try again.');
                         } else {
-                            this.showNotification('An error occurred. Please try again.', 'error');
+                            this.showSwal('error', 'Network Error', 'An error occurred. Please try again.');
                         }
                     } finally {
                         this.setLoadingState(submitBtn, false);
@@ -1120,6 +1071,10 @@
                     isValid = false;
                 }
 
+                if (!isValid) {
+                    this.showSwal('warning', 'Validation Failed', 'Please fill all required fields correctly.');
+                }
+
                 return isValid;
             }
 
@@ -1136,39 +1091,68 @@
             }
 
             displayValidationErrors(errors) {
+                let errorMessages = [];
+
                 for (const [field, messages] of Object.entries(errors)) {
                     const errorElement = document.getElementById(field + 'Error');
                     if (errorElement) {
                         errorElement.textContent = messages[0];
                         errorElement.classList.add('show');
-                    } else {
-                        this.showNotification(messages[0], 'error');
                     }
+                    errorMessages.push(messages[0]);
+                }
+
+                if (errorMessages.length > 0) {
+                    this.showSwal('error', 'Validation Error', errorMessages.join('<br>'));
                 }
             }
 
-            showNotification(message, type) {
-                const notification = document.createElement('div');
-                notification.className = `alert alert-${type}`;
-                notification.style.cssText = `
-                position: fixed;
-                top: 20px;
-                right: 20px;
-                z-index: 9999;
-                min-width: 300px;
-                padding: 15px;
-                border-radius: 8px;
-                color: white;
-                font-weight: bold;
-                background-color: ${type === 'success' ? '#28a745' : '#dc3545'};
-            `;
-                notification.textContent = message;
+            // SweetAlert2 notification method
+            showSwal(icon, title, text, showConfirmButton = false, confirmButtonText = null, cancelButtonText = null, timer = 3000) {
+                const options = {
+                    icon: icon,
+                    title: title,
+                    html: text,
+                    showConfirmButton: showConfirmButton,
+                    timer: timer,
+                    timerProgressBar: true,
+                    didOpen: (toast) => {
+                        if (toast) {
+                            toast.addEventListener('mouseenter', Swal.stopTimer);
+                            toast.addEventListener('mouseleave', Swal.resumeTimer);
+                        }
+                    },
+                    showClass: {
+                        popup: 'animate__animated animate__fadeInRight animate__faster'
+                    },
+                    hideClass: {
+                        popup: 'animate__animated animate__fadeOutRight animate__faster'
+                    }
+                };
 
-                document.body.appendChild(notification);
+                if (showConfirmButton) {
+                    options.confirmButtonText = confirmButtonText;
+                    options.confirmButtonColor = 'var(--main)';
+                    options.showCancelButton = true;
+                    options.cancelButtonText = cancelButtonText;
+                    options.cancelButtonColor = 'var(--gray-300)';
+                    options.reverseButtons = true;
+                    options.focusConfirm = true;
+                }
 
-                setTimeout(() => {
-                    notification.remove();
-                }, 3000);
+                return Swal.fire(options);
+            }
+
+            // SweetAlert2 loading method
+            showLoadingSwal(title, text) {
+                return Swal.fire({
+                    title: title,
+                    text: text,
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
             }
         }
 
