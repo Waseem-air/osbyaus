@@ -782,7 +782,6 @@
                         }
                     } catch (error) {
                         this.showSwal('error', 'Network Error', 'An error occurred. Please try again.');
-                        console.error('Error:', error);
                     } finally {
                         this.setLoadingState(submitBtn, false);
                     }

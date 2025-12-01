@@ -328,18 +328,14 @@
                         @include('admin.partials.add-order-popup')
                         <div class="custom-tab-btns mb-0">
 
-                            <button class="tab-btn active" data-tab="all">All Orders ({{ $orderCounts['all'] }})
+                            <button class="tab-btn active" data-tab="all">All Orders({{ $orderCounts['all'] }})
                             </button>
-                            <button class="tab-btn" data-tab="pending">Pending ({{ $orderCounts['pending'] }})</button>
-                            <button class="tab-btn" data-tab="confirmed">Confirmed ({{ $orderCounts['confirmed'] }})
+                            <button class="tab-btn" data-tab="confirmed">Confirmed({{ $orderCounts['confirmed'] }})
                             </button>
-                            <button class="tab-btn" data-tab="processing">Processing ({{ $orderCounts['processing'] }}
-                                )
+                            <button class="tab-btn" data-tab="shipped">Shipping({{ $orderCounts['shipped'] }})</button>
+                            <button class="tab-btn" data-tab="delivered">Completed({{ $orderCounts['delivered'] }})
                             </button>
-                            <button class="tab-btn" data-tab="shipped">Shipping ({{ $orderCounts['shipped'] }})</button>
-                            <button class="tab-btn" data-tab="delivered">Completed ({{ $orderCounts['delivered'] }})
-                            </button>
-                            <button class="tab-btn" data-tab="cancelled">Cancelled ({{ $orderCounts['cancelled'] }})
+                            <button class="tab-btn" data-tab="cancelled">Cancelled({{ $orderCounts['cancelled'] }})
                             </button>
                         </div>
                     </div>
