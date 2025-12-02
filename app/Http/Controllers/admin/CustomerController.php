@@ -1,19 +1,102 @@
 <?php
 
-namespace App\Http\Controllers\admin;
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
 class CustomerController extends Controller
 {
-    public function detail()
+    // ✅ Show Customer Details with Orders
+    public function detail($id)
     {
-        return view("admin.customers.detail");
+        // Eager load orders with their items
+        $customer = User::where('role', 'customer')
+            ->with(['orders' => function($query) {
+                $query->with('items')
+                    ->orderBy('created_at', 'desc');
+            }])
+            ->findOrFail($id);
+
+        // Calculate statistics
+        $totalOrders = $customer->orders->count();
+        $completedOrders = $customer->orders->where('status', 'completed')->count();
+        $canceledOrders = $customer->orders->where('status', 'canceled')->count();
+
+        return view("admin.customer.detail", compact(
+            'customer',
+            'totalOrders',
+            'completedOrders',
+            'canceledOrders'
+        ));
     }
+
+    // ✅ Show Customer Details Page (Alternate method if needed)
+    public function show_customer($id)
+    {
+        try {
+            // Find customer with their orders and order items
+            $customer = User::where('role', 'customer')
+                ->with(['orders' => function($query) {
+                    $query->with(['items' => function($q) {
+                        $q->with('product');
+                    }])
+                    ->orderBy('created_at', 'desc')
+                    ->take(10); // Limit to recent 10 orders
+                }])
+                ->findOrFail($id);
+                
+            // Calculate order statistics
+            $stats = [
+                'total_orders' => $customer->orders->count(),
+                'completed_orders' => $customer->orders->where('status', 'completed')->count(),
+                'canceled_orders' => $customer->orders->where('status', 'canceled')->count(),
+                'pending_orders' => $customer->orders->where('status', 'pending')->count(),
+                'processing_orders' => $customer->orders->where('status', 'processing')->count(),
+                'total_spent' => $customer->orders->where('status', 'completed')->sum('total_amount'),
+            ];
+            
+            // Recent orders (last 5)
+            $recentOrders = $customer->orders()
+                ->with('items')
+                ->orderBy('created_at', 'desc')
+                ->take(5)
+                ->get();
+            
+            // Get order status distribution for chart
+            $statusDistribution = [
+                'completed' => $customer->orders->where('status', 'completed')->count(),
+                'pending' => $customer->orders->where('status', 'pending')->count(),
+                'processing' => $customer->orders->where('status', 'processing')->count(),
+                'canceled' => $customer->orders->where('status', 'canceled')->count(),
+                'refunded' => $customer->orders->where('status', 'refunded')->count(),
+            ];
+            
+            // Format date of birth if exists
+            $formattedDob = null;
+            if ($customer->dob) {
+                $formattedDob = \Carbon\Carbon::parse($customer->dob);
+            }
+            // dd($formattedDob);
+            return view('admin.customers.detail', compact(
+                'customer',
+                'stats',
+                'recentOrders',
+                'statusDistribution',
+                'formattedDob'
+            ));
+
+        } catch (\Exception $e) {
+            \Log::error('Show Customer Error: ' . $e->getMessage());
+            return redirect()->route('admin.customer.index')
+                ->with('error', 'Customer not found or an error occurred.');
+        }
+    }
+
     // ✅ Show Customer List with Filters
     public function customer_list(Request $request)
     {
@@ -249,13 +332,6 @@ class CustomerController extends Controller
         }
     }
 
-    // ✅ Show Customer Details
-    public function show_customer($id)
-    {
-        $customer = User::where('role', 'customer')->findOrFail($id);
-        return view('admin.customers.show', compact('customer'));
-    }
-
     // ✅ Toggle Customer Status (AJAX)
     public function toggle_status($id)
     {
@@ -302,6 +378,41 @@ class CustomerController extends Controller
             return response()->json([
                 'status' => 'error',
                 'message' => 'Failed to delete customer. Please try again.'
+            ], 500);
+        }
+    }
+
+    // ✅ Update Order Status (AJAX)
+    public function updateOrderStatus(Request $request, $orderId)
+    {
+        try {
+            $order = Order::findOrFail($orderId);
+            
+            $request->validate([
+                'status' => 'required|in:pending,processing,completed,canceled,refunded'
+            ]);
+            
+            $oldStatus = $order->status;
+            $order->status = $request->status;
+            $order->save();
+            
+            // Add status history if you have the model
+            // OrderStatusHistory::create([
+            //     'order_id' => $order->id,
+            //     'status' => $request->status,
+            //     'notes' => "Status changed from {$oldStatus} to {$request->status}"
+            // ]);
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'Order status updated successfully!'
+            ]);
+            
+        } catch (\Exception $e) {
+            \Log::error('Order Status Update Error: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to update order status.'
             ], 500);
         }
     }

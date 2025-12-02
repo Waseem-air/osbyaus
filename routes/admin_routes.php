@@ -105,6 +105,11 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin'])->grou
         Route::get('/{id}/get', [CustomerController::class, 'get_customer'])->name('get');
         Route::post('/{id}/update', [CustomerController::class, 'update_customer'])->name('update');
         Route::delete('/{id}/delete', [CustomerController::class, 'delete_customer'])->name('delete');
+        Route::get('/{customer}/detail', [CustomerController::class, 'detail'])->name('admin.customers.detail');
+
+        // For the comprehensive show view
+        Route::get('/{customer}/show', [CustomerController::class, 'show_customer'])->name('admin.customers.show');
+                
     });
 
     Route::post('/create-order', [AdminOrderController::class, 'createOrderFromAdmin'])->name('create.order');

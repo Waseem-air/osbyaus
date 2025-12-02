@@ -127,14 +127,30 @@
         font-weight: 500;
     }
     
+    .status-pending {
+        color: #ffc107;
+        font-weight: 500;
+    }
+    
+    .status-processing {
+        color: #0d6efd;
+        font-weight: 500;
+    }
+    
     .status-canceled {
         color: #dc3545;
+        font-weight: 500;
+    }
+    
+    .status-refunded {
+        color: #6c757d;
         font-weight: 500;
     }
     
     .detail-table {
         border-radius: 6px;
         margin-top: 10px;
+        background-color: #f8f9fa;
     }
     
     .detail-table table {
@@ -144,11 +160,13 @@
     .detail-table table th {
         border-bottom: 1px solid #E9E7FD;
         padding: 8px 12px;
+        background-color: #e9ecef;
     }
     
     .detail-table table td {
         border-bottom: 1px solid #E9E7FD;
         padding: 8px 12px;
+        background-color: white;
     }
     
     .dropdown-toggle::after {
@@ -161,6 +179,7 @@
         background-color: #6c757d;
         color: white;
         border: none;
+        cursor: pointer;
     }
     
     .action-btn:hover {
@@ -170,10 +189,13 @@
     .print-icon {
         color: #6c757d;
         cursor: pointer;
+        font-size: 16px;
+        transition: all 0.2s ease;
     }
     
     .print-icon:hover {
-        color: #0d6efd;
+        color: #94010E;
+        transform: scale(1.1);
     }
     
     /* Fix for dropdown menu positioning */
@@ -246,9 +268,22 @@
             font-size: 14px;
         }
         
+        /* FIXED: Set 144px width for each column on mobile */
         .order-table table th,
         .order-table table td {
+            min-width: 144px;
+            max-width: 144px;
+            width: 144px;
             padding: 8px 10px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        
+        /* Make table horizontally scrollable on mobile */
+        .table-responsive {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
         }
         
         .action-btn {
@@ -269,6 +304,33 @@
         .dropdown-menu {
             position: absolute !important;
         }
+        
+        /* Adjust for collapsed rows */
+        .collapse td {
+            min-width: 100% !important;
+            max-width: 100% !important;
+            width: 100% !important;
+        }
+        
+        /* Adjust detail table for mobile */
+        .detail-table table th,
+        .detail-table table td {
+            min-width: auto !important;
+            max-width: none !important;
+            width: auto !important;
+            white-space: normal;
+        }
+    }
+    
+    /* Desktop styles - no fixed width */
+    @media (min-width: 769px) {
+        .order-table table th,
+        .order-table table td {
+            min-width: auto;
+            max-width: none;
+            width: auto;
+            white-space: normal;
+        }
     }
     
     /* Search bar styling */
@@ -279,23 +341,6 @@
         margin-bottom: 20px;
         flex-wrap: wrap;
         gap: 15px;
-    }
-    
-    .form-search {
-        flex: 1;
-        min-width: 300px;
-    }
-    
-    .form-search fieldset {
-        position: relative;
-        margin: 0;
-    }
-    
-    .form-search input {
-        width: 100%;
-        padding: 10px 40px 10px 15px;
-        border: 1px solid #ddd;
-        border-radius: 4px;
     }
     
     .search-icon {
@@ -342,6 +387,63 @@
     .detail-table table td {
         border-bottom: 1px solid #E9E7FD;
     }
+    
+    .customer-profile-img {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 3px solid #f0f0f0;
+    }
+    
+    .no-orders {
+        text-align: center;
+        padding: 40px;
+        color: #6c757d;
+    }
+    
+    .no-orders i {
+        font-size: 48px;
+        margin-bottom: 15px;
+        color: #dee2e6;
+    }
+    
+    /* Dropdown arrow icon styling */
+    .dropdown-arrow-icon {
+        font-size: 12px;
+        transition: transform 0.2s;
+    }
+    
+    .action-btn.active .dropdown-arrow-icon {
+        transform: rotate(180deg);
+    }
+    
+    /* Remove dropdown menu styling since we're not using it */
+    .dropdown-menu {
+        display: none !important;
+    }
+    
+    /* Print button styling */
+    .print-btn {
+        background: none;
+        border: none;
+        padding: 5px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+    
+    .print-btn:hover {
+        transform: scale(1.1);
+    }
+    
+    .print-btn i {
+        color: #6c757d;
+        font-size: 16px;
+    }
+    
+    .print-btn:hover i {
+        color: #94010E;
+    }
 </style>
 
 <div class="main-content">
@@ -359,12 +461,18 @@
 
                             <!-- Customer Info -->
                             <div class="col-md-4 d-flex flex-column justify-content-center align-items-center text-center border-end py-3 px-3">
-                                <img src="{{ asset('admin/images/customer-img.png') }}" 
-                                     alt="Customer" 
-                                     width="60" height="60">
+                                @if($customer->profile_photo)
+                                    <img src="{{ asset($customer->profile_photo) }}" 
+                                         alt="{{ $customer->full_name }}" 
+                                         class="customer-profile-img">
+                                @else
+                                    <img src="{{ asset('admin/images/customer-img.png') }}" 
+                                         alt="{{ $customer->full_name }}" 
+                                         class="customer-profile-img">
+                                @endif
                                 <div class="d-flex flex-column mt-2">
-                                    <h6 class="fw-bold mb-1">Robert Fox</h6>
-                                    <p class="mb-0 text-muted">robert@gmail.com</p>
+                                    <h6 class="fw-bold mb-1">{{ $customer->full_name }}</h6>
+                                    <p class="mb-0 text-muted">{{ $customer->email }}</p>
                                 </div>
                             </div>
 
@@ -382,10 +490,24 @@
 
                                     <!-- Values -->
                                     <div class="profile-info-right">
-                                        <p class="mb-2 mt-3">(201) 555-0124</p>
-                                        <p class="mb-2 mt-3">Male</p>
-                                        <p class="mb-2 mt-3">1 Jan, 1985</p>
-                                        <p class="mb-0 mt-3">3 March, 2023</p>
+                                        <p class="mb-2 mt-3">{{ $customer->phone ?? 'N/A' }}</p>
+                                        <p class="mb-2 mt-3">
+                                            @if($customer->gender)
+                                                {{ ucfirst($customer->gender) }}
+                                            @else
+                                                N/A
+                                            @endif
+                                        </p>
+                                        <p class="mb-2 mt-3">
+                                            @if($customer->dob)
+                                                {{ \Carbon\Carbon::parse($customer->dob)->format('d M, Y') }}
+                                            @else
+                                                N/A
+                                            @endif
+                                        </p>
+                                        <p class="mb-0 mt-3">
+                                            {{ $customer->created_at->format('d M, Y') }}
+                                        </p>
                                     </div>
                                 </div>
                             </div>
@@ -395,21 +517,31 @@
                                 <!-- Shipping Address -->
                                 <p class="mb-2">Shipping Address</p>
                                 <div class="profile-info-left mb-4 mt-4">
-                                    <p class="mb-0 ">3517 W. Gray St. Utica, Pennsylvania 57867</p>
+                                    <p class="mb-0">
+                                        @if($customer->address)
+                                            {{ $customer->address }}, 
+                                            @if($customer->city) {{ $customer->city }}, @endif
+                                            @if($customer->state) {{ $customer->state }}, @endif
+                                            @if($customer->country) {{ $customer->country }} @endif
+                                            @if($customer->postal_code) {{ $customer->postal_code }} @endif
+                                        @else
+                                            No address provided
+                                        @endif
+                                    </p>
                                 </div>
 
                                 <!-- Stats -->
                                 <div class="d-flex justify-content-between">
                                     <div class="text-center">
-                                        <h6 class="mb-0">150</h6>
+                                        <h6 class="mb-0">{{ $customer->orders->count() }}</h6>
                                         <p class="mb-0">Total Order</p>
                                     </div>
                                     <div class="text-center">
-                                        <h6 class="mb-0">140</h6>
+                                        <h6 class="mb-0">{{ $customer->orders()->where('status', 'completed')->count() }}</h6>
                                         <p class="mb-0">Completed</p>
                                     </div>
                                     <div class="text-center">
-                                        <h6 class="mb-0">10</h6>
+                                        <h6 class="mb-0">{{ $customer->orders()->where('status', 'canceled')->count() }}</h6>
                                         <p class="mb-0">Canceled</p>
                                     </div>
                                 </div>
@@ -430,136 +562,403 @@
                 </div>
             </div>
 
-            <!-- Search and Filter Bar -->
-            <div class="search-bar-container mb-2">
-                <!-- Search Form -->
-                <form class="form-search" id="searchForm">
-                    <fieldset class="name">
-                        <input type="text" 
-                               placeholder="Search customers..." 
-                               id="customerSearch"
-                               name="search" 
-                               value="{{ request('search') }}">
-                        <button type="submit" class="search-icon">
-                            <i class="icon-search"></i>
-                        </button>
-                    </fieldset>
-                </form>
-
-                <!-- Add New Button -->
-                <button class="tf-button style-1 w208" 
-                        data-bs-toggle="modal" 
-                        data-bs-target="#addCategoryModal">
-                    <i class="icon-plus"></i> Add New Category
-                </button>
-            </div>
-
             <div class="row">
                 <div class="col-12">
                     <!-- ================= TAB CONTENT ================= -->
                     <div id="tab-all" class="tab-content">
-                        <div class="table-responsive order-table">
-                            <table class="table mb-0">
-                                <thead>
-                                    <tr>
-                                        <th>Order ID</th>
-                                        <th>Created</th>
-                                        <th>Total</th>
-                                        <th>Payment</th>
-                                        <th>Status</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>#6548</td>
-                                        <td>2 min ago</td>
-                                        <td>$654</td>
-                                        <td>CC</td>
-                                        <td><span class="status-completed">Completed</span></td>
-                                        <td>
-                                            <div class="dropdown">
-                                                <button class="btn btn-sm action-btn dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                                                    <i class="fas fa-ellipsis-v"></i>
+                        @if($customer->orders->count() > 0)
+                            <div class="table-responsive order-table">
+                                <table class="table mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th>Order ID</th>
+                                            <th>Created</th>
+                                            <th>Total</th>
+                                            <th>Payment</th>
+                                            <th>Status</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach($customer->orders as $order)
+                                        <tr>
+                                            <td>#{{ $order->order_number }}</td>
+                                            <td>
+                                                {{ $order->created_at->diffForHumans() }}
+                                                <br>
+                                                <small class="text-muted">
+                                                    {{ $order->created_at->format('d M, Y h:i A') }}
+                                                </small>
+                                            </td>
+                                            <td>${{ number_format($order->total_amount, 2) }}</td>
+                                            <td>
+                                                @if($order->payment_method == 'stripe')
+                                                    <span class="badge bg-primary">Stripe</span>
+                                                @elseif($order->payment_method == 'paypal')
+                                                    <span class="badge bg-info">PayPal</span>
+                                                @else
+                                                    <span class="badge bg-secondary">{{ ucfirst($order->payment_method) }}</span>
+                                                @endif
+                                            </td>
+                                            <td>
+                                                @switch($order->status)
+                                                    @case('completed')
+                                                        <span class="status-completed">Completed</span>
+                                                        @break
+                                                    @case('pending')
+                                                        <span class="status-pending">Pending</span>
+                                                        @break
+                                                    @case('processing')
+                                                        <span class="status-processing">Processing</span>
+                                                        @break
+                                                    @case('canceled')
+                                                        <span class="status-canceled">Canceled</span>
+                                                        @break
+                                                    @case('refunded')
+                                                        <span class="status-refunded">Refunded</span>
+                                                        @break
+                                                    @default
+                                                        <span class="text-capitalize">{{ $order->status }}</span>
+                                                @endswitch
+                                            </td>
+                                            <td>
+                                                <!-- Removed dropdown - Now just a toggle button -->
+                                                <button class="btn btn-sm action-btn toggle-details-btn d-flex align-items-center gap-1" 
+                                                        type="button" 
+                                                        data-order-id="{{ $order->id }}">
+                                                     <i class="fas fa-chevron-down dropdown-arrow-icon ms-1"></i>
                                                 </button>
-                                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                                    <li>
-                                                        <a class="dropdown-item view-details" href="#" 
-                                                           data-bs-toggle="collapse" 
-                                                           data-bs-target="#orderDetails6548"
-                                                           aria-expanded="false" 
-                                                           aria-controls="orderDetails6548">
-                                                            View Details
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <!-- Order Details Table (Collapsed by default) -->
-                                    <tr class="collapse" id="orderDetails6548" data-bs-parent=".table">
-                                        <td colspan="6" class="p-0">
-                                            <div class="detail-table m-2 p-3">
-                                                <div class="table-responsive">
-                                                    <table class="table table-sm table-borderless">
-                                                        <thead>
-                                                            <tr>
-                                                                <th>#</th>
-                                                                <th>Name</th>
-                                                                <th>Price</th>
-                                                                <th>Qty</th>
-                                                                <th>Disc.</th>
-                                                                <th>Total</th>
-                                                                <th>Print</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            <tr>
-                                                                <td>1</td>
-                                                                <td>Main Paislay 3 Piece</td>
-                                                                <td>$999.29</td>
-                                                                <td>x1</td>
-                                                                <td>5%</td>
-                                                                <td>Rs. 9,978</td>
-                                                                <td><i class="fas fa-print print-icon"></i></td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
+                                            </td>
+                                        </tr>
+                                        <!-- Order Details Table (Collapsed by default) -->
+                                        <tr class="collapse" id="orderDetails{{ $order->id }}">
+                                            <td colspan="6" class="p-0">
+                                                <div class="detail-table m-2 p-3">
+                                                    @if($order->items->count() > 0)
+                                                        <div class="table-responsive">
+                                                            <table class="table table-sm table-borderless">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>#</th>
+                                                                        <th>Product</th>
+                                                                        <th>Price</th>
+                                                                        <th>Qty</th>
+                                                                        <th>Total</th>
+                                                                        <th>Print</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    @foreach($order->items as $index => $item)
+                                                                    <tr>
+                                                                        <td>{{ $index + 1 }}</td>
+                                                                        <td>
+                                                                            {{ $item->product_name }}
+                                                             
+                                                                           
+                                                                        </td>
+                                                                        <td>${{ number_format($item->price, 2) }}</td>
+                                                                        <td>x{{ $item->quantity }}</td>
+                                                                        <td>${{ number_format($item->total, 2) }}</td>
+                                                                        <td>
+                                                                            <button class="print-btn" onclick="printItem({{ $item->id }})" title="Print Item">
+                                                                                <i class="fas fa-print print-icon"></i>
+                                                                            </button>
+                                                                        </td>
+                                                                    </tr>
+                                                                    @endforeach
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                        
+                                                        <!-- Order Summary -->
+                                                        <div class="order-summary-wrapper">
+                                                            <div class="summary-item">
+                                                                <div class="summary-label">Subtotal</div>
+                                                                <div class="summary-value">${{ number_format($order->subtotal, 2) }}</div>
+                                                            </div>
+                                                            @if($order->tax_amount > 0)
+                                                            <div class="summary-item">
+                                                                <div class="summary-label">Tax</div>
+                                                                <div class="summary-value">${{ number_format($order->tax_amount, 2) }}</div>
+                                                            </div>
+                                                            @endif
+                                                            @if($order->shipping_amount > 0)
+                                                            <div class="summary-item">
+                                                                <div class="summary-label">Shipping</div>
+                                                                <div class="summary-value">${{ number_format($order->shipping_amount, 2) }}</div>
+                                                            </div>
+                                                            @endif
+                                                            <div class="summary-item summary-total">
+                                                                <div class="summary-label">Total</div>
+                                                                <div class="summary-value">${{ number_format($order->total_amount, 2) }}</div>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                        <!-- Print Order Button -->
+                                                        <!-- <div class="d-flex justify-content-end mt-3">
+                                                            <button class="btn btn-outline-primary btn-sm" onclick="printOrder({{ $order->id }})">
+                                                                <i class="fas fa-print me-2"></i> Print Order #{{ $order->order_number }}
+                                                            </button>
+                                                        </div> -->
+                                                    @else
+                                                        <p class="text-center text-muted">No items found in this order.</p>
+                                                    @endif
                                                 </div>
-                                                
-                                                <!-- Order Summary - NOW IN DIVS -->
-                                                <div class="order-summary-wrapper">
-                                                    <div class="summary-item">
-                                                        <div class="summary-label">Subtotal</div>
-                                                        <div class="summary-value">$120.00</div>
-                                                    </div>
-                                                    <div class="summary-item">
-                                                        <div class="summary-label">Tax (10%)</div>
-                                                        <div class="summary-value">$12.00</div>
-                                                    </div>
-                                                    <div class="summary-item">
-                                                        <div class="summary-label">Discount</div>
-                                                        <div class="summary-value">$0.00</div>
-                                                    </div>
-                                                    <div class="summary-item summary-total">
-                                                        <div class="summary-label">Total</div>
-                                                        <div class="summary-value">$137.00</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
+                                            </td>
+                                        </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        @else
+                            <div class="no-orders">
+                                <i class="fas fa-shopping-cart"></i>
+                                <h4>No Orders Yet</h4>
+                                <p>This customer hasn't placed any orders yet.</p>
+                            </div>
+                        @endif
                     </div>
 
                     <div id="tab-completed" class="tab-content d-none">
-                        <p>Showing completed orders...</p>
+                        @php
+                            $completedOrders = $customer->orders()->where('status', 'completed')->get();
+                        @endphp
+                        
+                        @if($completedOrders->count() > 0)
+                            <div class="table-responsive order-table">
+                                <table class="table mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th>Order ID</th>
+                                            <th>Completed Date</th>
+                                            <th>Total</th>
+                                            <th>Payment</th>
+                                            <th>Status</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach($completedOrders as $order)
+                                        <tr>
+                                            <td>#{{ $order->order_number }}</td>
+                                            <td>{{ $order->updated_at->format('d M, Y') }}</td>
+                                            <td>${{ number_format($order->total_amount, 2) }}</td>
+                                            <td>{{ ucfirst($order->payment_method) }}</td>
+                                            <td><span class="status-completed">Completed</span></td>
+                                            <td>
+                                                <button class="btn btn-sm action-btn toggle-details-btn d-flex align-items-center gap-1" 
+                                                        type="button" 
+                                                        data-order-id="{{ $order->id }}">
+                                                    Actions <i class="fas fa-chevron-down dropdown-arrow-icon ms-1"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <!-- Order Details Table for Completed Orders -->
+                                        <tr class="collapse" id="orderDetails{{ $order->id }}">
+                                            <td colspan="6" class="p-0">
+                                                <div class="detail-table m-2 p-3">
+                                                    @if($order->items->count() > 0)
+                                                        <div class="table-responsive">
+                                                            <table class="table table-sm table-borderless">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>#</th>
+                                                                        <th>Product</th>
+                                                                        <th>Price</th>
+                                                                        <th>Qty</th>
+                                                                        <th>Total</th>
+                                                                        <th>Print</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    @foreach($order->items as $index => $item)
+                                                                    <tr>
+                                                                        <td>{{ $index + 1 }}</td>
+                                                                        <td>
+                                                                            {{ $item->product_name }}
+                                                                        </td>
+                                                                        <td>${{ number_format($item->price, 2) }}</td>
+                                                                        <td>x{{ $item->quantity }}</td>
+                                                                        <td>${{ number_format($item->total, 2) }}</td>
+                                                                        <td>
+                                                                            <button class="print-btn" onclick="printItem({{ $item->id }})" title="Print Item">
+                                                                                <i class="fas fa-print print-icon"></i>
+                                                                            </button>
+                                                                        </td>
+                                                                    </tr>
+                                                                    @endforeach
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                        
+                                                        <!-- Order Summary -->
+                                                        <div class="order-summary-wrapper">
+                                                            <div class="summary-item">
+                                                                <div class="summary-label">Subtotal</div>
+                                                                <div class="summary-value">${{ number_format($order->subtotal, 2) }}</div>
+                                                            </div>
+                                                            @if($order->tax_amount > 0)
+                                                            <div class="summary-item">
+                                                                <div class="summary-label">Tax</div>
+                                                                <div class="summary-value">${{ number_format($order->tax_amount, 2) }}</div>
+                                                            </div>
+                                                            @endif
+                                                            @if($order->shipping_amount > 0)
+                                                            <div class="summary-item">
+                                                                <div class="summary-label">Shipping</div>
+                                                                <div class="summary-value">${{ number_format($order->shipping_amount, 2) }}</div>
+                                                            </div>
+                                                            @endif
+                                                            <div class="summary-item summary-total">
+                                                                <div class="summary-label">Total</div>
+                                                                <div class="summary-value">${{ number_format($order->total_amount, 2) }}</div>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                        <!-- Print Order Button -->
+                                                        <div class="d-flex justify-content-end mt-3">
+                                                            <button class="btn btn-outline-primary btn-sm" onclick="printOrder({{ $order->id }})">
+                                                                <i class="fas fa-print me-2"></i> Print Order #{{ $order->order_number }}
+                                                            </button>
+                                                        </div>
+                                                    @else
+                                                        <p class="text-center text-muted">No items found in this order.</p>
+                                                    @endif
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        @else
+                            <div class="no-orders">
+                                <i class="fas fa-check-circle"></i>
+                                <h4>No Completed Orders</h4>
+                                <p>This customer has no completed orders yet.</p>
+                            </div>
+                        @endif
                     </div>
 
                     <div id="tab-canceled" class="tab-content d-none">
-                        <p>Showing canceled orders...</p>
+                        @php
+                            $canceledOrders = $customer->orders()->where('status', 'canceled')->get();
+                        @endphp
+                        
+                        @if($canceledOrders->count() > 0)
+                            <div class="table-responsive order-table">
+                                <table class="table mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th>Order ID</th>
+                                            <th>Canceled Date</th>
+                                            <th>Total</th>
+                                            <th>Payment</th>
+                                            <th>Status</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach($canceledOrders as $order)
+                                        <tr>
+                                            <td>#{{ $order->order_number }}</td>
+                                            <td>{{ $order->updated_at->format('d M, Y') }}</td>
+                                            <td>${{ number_format($order->total_amount, 2) }}</td>
+                                            <td>{{ ucfirst($order->payment_method) }}</td>
+                                            <td><span class="status-canceled">Canceled</span></td>
+                                            <td>
+                                                <button class="btn btn-sm action-btn toggle-details-btn d-flex align-items-center gap-1" 
+                                                        type="button" 
+                                                        data-order-id="{{ $order->id }}">
+                                                    Actions <i class="fas fa-chevron-down dropdown-arrow-icon ms-1"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <!-- Order Details Table for Canceled Orders -->
+                                        <tr class="collapse" id="orderDetails{{ $order->id }}">
+                                            <td colspan="6" class="p-0">
+                                                <div class="detail-table m-2 p-3">
+                                                    @if($order->items->count() > 0)
+                                                        <div class="table-responsive">
+                                                            <table class="table table-sm table-borderless">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>#</th>
+                                                                        <th>Product</th>
+                                                                        <th>Price</th>
+                                                                        <th>Qty</th>
+                                                                        <th>Total</th>
+                                                                        <th>Print</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    @foreach($order->items as $index => $item)
+                                                                    <tr>
+                                                                        <td>{{ $index + 1 }}</td>
+                                                                        <td>
+                                                                            {{ $item->product_name }}
+                                                                        </td>
+                                                                        <td>${{ number_format($item->price, 2) }}</td>
+                                                                        <td>x{{ $item->quantity }}</td>
+                                                                        <td>${{ number_format($item->total, 2) }}</td>
+                                                                        <td>
+                                                                            <button class="print-btn" onclick="printItem({{ $item->id }})" title="Print Item">
+                                                                                <i class="fas fa-print print-icon"></i>
+                                                                            </button>
+                                                                        </td>
+                                                                    </tr>
+                                                                    @endforeach
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                        
+                                                        <!-- Order Summary -->
+                                                        <div class="order-summary-wrapper">
+                                                            <div class="summary-item">
+                                                                <div class="summary-label">Subtotal</div>
+                                                                <div class="summary-value">${{ number_format($order->subtotal, 2) }}</div>
+                                                            </div>
+                                                            @if($order->tax_amount > 0)
+                                                            <div class="summary-item">
+                                                                <div class="summary-label">Tax</div>
+                                                                <div class="summary-value">${{ number_format($order->tax_amount, 2) }}</div>
+                                                            </div>
+                                                            @endif
+                                                            @if($order->shipping_amount > 0)
+                                                            <div class="summary-item">
+                                                                <div class="summary-label">Shipping</div>
+                                                                <div class="summary-value">${{ number_format($order->shipping_amount, 2) }}</div>
+                                                            </div>
+                                                            @endif
+                                                            <div class="summary-item summary-total">
+                                                                <div class="summary-label">Total</div>
+                                                                <div class="summary-value">${{ number_format($order->total_amount, 2) }}</div>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                        <!-- Print Order Button -->
+                                                        <div class="d-flex justify-content-end mt-3">
+                                                            <button class="btn btn-outline-primary btn-sm" onclick="printOrder({{ $order->id }})">
+                                                                <i class="fas fa-print me-2"></i> Print Order #{{ $order->order_number }}
+                                                            </button>
+                                                        </div>
+                                                    @else
+                                                        <p class="text-center text-muted">No items found in this order.</p>
+                                                    @endif
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        @else
+                            <div class="no-orders">
+                                <i class="fas fa-times-circle"></i>
+                                <h4>No Canceled Orders</h4>
+                                <p>This customer has no canceled orders.</p>
+                            </div>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -591,22 +990,34 @@
         });
     });
 
-    // Fix for dropdown details - close dropdown when clicking view details
-    document.querySelectorAll('.view-details').forEach(item => {
-        item.addEventListener('click', function() {
-            // Close the dropdown menu
-            const dropdown = this.closest('.dropdown-menu');
-            const dropdownInstance = bootstrap.Dropdown.getInstance(dropdown.closest('.dropdown').querySelector('.dropdown-toggle'));
-            if (dropdownInstance) {
-                dropdownInstance.hide();
+    // Handle toggle details button click
+    document.addEventListener('click', function(e) {
+        if (e.target.closest('.toggle-details-btn')) {
+            const button = e.target.closest('.toggle-details-btn');
+            const orderId = button.getAttribute('data-order-id');
+            const collapseElement = document.getElementById(`orderDetails${orderId}`);
+            const collapseInstance = bootstrap.Collapse.getInstance(collapseElement) || 
+                                    new bootstrap.Collapse(collapseElement, { toggle: true });
+            
+            // Close all other open collapses in the same tab
+            const currentTab = button.closest('.tab-content');
+            if (currentTab) {
+                currentTab.querySelectorAll('.collapse.show').forEach(collapse => {
+                    if (collapse.id !== `orderDetails${orderId}`) {
+                        const otherInstance = bootstrap.Collapse.getInstance(collapse);
+                        if (otherInstance) {
+                            otherInstance.hide();
+                        }
+                    }
+                });
             }
-        });
-    });
-
-    // Initialize all dropdowns
-    var dropdownElementList = [].slice.call(document.querySelectorAll('.dropdown-toggle'))
-    var dropdownList = dropdownElementList.map(function (dropdownToggleEl) {
-        return new bootstrap.Dropdown(dropdownToggleEl)
+            
+            // Toggle the current collapse
+            collapseInstance.toggle();
+            
+            // Toggle active class on button
+            button.classList.toggle('active');
+        }
     });
 
     // Initialize all collapses
@@ -616,5 +1027,53 @@
             toggle: false
         })
     });
+
+    // Print Item Function
+    function printItem(itemId) {
+        showToast(`Printing item ${itemId}...`, 'info');
+        // Add your print logic here
+        // Example: window.open(`/admin/order-items/${itemId}/print`, '_blank');
+    }
+
+    // Print Order Function
+    function printOrder(orderId) {
+        showToast(`Printing order ${orderId}...`, 'info');
+        // Add your print logic here
+        // Example: window.open(`/admin/orders/${orderId}/print`, '_blank');
+    }
+
+    // Toast notification function
+    function showToast(message, type = 'info') {
+        const toastContainer = document.querySelector('.toast-container');
+        const toastId = 'toast-' + Date.now();
+        
+        const toast = document.createElement('div');
+        toast.className = `toast align-items-center text-bg-${type} border-0`;
+        toast.id = toastId;
+        toast.setAttribute('role', 'alert');
+        toast.setAttribute('aria-live', 'assertive');
+        toast.setAttribute('aria-atomic', 'true');
+        
+        toast.innerHTML = `
+            <div class="d-flex">
+                <div class="toast-body">
+                    ${message}
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        `;
+        
+        toastContainer.appendChild(toast);
+        
+        const bsToast = new bootstrap.Toast(toast, {
+            delay: 3000
+        });
+        bsToast.show();
+        
+        // Remove toast after it's hidden
+        toast.addEventListener('hidden.bs.toast', function () {
+            toast.remove();
+        });
+    }
 </script>
 @endsection
