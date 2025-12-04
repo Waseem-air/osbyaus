@@ -268,9 +268,17 @@
             font-size: 14px;
         }
         
-        /* FIXED: Set 144px width for each column on mobile */
-        .order-table table th,
-        .order-table table td {
+        /* FIXED: Hide less important columns on mobile */
+        .order-table table th:nth-child(4), /* Payment */
+        .order-table table td:nth-child(4),
+        .order-table table th:nth-child(5), /* Status */
+        .order-table table td:nth-child(5) {
+            /* display: none; */
+        }
+        
+        /* Keep 144px width for remaining columns */
+        .order-table table th:nth-child(1),
+        .order-table table td:nth-child(1) { /* Order ID */
             min-width: 144px;
             max-width: 144px;
             width: 144px;
@@ -280,15 +288,64 @@
             white-space: nowrap;
         }
         
-        /* Make table horizontally scrollable on mobile */
+        .order-table table th:nth-child(2),
+        .order-table table td:nth-child(2) { /* Created */
+            min-width: 144px;
+            max-width: 144px;
+            width: 144px;
+            padding: 8px 10px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        
+        .order-table table th:nth-child(3),
+        .order-table table td:nth-child(3) { /* Total */
+            min-width: 144px;
+            max-width: 144px;
+            width: 144px;
+            padding: 8px 10px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        
+        .order-table table th:nth-child(6),
+        .order-table table td:nth-child(6) { /* Action */
+            min-width: 100px;
+            max-width: 100px;
+            width: 100px;
+            padding: 8px 10px;
+        }
+        
+        /* Make table horizontally scrollable on mobile if needed */
         .table-responsive {
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
         }
         
+        /* Calculate total width: 3 columns × 144px + 1 column × 100px = 532px */
+        .order-table table {
+            min-width: 532px;
+        }
+        
         .action-btn {
             padding: 3px 6px;
             font-size: 0.8rem;
+        }
+        
+        /* Remove "Actions" text, keep only icon on mobile */
+        .toggle-details-btn .btn-text {
+            display: none;
+        }
+        
+        .toggle-details-btn {
+            width: 32px;
+            height: 32px;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         
         .summary-label,
@@ -322,7 +379,7 @@
         }
     }
     
-    /* Desktop styles - no fixed width */
+    /* Desktop styles - show all columns */
     @media (min-width: 769px) {
         .order-table table th,
         .order-table table td {
@@ -330,6 +387,14 @@
             max-width: none;
             width: auto;
             white-space: normal;
+        }
+        
+        /* Show all columns on desktop */
+        .order-table table th:nth-child(4),
+        .order-table table td:nth-child(4),
+        .order-table table th:nth-child(5),
+        .order-table table td:nth-child(5) {
+            display: table-cell;
         }
     }
     
@@ -574,8 +639,8 @@
                                             <th>Order ID</th>
                                             <th>Created</th>
                                             <th>Total</th>
-                                            <th>Payment</th>
-                                            <th>Status</th>
+                                            <th class="d-none d-md-table-cell">Payment</th>
+                                            <th class="d-none d-md-table-cell">Status</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -591,7 +656,7 @@
                                                 </small>
                                             </td>
                                             <td>${{ number_format($order->total_amount, 2) }}</td>
-                                            <td>
+                                            <td class="d-none d-md-table-cell">
                                                 @if($order->payment_method == 'stripe')
                                                     <span class="badge bg-primary">Stripe</span>
                                                 @elseif($order->payment_method == 'paypal')
@@ -600,7 +665,7 @@
                                                     <span class="badge bg-secondary">{{ ucfirst($order->payment_method) }}</span>
                                                 @endif
                                             </td>
-                                            <td>
+                                            <td class="d-none d-md-table-cell">
                                                 @switch($order->status)
                                                     @case('completed')
                                                         <span class="status-completed">Completed</span>
@@ -626,7 +691,8 @@
                                                 <button class="btn btn-sm action-btn toggle-details-btn d-flex align-items-center gap-1" 
                                                         type="button" 
                                                         data-order-id="{{ $order->id }}">
-                                                     <i class="fas fa-chevron-down dropdown-arrow-icon ms-1"></i>
+                                                    <span class="btn-text d-none d-md-inline">Actions</span>
+                                                    <i class="fas fa-chevron-down dropdown-arrow-icon ms-1"></i>
                                                 </button>
                                             </td>
                                         </tr>
@@ -653,8 +719,6 @@
                                                                         <td>{{ $index + 1 }}</td>
                                                                         <td>
                                                                             {{ $item->product_name }}
-                                                             
-                                                                           
                                                                         </td>
                                                                         <td>${{ number_format($item->price, 2) }}</td>
                                                                         <td>x{{ $item->quantity }}</td>
@@ -693,13 +757,6 @@
                                                                 <div class="summary-value">${{ number_format($order->total_amount, 2) }}</div>
                                                             </div>
                                                         </div>
-                                                        
-                                                        <!-- Print Order Button -->
-                                                        <!-- <div class="d-flex justify-content-end mt-3">
-                                                            <button class="btn btn-outline-primary btn-sm" onclick="printOrder({{ $order->id }})">
-                                                                <i class="fas fa-print me-2"></i> Print Order #{{ $order->order_number }}
-                                                            </button>
-                                                        </div> -->
                                                     @else
                                                         <p class="text-center text-muted">No items found in this order.</p>
                                                     @endif
@@ -732,8 +789,8 @@
                                             <th>Order ID</th>
                                             <th>Completed Date</th>
                                             <th>Total</th>
-                                            <th>Payment</th>
-                                            <th>Status</th>
+                                            <th class="d-none d-md-table-cell">Payment</th>
+                                            <th class="d-none d-md-table-cell">Status</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -743,13 +800,14 @@
                                             <td>#{{ $order->order_number }}</td>
                                             <td>{{ $order->updated_at->format('d M, Y') }}</td>
                                             <td>${{ number_format($order->total_amount, 2) }}</td>
-                                            <td>{{ ucfirst($order->payment_method) }}</td>
-                                            <td><span class="status-completed">Completed</span></td>
+                                            <td class="d-none d-md-table-cell">{{ ucfirst($order->payment_method) }}</td>
+                                            <td class="d-none d-md-table-cell"><span class="status-completed">Completed</span></td>
                                             <td>
                                                 <button class="btn btn-sm action-btn toggle-details-btn d-flex align-items-center gap-1" 
                                                         type="button" 
                                                         data-order-id="{{ $order->id }}">
-                                                    Actions <i class="fas fa-chevron-down dropdown-arrow-icon ms-1"></i>
+                                                    <span class="btn-text d-none d-md-inline">Actions</span>
+                                                    <i class="fas fa-chevron-down dropdown-arrow-icon ms-1"></i>
                                                 </button>
                                             </td>
                                         </tr>
@@ -853,8 +911,8 @@
                                             <th>Order ID</th>
                                             <th>Canceled Date</th>
                                             <th>Total</th>
-                                            <th>Payment</th>
-                                            <th>Status</th>
+                                            <th class="d-none d-md-table-cell">Payment</th>
+                                            <th class="d-none d-md-table-cell">Status</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -864,13 +922,14 @@
                                             <td>#{{ $order->order_number }}</td>
                                             <td>{{ $order->updated_at->format('d M, Y') }}</td>
                                             <td>${{ number_format($order->total_amount, 2) }}</td>
-                                            <td>{{ ucfirst($order->payment_method) }}</td>
-                                            <td><span class="status-canceled">Canceled</span></td>
+                                            <td class="d-none d-md-table-cell">{{ ucfirst($order->payment_method) }}</td>
+                                            <td class="d-none d-md-table-cell"><span class="status-canceled">Canceled</span></td>
                                             <td>
                                                 <button class="btn btn-sm action-btn toggle-details-btn d-flex align-items-center gap-1" 
                                                         type="button" 
                                                         data-order-id="{{ $order->id }}">
-                                                    Actions <i class="fas fa-chevron-down dropdown-arrow-icon ms-1"></i>
+                                                    <span class="btn-text d-none d-md-inline">Actions</span>
+                                                    <i class="fas fa-chevron-down dropdown-arrow-icon ms-1"></i>
                                                 </button>
                                             </td>
                                         </tr>
