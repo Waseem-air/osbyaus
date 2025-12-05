@@ -5,6 +5,7 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Models\SocialMediaLink;
+use App\Models\StoreDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate; // Add this import
 use Illuminate\Support\Facades\Auth;
@@ -64,9 +65,50 @@ class AdminController extends Controller
 
         return redirect()->back()->with('success', 'Social media links updated successfully!');
     }
-    public function store_details()
+     public function store_details()
     {
-        return view('admin.storedetails');
+        // Get the first store detail or create empty if none exists
+        $storeDetail = StoreDetail::firstOrNew();
+        
+        return view('admin.storedetails', compact('storeDetail'));
+    }
+
+    // Update store details
+    public function store_details_update(Request $request)
+    {
+        $validated = $request->validate([
+            'store_name' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'phone' => 'required|string|max:20',
+            'address' => 'required|string',
+            'city' => 'required|string|max:100',
+            'state' => 'required|string|max:100',
+            'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'delivery_charges' => 'required|numeric|min:0',
+            'gst_tax' => 'required|numeric|min:0|max:100'
+        ]);
+
+        // Get existing store or create new
+        $storeDetail = StoreDetail::firstOrNew();
+        
+        // Handle image upload
+        if ($request->hasFile('profile_image')) {
+            // Delete old image if exists
+            if ($storeDetail->profile_image) {
+                Storage::delete('public/' . $storeDetail->profile_image);
+            }
+            
+            // Store new image
+            $path = $request->file('profile_image')->store('store', 'public');
+            $validated['profile_image'] = $path;
+        }
+
+        // Update or create store details
+        $storeDetail->fill($validated);
+        $storeDetail->save();
+
+        return redirect()->route('admin.store.details')
+            ->with('success', 'Store details updated successfully!');
     }
 
     

@@ -18,13 +18,13 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin'])->grou
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
     Route::get('/transaction', [AdminController::class, 'transaction'])->name('transaction');
     Route::get('/store-menu', [AdminController::class, 'store_menu'])->name('store.menu');
-Route::get('/profile', [AdminController::class, 'profile'])->name('profile');
+    Route::get('/profile', [AdminController::class, 'profile'])->name('profile');
     Route::put('/profile/update', [AdminController::class, 'updateProfile'])->name('profile.update');
     Route::put('/profile/password/update', [AdminController::class, 'updatePassword'])->name('password.update');    // Route::get('/media-links', [AdminController::class, 'media_links'])->name('media.links');
          Route::get('/media-links', [AdminController::class, 'index'])->name('social-media.index');
     Route::post('/social-media', [AdminController::class, 'store'])->name('social-media.store');
-    Route::get('/store-details', [AdminController::class, 'store_details'])->name('store.details');
-
+  Route::get('/store-details', [AdminController::class, 'store_details'])->name('store.details');
+    Route::put('/store-details', [AdminController::class, 'store_details_update'])->name('store.details.update');
 
     // Order Routes
     Route::prefix('orders')->name('order.')->group(function () {

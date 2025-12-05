@@ -116,7 +116,6 @@
 
         <!-- Search and Filter Bar (Desktop) -->
         <div class="search-bar-container mb-2 d-none d-md-flex align-items-center gap-2">
-
             <!-- Search Form -->
             <form class="form-search" id="searchForm">
                 <fieldset class="name d-flex">
