@@ -837,17 +837,7 @@
 </script>
 
 <!-- Javascript -->
-<script src="js/jquery.min.js"></script>
-<script src="js/bootstrap.min.js"></script>
-<script src="js/bootstrap-select.min.js"></script>
-<script src="js/zoom.js"></script>
-<script src="js/morris.min.js"></script>
-<script src="js/raphael.min.js"></script>
-<script src="js/morris.js"></script>
-<script src="js/jvectormap.min.js"></script>
-<script src="js/jvectormap-us-lcc.js"></script>
-<script src="js/jvectormap-data.js"></script>
-<script src="js/jvectormap.js"></script>
+
 <script src="js/apexcharts/apexcharts.js"></script>
 <script src="js/apexcharts/line-chart-1.js"></script>
 <script src="js/apexcharts/line-chart-2.js"></script>
@@ -856,7 +846,5 @@
 <script src="js/apexcharts/line-chart-5.js"></script>
 <script src="js/apexcharts/line-chart-6.js"></script>
 <script src="js/apexcharts/line-chart-7.js"></script>
-<script src="js/switcher.js"></script>
-<script defer src="js/theme-settings.js"></script>
-<script src="js/main.js"></script>
+
 @endpush
