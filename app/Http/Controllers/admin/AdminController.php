@@ -20,10 +20,15 @@ use Intervention\Image\Facades\Image;
 class AdminController extends Controller
 {
     //
-    public function transaction()
-    {
-        return view('admin.transaction');
-    }
+public function transaction()
+{
+    $transactions = Order::with(['user'])
+        ->where('payment_status', 'paid') // Add this line
+        ->orderBy('created_at', 'desc')
+        ->paginate(10);
+    
+    return view('admin.transaction', compact('transactions'));
+}
      public function store_menu()
     {
         return view('admin.storemenu');
