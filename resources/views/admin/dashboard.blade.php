@@ -55,6 +55,11 @@
         padding: 4px 12px;
         font-size: 12px;
     }
+    .badge {
+        font-size: 12px;
+        padding: 4px 8px;
+        border-radius: 4px;
+    }
 </style>
 <!-- main-content -->
 <div class="main-content">
@@ -80,22 +85,13 @@
                             <div>
                                 <div class="flex gap10 items-center">
                                     <div class="body-text mt-2 mb-4">Total Earnings</div>
-                                    <div class="box-icon-trending up">
-                                        <i class="icon-trending-up"></i>
-                                        <div class="body-title number">1.56%</div>
+                                    <div class="box-icon-trending {{ ($revenueGrowthPercentage ?? 0) >= 0 ? 'up' : 'down' }}">
+                                        <i class="icon-trending-{{ ($revenueGrowthPercentage ?? 0) >= 0 ? 'up' : 'down' }}"></i>
+                                        <div class="body-title number">{{ number_format($revenueGrowthPercentage ?? 0, 2) }}%</div>
                                     </div>
                                 </div>
-                                <h4>$334,945</h4>
+                                <h4>{{ \App\Helpers\AppHelper::currency_symbol() }} {{ number_format($totalRevenue ?? 0, 2) }}</h4>
                             </div>
-                        </div>
-                        <div class="dropdown default">
-                            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="view-all">Weekly<i class="icon-chevron-down"></i></span>
-                            </button>
-                            <ul class="dropdown-menu dropdown-menu-end">
-                                <li><a href="javascript:void(0);">Monthly</a></li>
-                                <li><a href="javascript:void(0);">Yearly</a></li>
-                            </ul>
                         </div>
                     </div>
                     <div class="wrap-chart">
@@ -120,22 +116,13 @@
                             <div>
                                 <div class="flex gap15 items-center">
                                     <div class="body-text mt-2 mb-4">Total Orders</div>
-                                    <div class="box-icon-trending down">
-                                        <i class="icon-trending-down"></i>
-                                        <div class="body-title number">1.56%</div>
+                                    <div class="box-icon-trending {{ ($ordersGrowthPercentage ?? 0) >= 0 ? 'up' : 'down' }}">
+                                        <i class="icon-trending-{{ ($ordersGrowthPercentage ?? 0) >= 0 ? 'up' : 'down' }}"></i>
+                                        <div class="body-title number">{{ number_format($ordersGrowthPercentage ?? 0, 2) }}%</div>
                                     </div>
                                 </div>
-                                <h4>2,802</h4>
+                                <h4>{{ number_format($totalOrders ?? 0) }}</h4>
                             </div>
-                        </div>
-                        <div class="dropdown default">
-                            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="view-all">Monthly<i class="icon-chevron-down"></i></span>
-                            </button>
-                            <ul class="dropdown-menu dropdown-menu-end">
-                                <li><a href="javascript:void(0);">Weekly</a></li>
-                                <li><a href="javascript:void(0);">Yearly</a></li>
-                            </ul>
                         </div>
                     </div>
                     <div class="wrap-chart">
@@ -166,17 +153,8 @@
                                         <div class="body-title number">1.56%</div>
                                     </div>
                                 </div>
-                                <h4>4,945</h4>
+                                <h4>{{ number_format($totalCustomers ?? 0) }}</h4>
                             </div>
-                        </div>
-                        <div class="dropdown default">
-                            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="view-all">Yearly<i class="icon-chevron-down"></i></span>
-                            </button>
-                            <ul class="dropdown-menu dropdown-menu-end">
-                                <li><a href="javascript:void(0);">Monthly</a></li>
-                                <li><a href="javascript:void(0);">Weekly</a></li>
-                            </ul>
                         </div>
                     </div>
                     <div class="wrap-chart">
@@ -200,23 +178,14 @@
                             </div>
                             <div>
                                 <div class="flex gap10 items-center">
-                                    <div class="body-text mt-2 mb-4">My Balance</div>
+                                    <div class="body-text mt-2 mb-4">Products</div>
                                     <div class="box-icon-trending up color-blue">
                                         <i class="icon-trending-up"></i>
                                         <div class="body-title number">1.56%</div>
                                     </div>
                                 </div>
-                                <h4>4,945</h4>
+                                <h4>{{ number_format($totalProducts ?? 0) }}</h4>
                             </div>
-                        </div>
-                        <div class="dropdown default">
-                            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="view-all">Yearly<i class="icon-chevron-down"></i></span>
-                            </button>
-                            <ul class="dropdown-menu dropdown-menu-end">
-                                <li><a href="javascript:void(0);">Monthly</a></li>
-                                <li><a href="javascript:void(0);">Weekly</a></li>
-                            </ul>
                         </div>
                     </div>
                     <div class="wrap-chart">
@@ -231,15 +200,6 @@
                 <div class="wg-box">
                     <div class="flex items-center justify-between">
                         <h5>Revenue</h5>
-                        <div class="dropdown default style-box">
-                            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <a href="product-list.html" class="view-all">Yearly<i class="icon-chevron-down"></i></a>
-                            </button>
-                            <ul class="dropdown-menu">
-                                <li><a href="javascript:void(0);">Weekly</a></li>
-                                <li><a href="javascript:void(0);">Monthly</a></li>
-                            </ul>
-                        </div>
                     </div>
                     <div class="flex flex-wrap gap40">
                         <div>
@@ -250,7 +210,7 @@
                                 </div>
                             </div>
                             <div class="flex items-center gap12">
-                                <h4>$37,802</h4>
+                                <h4>{{ \App\Helpers\AppHelper::currency_symbol() }} {{ number_format($totalRevenue ?? 0, 2) }}</h4>
                                 <div class="box-icon-trending up">
                                     <i class="icon-trending-up"></i>
                                     <div class="body-title number text-grey">0.56%</div>
@@ -265,7 +225,7 @@
                                 </div>
                             </div>
                             <div class="flex items-center gap12">
-                                <h4>$28,305</h4>
+                                <h4>{{ number_format($totalOrders ?? 0) }}</h4>
                                 <div class="box-icon-trending up">
                                     <i class="icon-trending-up"></i>
                                     <div class="body-title number text-grey">0.56%</div>
@@ -285,65 +245,39 @@
                     <div class="wg-box h-100">
                         <div class="mb-3">
                             <h6 class="fw-bold mb-0">Popular Products</h6>
-                            <p class="text-muted small mt-2">Total 10.4k Visitors</p>
+                            <p class="text-muted small mt-2">
+                                @php
+                                    $totalSold = isset($popularProducts) ? $popularProducts->sum('total_sold') : 0;
+                                @endphp
+                                Total {{ $totalSold }} Units Sold
+                            </p>
                         </div>
                         
                         <!-- Product List -->
                         <div class="product-list">
-                            <!-- Product Item 1 -->
-                            <div class="product-item d-flex align-items-center">
-                                <img src="https://via.placeholder.com/60" class="rounded me-3" width="46" height="46">
-                                <div class="flex-grow-1">
-                                    <h6 class="mb-1 fw-semibold">Main Paislay 3 Piece</h6>
+                            @if(isset($popularProducts) && $popularProducts->count() > 0)
+                                @foreach($popularProducts as $product)
+                                <div class="product-item d-flex align-items-center">
+                                    @if($product->mainImage)
+                                        <img src="{{ asset($product->mainImage->image_path) }}" 
+                                             class="rounded me-3" width="46" height="46" alt="{{ $product->name }}">
+                                    @else
+                                        <img src="https://via.placeholder.com/60" class="rounded me-3" width="46" height="46">
+                                    @endif
+                                    <div class="flex-grow-1">
+                                        <h6 class="mb-1 fw-semibold">{{ $product->name }}</h6>
+                                        <small class="text-muted">Sold: {{ $product->total_sold ?? 0 }} units</small>
+                                    </div>
+                                    <div>
+                                        <span class="product-price">{{ \App\Helpers\AppHelper::currency_symbol() }} {{ number_format($product->final_price ?? 0, 2) }}</span>
+                                    </div>
                                 </div>
-                                <div>
-                                    <span class="product-price">RS. 6,567</span>
+                                @endforeach
+                            @else
+                                <div class="text-center py-4">
+                                    <p class="text-muted">No popular products yet.</p>
                                 </div>
-                            </div>
-                            
-                            <!-- Product Item 2 -->
-                            <div class="product-item d-flex align-items-center">
-                                <img src="https://via.placeholder.com/60" class="rounded me-3" width="46" height="46">
-                                <div class="flex-grow-1">
-                                    <h6 class="mb-1 fw-semibold">Traditional Embroidered Suit</h6>
-                                </div>
-                                <div>
-                                    <span class="product-price">RS. 8,999</span>
-                                </div>
-                            </div>
-                            
-                            <!-- Product Item 3 -->
-                            <div class="product-item d-flex align-items-center">
-                                <img src="https://via.placeholder.com/60" class="rounded me-3" width="46" height="46">
-                                <div class="flex-grow-1">
-                                    <h6 class="mb-1 fw-semibold">Casual Cotton Shirt</h6>
-                                </div>
-                                <div>
-                                    <span class="product-price">RS. 2,499</span>
-                                </div>
-                            </div>
-                            
-                            <!-- Product Item 4 -->
-                            <div class="product-item d-flex align-items-center">
-                                <img src="https://via.placeholder.com/60" class="rounded me-3" width="46" height="46">
-                                <div class="flex-grow-1">
-                                    <h6 class="mb-1 fw-semibold">Designer Kurti Set</h6>
-                                </div>
-                                <div>
-                                    <span class="product-price">RS. 4,299</span>
-                                </div>
-                            </div>
-                            
-                            <!-- Product Item 5 -->
-                            <div class="product-item d-flex align-items-center">
-                                <img src="https://via.placeholder.com/60" class="rounded me-3" width="46" height="46">
-                                <div class="flex-grow-1">
-                                    <h6 class="mb-1 fw-semibold">Leather Jacket</h6>
-                                </div>
-                                <div>
-                                    <span class="product-price">RS. 7,850</span>
-                                </div>
-                            </div>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -353,7 +287,7 @@
                     <div class="wg-box h-100">
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <h6 class="fw-bold mb-0">Last Transactions</h6>
-                            <a href="#" class="text-primary small">View All</a>
+                            <a href="{{ route('admin.transaction') }}" class="text-primary small">View All</a>
                         </div>
                         
                         <!-- Transactions Table -->
@@ -361,68 +295,43 @@
                             <table class="table table-hover align-middle mb-0">
                                 <thead class="table-light">
                                     <tr>
-                                        <th class="py-2" style="font-size: 13px;">ID</th>
-                                        <th class="py-2" style="font-size: 13px;">Issued Date</th>
+                                        <th class="py-2" style="font-size: 13px;">Order #</th>
+                                        <th class="py-2" style="font-size: 13px;">Date</th>
                                         <th class="py-2" style="font-size: 13px;">Customer</th>
                                         <th class="py-2" style="font-size: 13px;">Total</th>
-                                        <th class="py-2 text-end" style="font-size: 13px;">Actions</th>
+                                        <th class="py-2 text-end" style="font-size: 13px;">Status</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <!-- Transaction 1 -->
+                                    @if(isset($latestTransactions) && $latestTransactions->count() > 0)
+                                        @foreach($latestTransactions as $transaction)
+                                        <tr>
+                                            <td class="py-2">#{{ $transaction->order_number }}</td>
+                                            <td class="py-2">{{ $transaction->created_at->format('d M Y') }}</td>
+                                            <td class="py-2">
+                                                @if($transaction->user)
+                                                    {{ $transaction->user->first_name ?? 'N/A' }} {{ $transaction->user->last_name ?? '' }}
+                                                @else
+                                                    {{ $transaction->customer_name ?? 'Guest' }}
+                                                @endif
+                                            </td>
+                                            <td class="py-2 fw-semibold {{ $transaction->payment_status == 'paid' ? 'text-success' : 'text-warning' }}">
+                                                {{ \App\Helpers\AppHelper::currency_symbol() }} {{ number_format($transaction->total_amount, 2) }}
+                                            </td>
+                                            <td class="py-2 text-end">
+                                                <span class="badge bg-{{ $transaction->payment_status == 'paid' ? 'success' : 'warning' }}">
+                                                    {{ ucfirst($transaction->payment_status) }}
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        @endforeach
+                                    @else
                                     <tr>
-                                        <td class="py-2">#5089</td>
-                                        <td class="py-2">31 March 2023</td>
-                                        <td class="py-2">Ali Ahmed</td>
-                                        <td class="py-2 fw-semibold text-success">RS. 6,567</td>
-                                        <td class="py-2 text-end">
-                                            <a href="#" class="btn btn-sm btn-outline-primary">View Detail</a>
+                                        <td colspan="5" class="text-center py-4">
+                                            <p class="text-muted">No transactions yet.</p>
                                         </td>
                                     </tr>
-                                    
-                                    <!-- Transaction 2 -->
-                                    <tr>
-                                        <td class="py-2">#5088</td>
-                                        <td class="py-2">30 March 2023</td>
-                                        <td class="py-2">Sara Khan</td>
-                                        <td class="py-2 fw-semibold text-success">RS. 12,450</td>
-                                        <td class="py-2 text-end">
-                                            <a href="#" class="btn btn-sm btn-outline-primary">View Detail</a>
-                                        </td>
-                                    </tr>
-                                    
-                                    <!-- Transaction 3 -->
-                                    <tr>
-                                        <td class="py-2">#5087</td>
-                                        <td class="py-2">29 March 2023</td>
-                                        <td class="py-2">Mohammad Raza</td>
-                                        <td class="py-2 fw-semibold text-success">RS. 8,999</td>
-                                        <td class="py-2 text-end">
-                                            <a href="#" class="btn btn-sm btn-outline-primary">View Detail</a>
-                                        </td>
-                                    </tr>
-                                    
-                                    <!-- Transaction 4 -->
-                                    <tr>
-                                        <td class="py-2">#5086</td>
-                                        <td class="py-2">28 March 2023</td>
-                                        <td class="py-2">Fatima Noor</td>
-                                        <td class="py-2 fw-semibold text-success">RS. 4,299</td>
-                                        <td class="py-2 text-end">
-                                            <a href="#" class="btn btn-sm btn-outline-primary">View Detail</a>
-                                        </td>
-                                    </tr>
-                                    
-                                    <!-- Transaction 5 -->
-                                    <tr>
-                                        <td class="py-2">#5085</td>
-                                        <td class="py-2">27 March 2023</td>
-                                        <td class="py-2">Usman Ali</td>
-                                        <td class="py-2 fw-semibold text-success">RS. 2,499</td>
-                                        <td class="py-2 text-end">
-                                            <a href="#" class="btn btn-sm btn-outline-primary">View Detail</a>
-                                        </td>
-                                    </tr>
+                                    @endif
                                 </tbody>
                             </table>
                         </div>
@@ -436,6 +345,496 @@
     <!-- /main-content-wrap -->
 </div>
 <!-- /main-content -->
+@endsection
+
+@push('scripts')
+<script>
+    // Prepare monthly data for charts
+    const monthlyRevenueData = @json(array_values($monthlyRevenueData ?? []));
+    const monthlyOrdersData = @json(array_values($monthlyOrdersData ?? []));
+    const monthLabels = @json($monthLabels ?? []);
+    
+    // Prepare weekly data for charts
+    const weeklyLabels = @json($weeklyLabels ?? []);
+    const weeklyRevenueChartData = @json($weeklyRevenueChartData ?? []);
+    const weeklyOrdersChartData = @json($weeklyOrdersChartData ?? []);
+    
+    // Chart 1: Monthly Revenue Line Chart
+    if (document.getElementById("line-chart-1")) {
+        const options1 = {
+            series: [{
+                name: "Revenue",
+                data: monthlyRevenueData
+            }],
+            chart: {
+                height: 120,
+                type: "line",
+                zoom: {
+                    enabled: false
+                },
+                toolbar: {
+                    show: false
+                },
+                sparkline: {
+                    enabled: true
+                }
+            },
+            dataLabels: {
+                enabled: false
+            },
+            stroke: {
+                curve: "smooth",
+                width: 2
+            },
+            colors: ["#22C55E"],
+            grid: {
+                show: false,
+            },
+            xaxis: {
+                categories: monthLabels,
+                labels: {
+                    show: false
+                },
+                axisBorder: {
+                    show: false,
+                },
+                axisTicks: {
+                    show: false,
+                },
+            },
+            yaxis: {
+                show: false,
+            },
+            tooltip: {
+                enabled: true,
+                x: {
+                    show: false
+                },
+                y: {
+                    formatter: function(val) {
+                        return "{{ \App\Helpers\AppHelper::currency_symbol() }} " + val.toFixed(2);
+                    }
+                }
+            }
+        };
+        
+        const chart1 = new ApexCharts(document.querySelector("#line-chart-1"), options1);
+        chart1.render();
+    }
+    
+    // Chart 2: Weekly Orders Line Chart
+    if (document.getElementById("line-chart-2")) {
+        const options2 = {
+            series: [{
+                name: "Orders",
+                data: weeklyOrdersChartData
+            }],
+            chart: {
+                height: 120,
+                type: "line",
+                zoom: {
+                    enabled: false
+                },
+                toolbar: {
+                    show: false
+                },
+                sparkline: {
+                    enabled: true
+                }
+            },
+            dataLabels: {
+                enabled: false
+            },
+            stroke: {
+                curve: "smooth",
+                width: 2
+            },
+            colors: ["#FF5200"],
+            grid: {
+                show: false,
+            },
+            xaxis: {
+                categories: weeklyLabels,
+                labels: {
+                    show: false
+                },
+                axisBorder: {
+                    show: false,
+                },
+                axisTicks: {
+                    show: false,
+                },
+            },
+            yaxis: {
+                show: false,
+            },
+            tooltip: {
+                enabled: true,
+                x: {
+                    show: false
+                },
+                y: {
+                    formatter: function(val) {
+                        return val + " orders";
+                    }
+                }
+            }
+        };
+        
+        const chart2 = new ApexCharts(document.querySelector("#line-chart-2"), options2);
+        chart2.render();
+    }
+    
+    // Chart 3: Customer Growth Chart
+    if (document.getElementById("line-chart-3")) {
+        // Simulate customer growth data (you can replace with actual data)
+        const customerData = [];
+        for (let i = 0; i < 12; i++) {
+            customerData.push(Math.floor(Math.random() * 100) + 50);
+        }
+        
+        const options3 = {
+            series: [{
+                name: "Customers",
+                data: customerData
+            }],
+            chart: {
+                height: 120,
+                type: "line",
+                zoom: {
+                    enabled: false
+                },
+                toolbar: {
+                    show: false
+                },
+                sparkline: {
+                    enabled: true
+                }
+            },
+            dataLabels: {
+                enabled: false
+            },
+            stroke: {
+                curve: "smooth",
+                width: 2
+            },
+            colors: ["#8F77F3"],
+            grid: {
+                show: false,
+            },
+            xaxis: {
+                categories: monthLabels,
+                labels: {
+                    show: false
+                },
+                axisBorder: {
+                    show: false,
+                },
+                axisTicks: {
+                    show: false,
+                },
+            },
+            yaxis: {
+                show: false,
+            },
+            tooltip: {
+                enabled: true,
+                x: {
+                    show: false
+                },
+                y: {
+                    formatter: function(val) {
+                        return val + " customers";
+                    }
+                }
+            }
+        };
+        
+        const chart3 = new ApexCharts(document.querySelector("#line-chart-3"), options3);
+        chart3.render();
+    }
+    
+    // Chart 4: Product Performance Chart
+    if (document.getElementById("line-chart-4")) {
+        // Simulate product performance data
+        const productData = [];
+        for (let i = 0; i < 12; i++) {
+            productData.push(Math.floor(Math.random() * 50) + 20);
+        }
+        
+        const options4 = {
+            series: [{
+                name: "Products",
+                data: productData
+            }],
+            chart: {
+                height: 120,
+                type: "line",
+                zoom: {
+                    enabled: false
+                },
+                toolbar: {
+                    show: false
+                },
+                sparkline: {
+                    enabled: true
+                }
+            },
+            dataLabels: {
+                enabled: false
+            },
+            stroke: {
+                curve: "smooth",
+                width: 2
+            },
+            colors: ["#2377FC"],
+            grid: {
+                show: false,
+            },
+            xaxis: {
+                categories: monthLabels,
+                labels: {
+                    show: false
+                },
+                axisBorder: {
+                    show: false,
+                },
+                axisTicks: {
+                    show: false,
+                },
+            },
+            yaxis: {
+                show: false,
+            },
+            tooltip: {
+                enabled: true,
+                x: {
+                    show: false
+                },
+                y: {
+                    formatter: function(val) {
+                        return val + " products";
+                    }
+                }
+            }
+        };
+        
+        const chart4 = new ApexCharts(document.querySelector("#line-chart-4"), options4);
+        chart4.render();
+    }
+    
+    // Chart 7: Main Revenue Chart (Combined Revenue & Orders)
+    if (document.getElementById("line-chart-7")) {
+        const options7 = {
+            series: [{
+                name: "Revenue",
+                type: "area",
+                data: monthlyRevenueData
+            }, {
+                name: "Orders",
+                type: "line",
+                data: monthlyOrdersData
+            }],
+            chart: {
+                height: 350,
+                type: "line",
+                toolbar: {
+                    show: true,
+                    tools: {
+                        download: true,
+                        selection: true,
+                        zoom: true,
+                        zoomin: true,
+                        zoomout: true,
+                        pan: true,
+                        reset: true
+                    }
+                }
+            },
+            stroke: {
+                curve: "smooth",
+                width: [3, 2]
+            },
+            colors: ["#22C55E", "#FF5200"],
+            fill: {
+                type: "gradient",
+                gradient: {
+                    shadeIntensity: 1,
+                    opacityFrom: 0.7,
+                    opacityTo: 0.3,
+                    stops: [0, 90, 100]
+                }
+            },
+            markers: {
+                size: 0
+            },
+            xaxis: {
+                categories: monthLabels,
+                labels: {
+                    style: {
+                        colors: "#6B7280",
+                        fontSize: "12px"
+                    }
+                }
+            },
+            yaxis: [
+                {
+                    title: {
+                        text: "Revenue ({{ \App\Helpers\AppHelper::currency_symbol() }})",
+                        style: {
+                            color: "#22C55E",
+                            fontSize: "12px"
+                        }
+                    },
+                    labels: {
+                        formatter: function(val) {
+                            return "{{ \App\Helpers\AppHelper::currency_symbol() }} " + val.toLocaleString();
+                        },
+                        style: {
+                            colors: "#6B7280",
+                            fontSize: "12px"
+                        }
+                    }
+                },
+                {
+                    opposite: true,
+                    title: {
+                        text: "Orders",
+                        style: {
+                            color: "#FF5200",
+                            fontSize: "12px"
+                        }
+                    },
+                    labels: {
+                        style: {
+                            colors: "#6B7280",
+                            fontSize: "12px"
+                        }
+                    }
+                }
+            ],
+            tooltip: {
+                shared: true,
+                intersect: false,
+                y: {
+                    formatter: function(y) {
+                        if (typeof y !== "undefined") {
+                            if (this.series.index === 0) {
+                                return "{{ \App\Helpers\AppHelper::currency_symbol() }} " + y.toLocaleString();
+                            } else {
+                                return y + " orders";
+                            }
+                        }
+                        return y;
+                    }
+                }
+            },
+            legend: {
+                position: "top",
+                horizontalAlign: "right",
+                fontSize: "14px",
+                fontFamily: "Inter, sans-serif",
+                fontWeight: 400,
+                markers: {
+                    width: 10,
+                    height: 10,
+                    radius: 4
+                }
+            },
+            grid: {
+                borderColor: "#E5E7EB",
+                strokeDashArray: 4,
+                yaxis: {
+                    lines: {
+                        show: true
+                    }
+                }
+            }
+        };
+        
+        const chart7 = new ApexCharts(document.querySelector("#line-chart-7"), options7);
+        chart7.render();
+    }
+    
+    // Update percentage indicators with actual growth data
+    document.addEventListener('DOMContentLoaded', function() {
+        // Update revenue growth percentage
+        const revenueGrowth = {{ $revenueGrowthPercentage ?? 0 }};
+        const revenueTrendElement = document.querySelector('.wg-chart-default:nth-child(1) .body-title.number');
+        if (revenueTrendElement) {
+            revenueTrendElement.textContent = revenueGrowth.toFixed(2) + '%';
+            
+            // Update icon based on growth
+            const trendIcon = revenueTrendElement.closest('.box-icon-trending');
+            if (trendIcon) {
+                if (revenueGrowth >= 0) {
+                    trendIcon.classList.remove('down');
+                    trendIcon.classList.add('up');
+                    trendIcon.querySelector('i').className = 'icon-trending-up';
+                } else {
+                    trendIcon.classList.remove('up');
+                    trendIcon.classList.add('down');
+                    trendIcon.querySelector('i').className = 'icon-trending-down';
+                }
+            }
+        }
+        
+        // Update orders growth percentage
+        const ordersGrowth = {{ $ordersGrowthPercentage ?? 0 }};
+        const ordersTrendElement = document.querySelector('.wg-chart-default:nth-child(2) .body-title.number');
+        if (ordersTrendElement) {
+            ordersTrendElement.textContent = ordersGrowth.toFixed(2) + '%';
+            
+            // Update icon based on growth
+            const trendIcon = ordersTrendElement.closest('.box-icon-trending');
+            if (trendIcon) {
+                if (ordersGrowth >= 0) {
+                    trendIcon.classList.remove('down');
+                    trendIcon.classList.add('up');
+                    trendIcon.querySelector('i').className = 'icon-trending-up';
+                } else {
+                    trendIcon.classList.remove('up');
+                    trendIcon.classList.add('down');
+                    trendIcon.querySelector('i').className = 'icon-trending-down';
+                }
+            }
+        }
+    });
+    
+    // Add dropdown functionality for time periods
+    function updateCharts(timePeriod) {
+        // You can make AJAX calls here to fetch data for different time periods
+        console.log('Time period changed to:', timePeriod);
+        
+        // Example AJAX implementation:
+        /*
+        fetch(`/admin/dashboard/chart-data?period=${timePeriod}`)
+            .then(response => response.json())
+            .then(data => {
+                // Update charts with new data
+                chart1.updateSeries([{ data: data.revenueData }]);
+                chart2.updateSeries([{ data: data.ordersData }]);
+                // ... update other charts
+            });
+        */
+    }
+    
+    // Add event listeners to dropdown items
+    document.addEventListener('DOMContentLoaded', function() {
+        const dropdownItems = document.querySelectorAll('.dropdown-menu a');
+        dropdownItems.forEach(item => {
+            item.addEventListener('click', function(e) {
+                e.preventDefault();
+                const timePeriod = this.textContent.trim();
+                const dropdownButton = this.closest('.dropdown').querySelector('.dropdown-toggle .view-all');
+                if (dropdownButton) {
+                    dropdownButton.innerHTML = `${timePeriod}<i class="icon-chevron-down"></i>`;
+                }
+                updateCharts(timePeriod.toLowerCase());
+            });
+        });
+    });
+</script>
 
 <!-- Javascript -->
 <script src="js/jquery.min.js"></script>
@@ -460,4 +859,4 @@
 <script src="js/switcher.js"></script>
 <script defer src="js/theme-settings.js"></script>
 <script src="js/main.js"></script>
-@endsection
+@endpush

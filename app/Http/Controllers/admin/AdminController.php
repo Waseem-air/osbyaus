@@ -6,6 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Models\SocialMediaLink;
 use App\Models\StoreDetail;
+use App\Models\Order;
+use App\Models\User;
+use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate; // Add this import
 use Illuminate\Support\Facades\Auth;
@@ -25,10 +28,170 @@ class AdminController extends Controller
     {
         return view('admin.storemenu');
     }
-    public function dashboard()
-    {
-        return view('admin.dashboard');
+   public function dashboard()
+{
+    // Get popular products (based on total quantity sold)
+    $popularProducts = Product::active()
+        ->with(['images'])
+        ->withCount(['orderItems as total_sold' => function ($query) {
+            $query->select(DB::raw('COALESCE(SUM(quantity), 0)'));
+        }])
+        ->orderBy('total_sold', 'desc')
+        ->limit(5)
+        ->get();
+    
+    // Get latest transactions
+    $latestTransactions = Order::with(['user'])
+        ->orderBy('created_at', 'desc')
+        ->limit(5)
+        ->get();
+    
+    // Get dashboard statistics
+    $totalRevenue = Order::where('payment_status', 'paid')
+        ->sum('total_amount');
+        
+    $totalOrders = Order::count();
+    $totalProducts = Product::active()->count();
+    $totalCustomers = User::where('role', 'customer')->count();
+    
+    // Calculate monthly revenue for charts
+    $monthlyRevenue = Order::select(
+            DB::raw('MONTH(created_at) as month'),
+            DB::raw('SUM(total_amount) as revenue')
+        )
+        ->where('payment_status', 'paid')
+        ->whereYear('created_at', date('Y'))
+        ->groupBy('month')
+        ->orderBy('month')
+        ->get();
+    
+    // Calculate weekly revenue (last 8 weeks)
+    $weeklyRevenue = Order::select(
+            DB::raw('WEEK(created_at, 1) as week'),
+            DB::raw('SUM(total_amount) as revenue'),
+            DB::raw('COUNT(*) as orders_count')
+        )
+        ->where('payment_status', 'paid')
+        ->where('created_at', '>=', now()->subWeeks(8))
+        ->groupBy('week')
+        ->orderBy('week')
+        ->get();
+    
+    // Calculate yearly revenue (last 5 years)
+    $yearlyRevenue = Order::select(
+            DB::raw('YEAR(created_at) as year'),
+            DB::raw('SUM(total_amount) as revenue'),
+            DB::raw('COUNT(*) as orders_count')
+        )
+        ->where('payment_status', 'paid')
+        ->whereYear('created_at', '>=', date('Y') - 4)
+        ->groupBy('year')
+        ->orderBy('year')
+        ->get();
+    
+    // Get today's revenue
+    $todayRevenue = Order::where('payment_status', 'paid')
+        ->whereDate('created_at', today())
+        ->sum('total_amount');
+    
+    // Get yesterday's revenue
+    $yesterdayRevenue = Order::where('payment_status', 'paid')
+        ->whereDate('created_at', today()->subDay())
+        ->sum('total_amount');
+    
+    // Calculate revenue growth percentage
+    $revenueGrowthPercentage = 0;
+    if ($yesterdayRevenue > 0) {
+        $revenueGrowthPercentage = (($todayRevenue - $yesterdayRevenue) / $yesterdayRevenue) * 100;
     }
+    
+    // Get today's orders count
+    $todayOrders = Order::whereDate('created_at', today())->count();
+    
+    // Get yesterday's orders count
+    $yesterdayOrders = Order::whereDate('created_at', today()->subDay())->count();
+    
+    // Calculate orders growth percentage
+    $ordersGrowthPercentage = 0;
+    if ($yesterdayOrders > 0) {
+        $ordersGrowthPercentage = (($todayOrders - $yesterdayOrders) / $yesterdayOrders) * 100;
+    }
+    
+    // Format monthly revenue for charts
+    $monthlyRevenueData = [];
+    $monthlyOrdersData = [];
+    $monthLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    
+    // Initialize arrays
+    for ($i = 1; $i <= 12; $i++) {
+        $monthlyRevenueData[$i] = 0;
+        $monthlyOrdersData[$i] = 0;
+    }
+    
+    // Fill with actual data
+    foreach ($monthlyRevenue as $monthData) {
+        $monthlyRevenueData[$monthData->month] = $monthData->revenue;
+    }
+    
+    // Get monthly orders count
+    $monthlyOrders = Order::select(
+            DB::raw('MONTH(created_at) as month'),
+            DB::raw('COUNT(*) as orders_count')
+        )
+        ->whereYear('created_at', date('Y'))
+        ->groupBy('month')
+        ->orderBy('month')
+        ->get();
+    
+    foreach ($monthlyOrders as $orderData) {
+        $monthlyOrdersData[$orderData->month] = $orderData->orders_count;
+    }
+    
+    // Format weekly data for charts
+    $weeklyLabels = [];
+    $weeklyRevenueChartData = [];
+    $weeklyOrdersChartData = [];
+    
+    for ($i = 7; $i >= 0; $i--) {
+        $date = now()->subDays($i);
+        $weekLabel = $date->format('M d');
+        $weeklyLabels[] = $weekLabel;
+        
+        // Find matching week data
+        $weekRevenue = 0;
+        $weekOrders = 0;
+        
+        foreach ($weeklyRevenue as $weekData) {
+            if ($weekData->week == $date->weekOfYear) {
+                $weekRevenue = $weekData->revenue;
+                $weekOrders = $weekData->orders_count;
+                break;
+            }
+        }
+        
+        $weeklyRevenueChartData[] = $weekRevenue;
+        $weeklyOrdersChartData[] = $weekOrders;
+    }
+    
+    return view('admin.dashboard', compact(
+        'popularProducts',
+        'latestTransactions',
+        'totalRevenue',
+        'totalOrders',
+        'totalProducts',
+        'totalCustomers',
+        'monthlyRevenue',
+        'revenueGrowthPercentage',
+        'ordersGrowthPercentage',
+        'monthlyRevenueData',
+        'monthlyOrdersData',
+        'monthLabels',
+        'weeklyLabels',
+        'weeklyRevenueChartData',
+        'weeklyOrdersChartData'
+    ));
+}
+
 
      public function profile()
     {

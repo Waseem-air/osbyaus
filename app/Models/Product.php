@@ -126,5 +126,21 @@ class Product extends Model
     {
         return $this->hasMany(Wishlist::class);
     }
+    // In Product.php model, add this scope method
+public function scopePopular($query, $limit = 5)
+{
+    return $query->where('status', true)
+        ->withCount(['orderItems as total_quantity' => function ($query) {
+            $query->select(\DB::raw('COALESCE(SUM(quantity), 0)'));
+        }])
+        ->orderBy('total_quantity', 'desc')
+        ->limit($limit);
+}
+
+// Also make sure you have this relationship
+public function orderItems()
+{
+    return $this->hasMany(OrderItem::class);
+}
 
 }

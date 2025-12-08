@@ -88,4 +88,11 @@ public static function generateOrderNumber()
     {
         return $this->hasMany(OrderStatusHistory::class)->latest();
     }
+    // In Order.php model, add this scope
+public function scopeLatestTransactions($query, $limit = 5)
+{
+    return $query->with(['user'])
+        ->orderBy('created_at', 'desc')
+        ->limit($limit);
+}
 }

@@ -746,3 +746,107 @@
         });
     </script>
 @endpush
+
+
+
+<!-- Two Column Layout -->
+            <div class="row g-3 mb-4">
+                <!-- Popular Products Column -->
+                <div class="col-lg-5 col-md-6 col-12">
+                    <div class="wg-box h-100">
+                        <div class="mb-3">
+                            <h6 class="fw-bold mb-0">Popular Products</h6>
+                            <p class="text-muted small mt-2">
+                                @php
+                                    $totalSold = isset($popularProducts) ? $popularProducts->sum('total_sold') : 0;
+                                @endphp
+                                Total {{ $totalSold }} Units Sold
+                            </p>
+                        </div>
+                        
+                        <!-- Product List -->
+                        <div class="product-list">
+                            @if(isset($popularProducts) && $popularProducts->count() > 0)
+                                @foreach($popularProducts as $product)
+                                <div class="product-item d-flex align-items-center">
+                                    @if($product->mainImage)
+                                        <img src="{{ asset($product->mainImage->image_path) }}" 
+                                             class="rounded me-3" width="46" height="46" alt="{{ $product->name }}">
+                                    @else
+                                        <img src="https://via.placeholder.com/60" class="rounded me-3" width="46" height="46">
+                                    @endif
+                                    <div class="flex-grow-1">
+                                        <h6 class="mb-1 fw-semibold">{{ $product->name }}</h6>
+                                        <small class="text-muted">Sold: {{ $product->total_sold ?? 0 }} units</small>
+                                    </div>
+                                    <div>
+                                        <span class="product-price">{{ \App\Helpers\AppHelper::currency_symbol() }} {{ number_format($product->final_price ?? 0, 2) }}</span>
+                                    </div>
+                                </div>
+                                @endforeach
+                            @else
+                                <div class="text-center py-4">
+                                    <p class="text-muted">No popular products yet.</p>
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Last Transactions Column -->
+                <div class="col-lg-7 col-md-6 col-12">
+                    <div class="wg-box h-100">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h6 class="fw-bold mb-0">Last Transactions</h6>
+                            <a href="{{ route('admin.transaction') }}" class="text-primary small">View All</a>
+                        </div>
+                        
+                        <!-- Transactions Table -->
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th class="py-2" style="font-size: 13px;">Order #</th>
+                                        <th class="py-2" style="font-size: 13px;">Date</th>
+                                        <th class="py-2" style="font-size: 13px;">Customer</th>
+                                        <th class="py-2" style="font-size: 13px;">Total</th>
+                                        <th class="py-2 text-end" style="font-size: 13px;">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if(isset($latestTransactions) && $latestTransactions->count() > 0)
+                                        @foreach($latestTransactions as $transaction)
+                                        <tr>
+                                            <td class="py-2">#{{ $transaction->order_number }}</td>
+                                            <td class="py-2">{{ $transaction->created_at->format('d M Y') }}</td>
+                                            <td class="py-2">
+                                                @if($transaction->user)
+                                                    {{ $transaction->user->first_name ?? 'N/A' }} {{ $transaction->user->last_name ?? '' }}
+                                                @else
+                                                    {{ $transaction->customer_name ?? 'Guest' }}
+                                                @endif
+                                            </td>
+                                            <td class="py-2 fw-semibold {{ $transaction->payment_status == 'paid' ? 'text-success' : 'text-warning' }}">
+                                                {{ \App\Helpers\AppHelper::currency_symbol() }} {{ number_format($transaction->total_amount, 2) }}
+                                            </td>
+                                            <td class="py-2 text-end">
+                                                <span class="badge bg-{{ $transaction->payment_status == 'paid' ? 'success' : 'warning' }}">
+                                                    {{ ucfirst($transaction->payment_status) }}
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        @endforeach
+                                    @else
+                                    <tr>
+                                        <td colspan="5" class="text-center py-4">
+                                            <p class="text-muted">No transactions yet.</p>
+                                        </td>
+                                    </tr>
+                                    @endif
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End Two Column Layout -->
