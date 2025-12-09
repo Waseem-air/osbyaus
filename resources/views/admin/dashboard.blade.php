@@ -5,20 +5,19 @@
         padding: 12px;
         border-radius: 8px;
         margin-bottom: 10px;
-        background: #f8f9fa;
         transition: all 0.3s ease;
         cursor: pointer;
-        border: 1px solid #e9ecef;
     }
-    .product-item:hover {
+    /* .product-item:hover {
         background: #fff;
         box-shadow: 0 2px 8px rgba(0,0,0,0.08);
         border-color: #dee2e6;
-    }
+    } */
     .product-item h6 {
         font-size: 14px;
         font-weight: 500;
         margin-bottom: 4px;
+        width: 100%;
         color: #333;
     }
     .product-item .product-code {
@@ -38,18 +37,18 @@
         box-shadow: 0 1px 3px rgba(0,0,0,0.08);
     }
     .table-responsive {
-        border-radius: 8px;
         overflow: hidden;
     }
     .table th {
-        font-weight: 600;
-        background: #f8f9fa;
-        border-bottom: 2px solid #dee2e6;
+        font-weight: 400;
         color: #495057;
+        font-size:15px!important;
     }
     .table td {
         vertical-align: middle;
         border-color: #e9ecef;
+                font-size:15px!important;
+
     }
     .btn-sm {
         padding: 4px 12px;
@@ -59,6 +58,9 @@
         font-size: 12px;
         padding: 4px 8px;
         border-radius: 4px;
+    }
+    .bg-color{
+        background-color:#DBDADE;
     }
 </style>
 <!-- main-content -->
@@ -287,19 +289,19 @@
                     <div class="wg-box h-100">
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <h6 class="fw-bold mb-0">Last Transactions</h6>
-                            <a href="{{ route('admin.transaction') }}" class="text-primary small">View All</a>
+                            <a href="{{ route('admin.transaction') }}" class="text-danger large">View All</a>
                         </div>
                         
                         <!-- Transactions Table -->
                         <div class="table-responsive">
-                            <table class="table table-hover align-middle mb-0">
-                                <thead class="table-light">
+                            <table class="table align-middle mb-0">
+                                <thead class="bg-color">
                                     <tr>
                                         <th class="py-2" style="font-size: 13px;">Order #</th>
                                         <th class="py-2" style="font-size: 13px;">Date</th>
-                                        <th class="py-2" style="font-size: 13px;">Customer</th>
+                                        <!-- <th class="py-2" style="font-size: 13px;">Customer</th> -->
                                         <th class="py-2" style="font-size: 13px;">Total</th>
-                                        <th class="py-2 text-end" style="font-size: 13px;">Status</th>
+                                        <th class="py-2 text-end" style="font-size: 13px;">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -308,20 +310,20 @@
                                         <tr>
                                             <td class="py-2">#{{ $transaction->order_number }}</td>
                                             <td class="py-2">{{ $transaction->created_at->format('d M Y') }}</td>
-                                            <td class="py-2">
+                                            <!-- <td class="py-2">
                                                 @if($transaction->user)
                                                     {{ $transaction->user->first_name ?? 'N/A' }} {{ $transaction->user->last_name ?? '' }}
                                                 @else
                                                     {{ $transaction->customer_name ?? 'Guest' }}
                                                 @endif
-                                            </td>
+                                            </td> -->
                                             <td class="py-2 fw-semibold {{ $transaction->payment_status == 'paid' ? 'text-success' : 'text-warning' }}">
                                                 {{ \App\Helpers\AppHelper::currency_symbol() }} {{ number_format($transaction->total_amount, 2) }}
                                             </td>
                                             <td class="py-2 text-end">
-                                                <span class="badge bg-{{ $transaction->payment_status == 'paid' ? 'success' : 'warning' }}">
-                                                    {{ ucfirst($transaction->payment_status) }}
-                                                </span>
+                                               <a href="{{ route('admin.order.show', $transaction->id) }}" class="action-btn">
+                                        View Details
+                                    </a>
                                             </td>
                                         </tr>
                                         @endforeach
