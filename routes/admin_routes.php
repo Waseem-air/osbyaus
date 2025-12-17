@@ -46,6 +46,8 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin'])->grou
         Route::get('/{id}/get', [ProductController::class, 'get_product'])->name('get');
         Route::get('/{id}/edit', [ProductController::class, 'edit_product'])->name('edit');
 
+        Route::post('/{id}/toggle-status', [ProductController::class, 'toggleStatus'])->name('toggle-status');
+
         Route::post('/update-product', [ProductController::class, 'update_product'])->name('update-product');
         Route::delete('/{id}/delete', [ProductController::class, 'delete_product'])->name('delete');
         Route::delete('/image/{id}/delete', [ProductController::class, 'delete_product_image'])->name('image.delete');
@@ -110,7 +112,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin'])->grou
 
         // For the comprehensive show view
         Route::get('/{customer}/show', [CustomerController::class, 'show_customer'])->name('admin.customers.show');
-                
+
     });
 
     Route::post('/create-order', [AdminOrderController::class, 'createOrderFromAdmin'])->name('create.order');

@@ -25,7 +25,7 @@ class Product extends Model
     ];
 
     protected $casts = [
-        'status' => 'boolean',
+        'status' => 'string',
         'price' => 'decimal:2',
         'discount_price' => 'decimal:2',
     ];
@@ -96,16 +96,19 @@ class Product extends Model
         return $this->hasMany(ProductSize::class);
     }
 
-    /** Scope: Only active products */
+
+    // In your Product model (App\Models\Product.php)
+
+// Update the active() scope method:
     public function scopeActive($query)
     {
-        return $query->where('status', true);
+        return $query->where('status', 'active');
     }
 
-    /** Scope: Popular this week */
+// Update the popularThisWeek() scope method:
     public function scopePopularThisWeek($query)
     {
-        return $query->where('status', true)
+        return $query->where('status', 'active')
             ->whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()])
             ->orderBy('created_at', 'desc');
     }
@@ -129,7 +132,7 @@ class Product extends Model
     // In Product.php model, add this scope method
 public function scopePopular($query, $limit = 5)
 {
-    return $query->where('status', true)
+    return $query->where('status', 'active')
         ->withCount(['orderItems as total_quantity' => function ($query) {
             $query->select(\DB::raw('COALESCE(SUM(quantity), 0)'));
         }])

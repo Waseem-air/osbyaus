@@ -10,15 +10,16 @@ use Illuminate\Http\Request;
 class HomeController extends Controller
 {
 
-   
+
     public function home()
 {
     // Fetch popular products this week
     $products = Product::with(['images', 'categories', 'colors', 'sizes', 'variants'])
+        ->active()
         ->popularThisWeek()
         ->take(8)
         ->get();
-    
+
     // Get banners and separate by is_right_text
     $banners = Banner::ordered()->active()->limit(2)->get();
     $leftBanner = $banners->where('is_right_text', 0)->first();
@@ -28,13 +29,15 @@ class HomeController extends Controller
         $remaining = 8 - $products->count();
         $randomProducts = Product::with(['images', 'categories', 'colors', 'sizes', 'variants'])
             ->whereNotIn('id', $products->pluck('id'))
+            ->active()
             ->inRandomOrder()
             ->take($remaining)
             ->get();
 
         $products = $products->merge($randomProducts);
     }
-    
+
+
     return view('website.index', compact('products', 'leftBanner', 'rightBanner'));
 }
 

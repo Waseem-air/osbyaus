@@ -574,14 +574,6 @@
                                     <textarea name="description" placeholder="Type Description here" class="form-control" rows="4" required></textarea>
                                 </fieldset>
 
-                                <!-- Status Toggle -->
-                                <div class="status-toggle">
-                                    <span class="status-label">Active</span>
-                                    <label class="switch">
-                                        <input type="checkbox" name="status" value="active" checked>
-                                        <span class="slider"></span>
-                                    </label>
-                                </div>
                             </div>
 
                             <!-- Submit Button -->

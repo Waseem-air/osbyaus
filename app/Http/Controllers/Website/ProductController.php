@@ -133,6 +133,7 @@ class ProductController extends Controller
             ->whereHas('categories', function ($q) use ($product) {
                 $q->whereIn('categories.id', $product->categories->pluck('id'));
             })
+            ->active()
             ->popularThisWeek()
             ->inRandomOrder()
             ->take(8)

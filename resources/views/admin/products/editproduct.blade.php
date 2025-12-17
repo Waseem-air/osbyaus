@@ -735,16 +735,6 @@
                                               class="form-control" rows="4"
                                               required>{{ $product->description }}</textarea>
                                 </fieldset>
-
-                                <!-- Status Toggle -->
-                                <div class="status-toggle">
-                                    <span class="status-label">Active</span>
-                                    <label class="switch">
-                                        <input type="checkbox" name="status"
-                                               value="1" {{ $product->status ? 'checked' : '' }}>
-                                        <span class="slider"></span>
-                                    </label>
-                                </div>
                             </div>
 
                             <!-- Submit Button -->

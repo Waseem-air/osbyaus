@@ -20,6 +20,7 @@ use Illuminate\Support\Str;
 class ProductController extends Controller
 {
     // ✅ Show Product List with AJAX support
+
     public function product_list(Request $request)
     {
         $query = Product::with([
@@ -39,14 +40,14 @@ class ProductController extends Controller
             });
         }
 
-        // Status filter
+        // ✅ Status filter - UPDATED
         if ($request->has('status') && $request->status !== 'all') {
             switch ($request->status) {
                 case 'active':
-                    $query->where('status', true);
+                    $query->where('status', 'active');
                     break;
                 case 'inactive':
-                    $query->where('status', false);
+                    $query->where('status', 'inactive');
                     break;
                 case 'in_stock':
                     $query->where('stock_quantity', '>', 0);
@@ -95,10 +96,8 @@ class ProductController extends Controller
             ]);
         }
 
-        // Regular request - return full view
         return view('admin.products.index', compact('products'));
     }
-
 
     // ✅ Show Add Product Form
     public function add_product()
@@ -155,7 +154,7 @@ class ProductController extends Controller
             $product->fabric = $request->fabric;
             $product->embellishment = $request->embellishment;
             $product->cut = $request->cut;
-            $product->status = $request->has('status') && $request->status === 'active' ? true : false;
+            $product->status = 'active';
             $product->save();
 
             // Attach categories
@@ -327,7 +326,6 @@ class ProductController extends Controller
             $product->fabric = $request->fabric;
             $product->embellishment = $request->embellishment;
             $product->cut = $request->cut;
-            $product->status = $request->status == 1 ? 'active' : 'inactive';
             $product->save();
             $product->categories()->sync($request->categories);
 
@@ -514,6 +512,30 @@ class ProductController extends Controller
             return response()->json([
                 'status' => 'error',
                 'message' => 'Failed to update main image. Please try again.'
+            ], 500);
+        }
+    }
+
+    public function toggleStatus(Request $request, $id)
+    {
+        try {
+            $product = Product::findOrFail($id);
+            $newStatus = $product->status === 'active' ? 'inactive' : 'active';
+            $product->status = $newStatus;
+            $product->save();
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Product status updated successfully!',
+                'new_status' => $newStatus,
+                'status_badge' => $newStatus === 'active'
+                    ? '<div class="block-available fw-7" style="background: var(--Palette-Green-500); color: var(--White); padding: 6px 12px; border-radius: 20px; font-size: 12px; display: inline-block;">Active</div>'
+                    : '<div class="block-stock fw-7" style="background: var(--Palette-Gray-500); color: var(--White); padding: 6px 12px; border-radius: 20px; font-size: 12px; display: inline-block;">Inactive</div>'
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Failed to update product status. Please try again.'
             ], 500);
         }
     }

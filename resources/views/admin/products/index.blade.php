@@ -112,7 +112,7 @@
             </button>
         </div>
 
-       
+
     </div>
 </div>
 
@@ -569,6 +569,75 @@
 @push('scripts')
     <script>
         $(document).ready(function () {
+
+            // Toggle Product Status
+            $(document).on('click', '.toggle-status', function (e) {
+                e.preventDefault();
+
+                const button = $(this);
+                const productId = button.data('id');
+                const currentStatus = button.data('current-status');
+                const statusColumn = button.closest('.wg-product').find('.status-column');
+
+                const actionText = currentStatus === 'active' ? 'deactivate' : 'activate';
+
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: `Do you want to ${actionText} this product?`,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes, update it!',
+                    cancelButtonText: 'Cancel',
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                }).then((result) => {
+                    if (!result.isConfirmed) return;
+
+                    $.ajax({
+                        url: "{{ route('admin.product.toggle-status', ':id') }}".replace(':id', productId),
+                        type: 'POST',
+                        data: {
+                            _token: "{{ csrf_token() }}"
+                        },
+                        beforeSend: function () {
+                            button.prop('disabled', true);
+                            button.html('<i class="icon-loader spinner"></i>');
+                        },
+                        success: function (response) {
+                            if (response.status === 'success') {
+
+                                // Update status badge
+                                statusColumn.html(response.status_badge);
+
+                                // Update button icon & tooltip
+                                const newStatus = response.new_status;
+                                const newIcon = newStatus === 'active' ? 'toggle-right' : 'toggle-left';
+                                const newTitle = newStatus === 'active' ? 'Deactivate' : 'Activate';
+
+                                button
+                                    .data('current-status', newStatus)
+                                    .attr('title', newTitle)
+                                    .html(`<i class="icon-${newIcon}"></i>`);
+
+                                Swal.fire('Updated!', response.message, 'success');
+                            }
+                        },
+                        error: function () {
+                            Swal.fire('Error!', 'Failed to update product status.', 'error');
+                        },
+                        complete: function () {
+                            button.prop('disabled', false);
+                        }
+                    });
+                });
+            });
+
+        });
+    </script>
+
+
+    <script>
+        $(document).ready(function () {
             const csrfToken = $('meta[name="csrf-token"]').attr('content') || '';
             let currentPage = 1;
             let currentFilters = {
@@ -745,6 +814,7 @@
             });
         });
     </script>
+
 @endpush
 
 
